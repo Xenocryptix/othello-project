@@ -5,7 +5,6 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
-    private static final String DELIM = "     ";
     private Disk[][] fields;
 
     /**
