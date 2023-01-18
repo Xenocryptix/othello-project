@@ -21,6 +21,10 @@ public class Board {
                 fields[i][j] = Disk.EMPTY;  // Initialize the cell
             }
         }
+        fields[3][3] = Disk.WHITE;
+        fields[3][4] = Disk.BLACK;
+        fields[4][3] = Disk.WHITE;
+        fields[4][4] = Disk.BLACK;
     }
 
     /**
