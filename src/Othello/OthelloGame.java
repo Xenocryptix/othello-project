@@ -3,7 +3,7 @@ package Othello;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OthelloGame implements Game{
+public class OthelloGame implements Game {
     private Board board;
     private Player player1;
     private Player player2;
@@ -20,6 +20,7 @@ public class OthelloGame implements Game{
 
     /**
      * Set player 1
+     *
      * @param p1 Player 1 object
      */
     public void setPlayer1(Player p1) {
@@ -28,6 +29,7 @@ public class OthelloGame implements Game{
 
     /**
      * Set player 2
+     *
      * @param p2 Player 2 object
      */
     public void setPlayer2(Player p2) {
@@ -36,6 +38,7 @@ public class OthelloGame implements Game{
 
     /**
      * Return turn counter
+     *
      * @return turn
      */
     public int getCounter() {
@@ -106,6 +109,67 @@ public class OthelloGame implements Game{
         return null;
     }
 
+    public boolean checkNE(Disk disk, int row, int col) {
+        Disk otherDisk = disk.other();
+        int i = row + 1;
+        int j = col + 1;
+        if (board.getField(row - 1, col - 1).equals(Disk.EMPTY)) {
+            while (i < Board.DIM && j < Board.DIM) {
+                if (board.getField(row, col).equals(otherDisk)) {
+                    return true;
+                }
+                i = i + 1;
+                j = j + 1;
+            }
+        }
+        return false;
+    }
+    public boolean checkSE(Disk disk, int row, int col) {
+        Disk otherDisk = disk.other();
+        int i = row - 1;
+        int j = col + 1;
+        if (board.getField(row + 1, col - 1).equals(Disk.EMPTY)) {
+            while (i >= 0 && j < Board.DIM) {
+                if (board.getField(row, col).equals(otherDisk)) {
+                    return true;
+                }
+                i = i - 1;
+                j = j + 1;
+            }
+        }
+        return false;
+    }
+    public boolean checkSW(Disk disk, int row, int col) {
+        Disk otherDisk = disk.other();
+        int i = row - 1;
+        int j = col - 1;
+        if (board.getField(row + 1, col + 1).equals(Disk.EMPTY)) {
+            while (i >= 0 && j >= 0) {
+                if (board.getField(row, col).equals(otherDisk)) {
+                    return true;
+                }
+                i = i - 1;
+                j = j - 1;
+            }
+        }
+        return false;
+    }
+    public boolean checkNW(Disk disk, int row, int col) {
+        Disk otherDisk = disk.other();
+        int i = row + 1;
+        int j = col - 1;
+        if (board.getField(row - 1, col + 1).equals(Disk.EMPTY)) {
+            while (i < Board.DIM && j >= 0) {
+                if (board.getField(row, col).equals(otherDisk)) {
+                    return true;
+                }
+                i = i + 1;
+                j = j - 1;
+            }
+        }
+        return false;
+    }
+
     /**
      * Perform the move, assuming it is a valid move.
      *
@@ -125,6 +189,7 @@ public class OthelloGame implements Game{
 
     /**
      * Return the board as a string
+     *
      * @return string
      */
     public String toString() {
@@ -133,6 +198,7 @@ public class OthelloGame implements Game{
 
     /**
      * Return the board object
+     *
      * @return board
      */
     public Board getBoard() {
