@@ -59,7 +59,7 @@ public class OthelloGame implements Game{
      */
     @Override
     public Player getTurn() {
-        //Depends if we defaults player1 go first
+        //Depends if we default player1 go first
         if (turn % 2 == 0) {
             return player1;
         } else {
@@ -118,7 +118,7 @@ public class OthelloGame implements Game{
         Disk disk = ((OthelloMove) move).getDisk();
         validMoves = getValidMoves();
         if (isValidMove(move)) {
-            board.setField(board.index(row, col), disk);
+            board.setField(row, col, disk);
         }
         turn++;
     }
