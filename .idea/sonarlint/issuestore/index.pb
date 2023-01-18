@@ -7,8 +7,6 @@ N
 src/Othello/Server/Client.java,a\7\a77bd8d68d04917142a0a13f9d660e749fbb3d3a
 U
 %src/Othello/Server/ClientHandler.java,4\2\425444884149b7714ad9c34cfec92492c0f91561
-P
- src/Othello/Server/Protocol.java,a\0\a055f0e5724bd9df04349f3d7da89b9d97289d5d
 L
 src/Othello/ai/Strategy.java,1\0\1051970ec9466b5d19c8784c733569bcaed020dd
 Q
