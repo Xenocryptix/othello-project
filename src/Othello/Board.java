@@ -53,7 +53,17 @@ public class Board {
     public int index(int row, int col) {
         return row * DIM + col;
     }
-    //TODO: ask about the the methods containing the index
+
+    /**
+     * Returns true if index is a valid index of a field on the board.
+     *
+     * @return true if 0 <= index < DIM*DIM
+     */
+    //@ ensures index >= 0 && index < DIM*DIM ==> \result == true;
+    //@ pure;
+    public boolean isField(int index) {
+        return index >= 0 && index < DIM * DIM;
+    }
 
     /**
      * Returns true of the (row,col) pair refers to a valid field on the board.
@@ -82,6 +92,45 @@ public class Board {
     }
 
     /**
+     * Returns the content of the field i.
+     *
+     * @param i the number of the field
+     * @return the mark on the field
+     */
+    /*@ requires isField(i);
+    ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
+    pure;
+     @*/
+    public Disk getField(int i) {
+        int row = getRow(i);
+        int column = getColumn(i);
+        return fields[row][column];
+    }
+
+    /**
+     * Returns the column from a given index
+     * @param i the index
+     * @return the column
+     */
+    //@requires i != null;
+    //@pure
+    public int getColumn(int i) {
+        int column = i % DIM;
+        return column;
+    }
+    /**
+     * Returns the column from a given index
+     * @param i the index
+     * @return the column
+     */
+    //@requires i != null;
+    //@pure
+    public int getRow(int i) {
+        int row = i / DIM;
+        return row;
+    }
+
+    /**
      * Returns true if the field referred to by the (row,col) pair it empty.
      *
      * @param row the row of the field
@@ -90,6 +139,7 @@ public class Board {
      */
     /*@ requires isField(row, col);
     ensures getField(row, col) == Disk.EMPTY ==> \result == true;
+    pure
      @*/
     public boolean isEmptyField(int row, int col) {
         return getField(row, col) == Disk.EMPTY;
@@ -171,11 +221,26 @@ public class Board {
         fields[row][col] = disk;
     }
 
+    /**
+     * Sets the content of field i to the Disk disk.
+     *
+     * @param i    the field number
+     * @param disk the mark to be placed
+     */
+    /*@ requires isField(i);
+    ensures getField(i) == disk;
+     @*/
+    public void setField(int i, Disk disk) {
+        int row = getRow(i);
+        int col = getColumn(i);
+        fields[row][col] = disk;
+    }
+
     @Override
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";
         for (int i = 0; i < DIM; i++) {
-            String row = Integer.toString(i+1) + " ";
+            String row = Integer.toString(i + 1) + " ";
             for (int j = 0; j < DIM; j++) {
                 row += " " + getField(i, j).toString().substring(0, 1).replace("E", " ") + " ";
                 if (j < DIM - 1) {

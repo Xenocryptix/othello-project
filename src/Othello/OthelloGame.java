@@ -3,6 +3,15 @@ package Othello;
 import java.util.List;
 
 public class OthelloGame implements Game{
+    private Board board;
+    private Player player1;
+    private  Player player2;
+
+    public OthelloGame () {
+        this.board = new Board();
+        this.player1 = null;
+        this.player2 = null;
+    }
     /**
      * Check if the game is over, i.e., there is a winner or no more moves are available.
      *
@@ -10,7 +19,7 @@ public class OthelloGame implements Game{
      */
     @Override
     public boolean isGameover() {
-        return true;
+        return board.gameOver();
     }
 
     /**
@@ -30,7 +39,6 @@ public class OthelloGame implements Game{
      */
     @Override
     public Player getWinner() {
-        return null;
     }
 
     /**
