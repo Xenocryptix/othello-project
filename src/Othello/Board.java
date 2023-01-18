@@ -8,6 +8,7 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
+    private static final String LINE = "  ---+---+---+---+---+---+---+---";
     private Disk[][] fields;
 
     /**
@@ -172,6 +173,20 @@ public class Board {
 
     @Override
     public String toString() {
-        //TODO
+        String s = "   A   B   C   D   E   F   G   H\n";
+        for (int i = 0; i < DIM; i++) {
+            String row = Integer.toString(i+1) + " ";
+            for (int j = 0; j < DIM; j++) {
+                row += " " + getField(i, j).toString().substring(0, 1).replace("E", " ") + " ";
+                if (j < DIM - 1) {
+                    row = row + "|";
+                }
+            }
+            s = s + row;
+            if (i < DIM - 1) {
+                s = s + "\n" + LINE + "\n";
+            }
+        }
+        return s;
     }
 }
