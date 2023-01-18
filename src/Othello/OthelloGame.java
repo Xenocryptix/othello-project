@@ -104,7 +104,6 @@ public class OthelloGame implements Game {
      */
     public boolean checkUp(Move move) {
         int row = ((OthelloMove) move).getRow() + 1;
-        int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk().other();
         for (int i = row + 1; i < Board.DIM; i++) {
             if (board.getField(row, i).equals(disk)) {
@@ -121,7 +120,6 @@ public class OthelloGame implements Game {
      */
     public boolean checkDown(Move move) {
         int row = ((OthelloMove) move).getRow() - 1;
-        int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk().other();
         for (int i = row - 1; i >= 0; i--) {
             if (board.getField(row, i).equals(disk)) {
@@ -137,7 +135,6 @@ public class OthelloGame implements Game {
      * @return move (if valid)
      */
     public boolean checkLeft(Move move) {
-        int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol() - 1;
         Disk disk = ((OthelloMove) move).getDisk().other();
         for (int i = col - 1; i >= 0; i--) {
@@ -154,7 +151,6 @@ public class OthelloGame implements Game {
      * @return move (if valid)
      */
     public boolean checkRight(Move move) {
-        int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol() + 1;
         Disk disk = ((OthelloMove) move).getDisk().other();
         for (int i = col + 1; i < Board.DIM; i++) {

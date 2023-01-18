@@ -109,6 +109,7 @@ public class Board {
 
     /**
      * Returns the column from a given index
+     *
      * @param i the index
      * @return the column
      */
@@ -118,8 +119,10 @@ public class Board {
         int column = i % DIM;
         return column;
     }
+
     /**
      * Returns the column from a given index
+     *
      * @param i the index
      * @return the column
      */

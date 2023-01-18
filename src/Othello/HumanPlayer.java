@@ -1,4 +1,5 @@
 package Othello;
 
-public class HumanPlayer {
+public class HumanPlayer{
+
 }
