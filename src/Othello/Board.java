@@ -67,6 +67,7 @@ public class Board {
      */
     /*@ requires isField(row, col);
     ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
+    pure;
      @*/
     public Disk getField(int row, int col) {
         return fields[row][col];
@@ -92,6 +93,7 @@ public class Board {
      * @return true if all fields are occupied
      */
     //@ ensures (\forall int i; (i >= 0 && i < DIM); (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
+    //@pure
     public boolean isFull() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
@@ -113,5 +115,53 @@ public class Board {
     public boolean gameOver() {
         return isFull() || hasWinner();
     }
-    //TODO:Checking if there is a winner methods
+
+    /**
+     * Counts the number of times a certain disk is on the board
+     * @param disk the disk to be counted
+     * @return the number of times that disk is on the board
+     */
+    //@ requires disk != null;
+    //@ ensures \result > 0;
+    //@pure
+    public int countDisk(Disk disk) {
+        int count = 0;
+        for (int row = 0; row < DIM; row++) {
+            for (int col = 0; col <DIM; col++) {
+                if (fields[row][col].equals(disk)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Check if a board has a winner by ensuring the number of black and white discs on the board are not equal
+     * @return true if the board has a winner, false if not
+     */
+    //@ ensures countDisk(Disk.BLACK) != countDisk(Disk.WHITE) ==> \result;
+    //@pure
+    public boolean hasWinner() {
+        return countDisk(Disk.BLACK) != countDisk(Disk.WHITE);
+    }
+    /**
+     * Sets the content of the field represented by
+     * the (row,col) pair to the mark m.
+     *
+     * @param row the field's row
+     * @param col the field's column
+     * @param disk   the mark to be placed
+     */
+    /*@ requires isField(row, col);
+    ensures getField(row, col) == disk;
+     @*/
+    public void setField(int row, int col, Disk disk) {
+        fields[row][col] = disk;
+    }
+
+    @Override
+    public String toString() {
+        //TODO
+    }
 }
