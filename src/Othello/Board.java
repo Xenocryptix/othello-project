@@ -171,7 +171,7 @@ public class Board {
      */
     //@ ensures isFull() || hasWinner() ==> \result == true;
     public boolean gameOver() {
-        return isFull() || hasWinner();
+        return isFull();
     }
 
     /**
@@ -196,14 +196,27 @@ public class Board {
     }
 
     /**
-     * Check if a board has a winner by ensuring the number of black and white discs on the board are not equal
+     * Checks if the disk d has won. A disk wins if it has more
+     * disk in the board, and when the board is full.
      *
-     * @return true if the board has a winner, false if not
+     * @param d the disk in question
+     * @return true if the disk has won
      */
-    //@ ensures countDisk(Disk.BLACK) != countDisk(Disk.WHITE) ==> \result;
+    //@ ensures isFull();
     //@pure
+    public boolean isWinner(Disk d) {
+        return isFull() && (countDisk(d) > countDisk(d.other()));
+    }
+
+    /**
+     * Returns true if the game has a winner. This is the case when the
+     * board is full and either of the colors has greater number of disks.
+     *
+     * @return true if the student has a winner.
+     */
+    //@ ensures isWinner(Disk.WHITE) || isWinner(Disk.BLACK) ==> \result == true;
     public boolean hasWinner() {
-        return countDisk(Disk.BLACK) != countDisk(Disk.WHITE);
+        return isWinner(Disk.WHITE) || isWinner(Disk.BLACK);
     }
 
     /**
