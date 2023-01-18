@@ -1,6 +1,9 @@
 package Othello;
 
 public class Board {
+    /*@
+    public invariant ((\forall int row;row >= 0 && row < DIM; (\forall int col; col >= 0 && col < DIM; fields[row][col] == Disk.WHITE || fields[row][col] == Disk.BLACK || fields[row][col] == Disk.EMPTY) ));
+    */
     /**
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
@@ -118,6 +121,7 @@ public class Board {
 
     /**
      * Counts the number of times a certain disk is on the board
+     *
      * @param disk the disk to be counted
      * @return the number of times that disk is on the board
      */
@@ -127,7 +131,7 @@ public class Board {
     public int countDisk(Disk disk) {
         int count = 0;
         for (int row = 0; row < DIM; row++) {
-            for (int col = 0; col <DIM; col++) {
+            for (int col = 0; col < DIM; col++) {
                 if (fields[row][col].equals(disk)) {
                     count++;
                 }
@@ -138,6 +142,7 @@ public class Board {
 
     /**
      * Check if a board has a winner by ensuring the number of black and white discs on the board are not equal
+     *
      * @return true if the board has a winner, false if not
      */
     //@ ensures countDisk(Disk.BLACK) != countDisk(Disk.WHITE) ==> \result;
@@ -145,13 +150,14 @@ public class Board {
     public boolean hasWinner() {
         return countDisk(Disk.BLACK) != countDisk(Disk.WHITE);
     }
+
     /**
      * Sets the content of the field represented by
      * the (row,col) pair to the mark m.
      *
-     * @param row the field's row
-     * @param col the field's column
-     * @param disk   the mark to be placed
+     * @param row  the field's row
+     * @param col  the field's column
+     * @param disk the mark to be placed
      */
     /*@ requires isField(row, col);
     ensures getField(row, col) == disk;
