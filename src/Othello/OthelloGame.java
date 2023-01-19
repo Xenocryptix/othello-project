@@ -154,7 +154,6 @@ public class OthelloGame implements Game {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        validMoves = getValidMoves();
         if (isValidMove(move)) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
@@ -170,6 +169,7 @@ public class OthelloGame implements Game {
                     }
                 }
             }
+            validMoves = getValidMoves();
         }
         turn++;
     }
