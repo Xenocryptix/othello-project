@@ -17,6 +17,7 @@ public class Board {
      * Creates an empty board.
      */
     //@ ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j;j <DIM && j >= 0 ;fields[i][j] == Disk.EMPTY)));
+    //TODO: EDIT THE JML SO IT CHECKS THE ONES FOR THE MIDDLE
     public Board() {
         fields = new Disk[DIM][DIM];
         for (int i = 0; i < DIM; i++) {
@@ -258,6 +259,20 @@ public class Board {
         int row = getRow(i);
         int col = getColumn(i);
         fields[row][col] = disk;
+    }
+    /**
+     * Empties all fields of this board excepts the disks in the middle.
+     */
+    //@ ensures (\forall int i; (i >= 0 && i < DIM*DIM); fields[i] == Disk.EMPTY);
+    //TODO: JML HEREEEEEE
+    public void reset() {
+        for (int i = 0; i < DIM; i++) {
+            for (int j = 0; j < DIM; j++) {
+                if (i != 3 && j != 3 && i != 4 && j != 4){
+                    fields[i][j] = Disk.EMPTY;
+                }
+            }
+        }
     }
 
     /**
