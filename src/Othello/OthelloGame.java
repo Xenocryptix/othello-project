@@ -8,6 +8,11 @@ public class OthelloGame implements Game {
     private Player player1;
     private Player player2;
     private List<Move> validMoves = new ArrayList<>();
+    //predefined directional array
+    private int[][] dxy = {
+        {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
+        {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
+    };
     private int turn;
 
     public OthelloGame() {
@@ -96,158 +101,33 @@ public class OthelloGame implements Game {
     public boolean isValidMove(Move move) {
         return validMoves.contains(move);
     }
-
     /**
-     * Check if a tile is placeable using the upward direction
+     * Flip a cell
      *
      * @return move (if valid)
      */
-    public boolean checkUp(Move move) {
-        int row = ((OthelloMove) move).getRow() + 1;
-        Disk disk = ((OthelloMove) move).getDisk().other();
-        for (int i = row + 1; i < Board.DIM; i++) {
-            if (board.getField(row, i).equals(disk)) {
-                return true;
-            }
+    public void flip(int x, int y) {
+        if (!board.isEmptyField(x, y)) {
+            Disk disk = board.getField(x, y);
+            board.setField(x, y, disk.other());
         }
-        return false;
     }
-
     /**
-     * Check if a tile is placeable using the downward direction
+     * Much more convenient check (experimental)
      *
-     * @return move (if valid)
+     * @return true (if valid)
      */
-    public boolean checkDown(Move move) {
-        int row = ((OthelloMove) move).getRow() - 1;
-        Disk disk = ((OthelloMove) move).getDisk().other();
-        for (int i = row - 1; i >= 0; i--) {
-            if (board.getField(row, i).equals(disk)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the left direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkLeft(Move move) {
-        int col = ((OthelloMove) move).getCol() - 1;
-        Disk disk = ((OthelloMove) move).getDisk().other();
-        for (int i = col - 1; i >= 0; i--) {
-            if (board.getField(i, col).equals(disk)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the right direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkRight(Move move) {
-        int col = ((OthelloMove) move).getCol() + 1;
-        Disk disk = ((OthelloMove) move).getDisk().other();
-        for (int i = col + 1; i < Board.DIM; i++) {
-            if (board.getField(i, col).equals(disk)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the northeast direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkNE(Move move) {
+    public boolean checkDirection(Move move) {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
-        Disk otherDisk = ((OthelloMove) move).getDisk().other();
-        int i = row + 1;
-        int j = col + 1;
-        if (board.getField(row - 1, col - 1).equals(Disk.EMPTY)) {
-            while (i < Board.DIM && j < Board.DIM) {
-                if (board.getField(row, col).equals(otherDisk)) {
+        Disk disk = ((OthelloMove) move).getDisk().other();
+        for (int[] i: dxy) {
+            int rowDir = row + i[0];
+            int colDir = col + i[1];
+            for ( ; board.isField(rowDir, colDir) ; rowDir += i[0], colDir += i[1]) {
+                if (board.getField(rowDir, colDir).equals(disk)) {
                     return true;
                 }
-                i = i + 1;
-                j = j + 1;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the southeast direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkSE(Move move) {
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        Disk otherDisk = ((OthelloMove) move).getDisk().other();
-        int i = row - 1;
-        int j = col + 1;
-        if (board.getField(row + 1, col - 1).equals(Disk.EMPTY)) {
-            while (i >= 0 && j < Board.DIM) {
-                if (board.getField(row, col).equals(otherDisk)) {
-                    return true;
-                }
-                i = i - 1;
-                j = j + 1;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the southwest direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkSW(Move move) {
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        Disk otherDisk = ((OthelloMove) move).getDisk().other();
-        int i = row - 1;
-        int j = col - 1;
-        if (board.getField(row + 1, col + 1).equals(Disk.EMPTY)) {
-            while (i >= 0 && j >= 0) {
-                if (board.getField(row, col).equals(otherDisk)) {
-                    return true;
-                }
-                i = i - 1;
-                j = j - 1;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Check if a tile is placeable using the northwest direction
-     *
-     * @return move (if valid)
-     */
-    public boolean checkNW(Move move) {
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        Disk otherDisk = ((OthelloMove) move).getDisk().other();
-        int i = row + 1;
-        int j = col - 1;
-        if (board.getField(row - 1, col + 1).equals(Disk.EMPTY)) {
-            while (i < Board.DIM && j >= 0) {
-                if (board.getField(row, col).equals(otherDisk)) {
-                    return true;
-                }
-                i = i + 1;
-                j = j - 1;
             }
         }
         return false;
@@ -265,8 +145,7 @@ public class OthelloGame implements Game {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
                     Move move = new OthelloMove(board.getField(i, j), i, j);
-                    if (checkUp(move) || checkDown(move) || checkLeft(move) || checkRight(move) ||
-                        checkNE(move) || checkSE(move)   || checkSW(move)   || checkNW(move)  ) {
+                    if (checkDirection(move)) {
                         validMoves.add(move);
                     }
                 }
@@ -288,6 +167,15 @@ public class OthelloGame implements Game {
         validMoves = getValidMoves();
         if (isValidMove(move)) {
             board.setField(row, col, disk);
+            for (int[] i: dxy) {
+                int rowDir = row + i[0];
+                int colDir = col + i[1];
+                for ( ; board.isField(rowDir, colDir) ; rowDir += i[0], colDir += i[1]) {
+                    if (board.getField(rowDir, colDir).equals(disk)) {
+                        //TODO:backtrack
+                    }
+                }
+            }
         }
         turn++;
     }
