@@ -39,9 +39,10 @@ public class Board {
         ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i] == this.fields[i]))) ;
     */
     public Board deepCopy() {
+        Disk[][] copy = new Disk[DIM][DIM];
         Board board = new Board();
-        fields = this.fields.clone();
-        board.fields = fields;
+        copy = this.fields.clone();
+        board.fields = copy;
         return board;
     }
 
@@ -263,7 +264,7 @@ public class Board {
     /**
      * Empties all fields of this board excepts the disks in the middle.
      */
-    //@ ensures (\forall int i; (i >= 0 && i < DIM*DIM); fields[i] == Disk.EMPTY);
+    //@
     //TODO: JML HEREEEEEE
     public void reset() {
         for (int i = 0; i < DIM; i++) {
