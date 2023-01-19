@@ -260,6 +260,32 @@ public class Board {
         fields[row][col] = disk;
     }
 
+    /**
+     * Flip a cell
+     *
+     * @param i index
+     */
+    public void flip(int i) {
+        int row = getRow(i);
+        int col = getColumn(i);
+        if (isEmptyField(row, col)) {
+            Disk disk = getField(row, col);
+            setField(row, col, disk.other());
+        }
+    }
+
+    /**
+     * Flip a cell
+     *
+     * @param row, col
+     */
+    public void flip(int row, int col) {
+        if (isEmptyField(row, col)) {
+            Disk disk = getField(row, col);
+            setField(row, col, disk.other());
+        }
+    }
+
     @Override
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";

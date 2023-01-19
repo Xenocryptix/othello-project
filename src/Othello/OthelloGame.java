@@ -101,17 +101,7 @@ public class OthelloGame implements Game {
     public boolean isValidMove(Move move) {
         return validMoves.contains(move);
     }
-    /**
-     * Flip a cell
-     *
-     * @return move (if valid)
-     */
-    public void flip(int x, int y) {
-        if (!board.isEmptyField(x, y)) {
-            Disk disk = board.getField(x, y);
-            board.setField(x, y, disk.other());
-        }
-    }
+
     /**
      * Much more convenient check (experimental)
      *
@@ -173,9 +163,11 @@ public class OthelloGame implements Game {
                 for (int i = rowDir, j = colDir ; board.isField(i, j); i += dir[0], j += dir[1]) {
                     if (board.isEmptyField(i, j))
                         break;
-                    if (board.getField(rowDir, colDir).equals(disk))
+                    if (board.getField(rowDir, colDir).equals(disk)) {
                         for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
-                            flip(x, y);
+                            board.flip(x, y);
+                        break;
+                    }
                 }
             }
         }
