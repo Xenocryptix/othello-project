@@ -114,7 +114,7 @@ public class OthelloGame implements Game {
         for (int[] i: dxy) {
             int rowDir = row + i[0];
             int colDir = col + i[1];
-            for ( ; board.isField(rowDir, colDir) ; rowDir += i[0], colDir += i[1]) {
+            for (; board.isField(rowDir, colDir) ; rowDir += i[0], colDir += i[1]) {
                 if (board.getField(rowDir, colDir).equals(disk)) {
                     return true;
                 }
