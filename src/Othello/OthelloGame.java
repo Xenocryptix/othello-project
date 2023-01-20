@@ -198,6 +198,7 @@ public class OthelloGame implements Game {
      */
     public void setBoard(Disk[][] newBoard) {
         board.setBoard(newBoard);
+        getValidMoves();
     }
 
     /**
