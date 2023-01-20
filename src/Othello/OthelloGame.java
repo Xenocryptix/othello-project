@@ -191,4 +191,20 @@ public class OthelloGame implements Game {
     public Board getBoard() {
         return board;
     }
+
+    /**
+     * Set the whole current board
+     * @param newBoard the 2D array
+     */
+    public void setBoard(Disk[][] newBoard) {
+        board.setBoard(newBoard);
+    }
+
+    /**
+     * Return the current board as a 2D array
+     * @return fields
+     */
+    public Disk[][] get2DBoard() {
+        return board.get2DBoard();
+    }
 }

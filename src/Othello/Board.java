@@ -302,6 +302,22 @@ public class Board {
         }
     }
 
+    /**
+     * Set the whole current board
+     * @param board the 2D array
+     */
+    public void setBoard(Disk[][] board) {
+        this.fields = board;
+    }
+
+    /**
+     * Return the current board as a 2D array
+     * @return fields
+     */
+    public Disk[][] get2DBoard() {
+        return fields;
+    }
+
     @Override
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";
