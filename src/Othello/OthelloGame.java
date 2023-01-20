@@ -200,12 +200,4 @@ public class OthelloGame implements Game {
         board.setBoard(newBoard);
         getValidMoves();
     }
-
-    /**
-     * Return the current board as a 2D array
-     * @return fields
-     */
-    public Disk[][] get2DBoard() {
-        return board.get2DBoard();
-    }
 }
