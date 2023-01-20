@@ -8,6 +8,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
     private Board board;
 
+    private final Disk B = Disk.BLACK;
+    private final Disk W = Disk.WHITE;
+    private final Disk E = Disk.EMPTY;
+    private final Disk[][] INITAL = {{E, E, E, E, E, E, E, E},
+                                     {E, E, E, E, E, B, E, E},
+                                     {E, E, E, B, B, E, E, E},
+                                     {E, W, B, B, B, E, E, E},
+                                     {E, W, W, W, W, W, W, E},
+                                     {E, B, B, W, E, E, E, E},
+                                     {E, E, E, E, E, E, E, E},
+                                     {E, E, E, E, E, E, E, E}}
+
     @BeforeEach
     public void setUp() {
         board = new Board();
