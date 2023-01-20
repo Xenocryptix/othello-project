@@ -85,5 +85,22 @@ public class BoardTest {
         assertEquals(Disk.WHITE, board.getField(3, 3));
         assertEquals(Disk.WHITE, board.getField(4, 3));
     }
+    @Test
+    public void testDeepCopy() {
+        board.setField(0, Disk.WHITE);
+        board.setField(Board.DIM * Board.DIM - 1, Disk.BLACK);
+        Board deepCopyBoard = board.deepCopy();
+
+        // First test if all the fields are the same
+        for (int i = 0; i < Board.DIM * Board.DIM; i++) {
+            assertEquals(board.getField(i), deepCopyBoard.getField(i));
+        }
+
+        // Check if a field in the deepcopied board the original remains the same
+        deepCopyBoard.setField(0, Disk.BLACK);
+
+        assertEquals(Disk.WHITE, board.getField(0));
+        assertEquals(Disk.BLACK, deepCopyBoard.getField(0));
+    }
 }
 
