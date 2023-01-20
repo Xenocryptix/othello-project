@@ -157,14 +157,20 @@ public class OthelloGame implements Game {
         if (isValidMove(move)) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
+                //We traverse to each direction, each element in dxy represent a direction
                 int rowDir = row + dir[0];
                 int colDir = col + dir[1];
+                //Continue going by the current direction, until we come to the boundary
                 for (int i = rowDir, j = colDir ; board.isField(i, j); i += dir[0], j += dir[1]) {
+                    //If empty field, skip immediately
                     if (board.isEmptyField(i, j))
                         break;
+                    //If we found a disk with the same color, backtrack to the cell we just placed
                     if (board.getField(rowDir, colDir).equals(disk)) {
+                        //Only backtracks "between the lines" and don't include the endpoints as we don't want to flip those
                         for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
                             board.flip(x, y);
+                        //Once done, break out and search in the next direction
                         break;
                     }
                 }
