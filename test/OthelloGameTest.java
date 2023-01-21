@@ -5,13 +5,13 @@ import Othello.OthelloMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OthelloGameTest {
     private OthelloGame game;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         game = new OthelloGame();
     }
 
@@ -20,16 +20,38 @@ public class OthelloGameTest {
         Board board = game.getBoard();
 
         //Testing flip horizontal right
-        assertEquals(board.getField(4,4), Disk.WHITE);
-        game.doMove(new OthelloMove(Disk.BLACK,5,4));
-        assertEquals(Disk.BLACK, board.getField(4,4));
+        assertEquals(board.getField(4, 4), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
+        assertEquals(Disk.BLACK, board.getField(4, 4));
 
         //Testing flip horizontal left
-        board.setField(3,5,Disk.WHITE);
-        board.flip(3,4);
+        board.setField(3, 5, Disk.WHITE);
+        board.flip(3, 4);
 
-        assertEquals(board.getField(3,4), Disk.WHITE);
-        game.doMove(new OthelloMove(Disk.BLACK,2,4));
-        assertEquals(Disk.BLACK, board.getField(3,4));
+        assertEquals(board.getField(3, 4), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 4));
+        assertEquals(Disk.BLACK, board.getField(3, 4));
     }
+
+    @Test
+    public void testFlipVertical() {
+        Board board = game.getBoard();
+
+        //Testing flip vertical up
+        assertEquals(board.getField(3, 3), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        assertEquals(Disk.BLACK, board.getField(3, 3));
+
+        //Testing flip vertical down
+        assertEquals(board.getField(4, 4), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
+        assertEquals(Disk.BLACK, board.getField(4, 4));
+    }
+
+//    @Test
+//    public void testFlipDiagonal() {
+//        Board board = game.getBoard();
+//
+//
+//    }
 }
