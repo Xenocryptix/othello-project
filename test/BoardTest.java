@@ -8,17 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
     private Board board;
 
-    private final Disk B = Disk.BLACK;
-    private final Disk W = Disk.WHITE;
-    private final Disk E = Disk.EMPTY;
-    private final Disk[][] INITAL = {{E, E, E, E, E, E, E, E},
-                                     {E, E, E, E, E, B, E, E},
-                                     {E, E, E, B, B, E, E, E},
-                                     {E, W, B, B, B, E, E, E},
-                                     {E, W, W, W, W, W, W, E},
-                                     {E, B, B, W, E, E, E, E},
-                                     {E, E, E, E, E, E, E, E},
-                                     {E, E, E, E, E, E, E, E}}
 
     @BeforeEach
     public void setUp() {
@@ -73,9 +62,9 @@ public class BoardTest {
     @Test
     public void testSetup() {
         assertEquals(Disk.BLACK, board.getField(3, 4));
-        assertEquals(Disk.BLACK, board.getField(4, 4));
+        assertEquals(Disk.BLACK, board.getField(4, 3));
         assertEquals(Disk.WHITE, board.getField(3, 3));
-        assertEquals(Disk.WHITE, board.getField(4, 3));
+        assertEquals(Disk.WHITE, board.getField(4, 4));
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (i != 3 && j != 3 && i != 4 && j != 4) {
@@ -93,9 +82,9 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(0));
         assertEquals(Disk.EMPTY, board.getField(Board.DIM * Board.DIM - 1));
         assertEquals(Disk.BLACK, board.getField(3, 4));
-        assertEquals(Disk.BLACK, board.getField(4, 4));
+        assertEquals(Disk.BLACK, board.getField(4, 3));
         assertEquals(Disk.WHITE, board.getField(3, 3));
-        assertEquals(Disk.WHITE, board.getField(4, 3));
+        assertEquals(Disk.WHITE, board.getField(4, 4));
     }
     @Test
     public void testDeepCopy() {

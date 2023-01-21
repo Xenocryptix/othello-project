@@ -1,4 +1,4 @@
-package Othello.Server;
+package Othello.client;
 
 public class ClientHandler {
 }

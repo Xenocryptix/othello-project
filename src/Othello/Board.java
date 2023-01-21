@@ -27,8 +27,8 @@ public class Board {
         }
         fields[3][3] = Disk.WHITE;
         fields[3][4] = Disk.BLACK;
-        fields[4][3] = Disk.WHITE;
-        fields[4][4] = Disk.BLACK;
+        fields[4][3] = Disk.BLACK;
+        fields[4][4] = Disk.WHITE;
     }
 
     /**
@@ -179,7 +179,7 @@ public class Board {
      */
     //@ ensures isFull() || hasWinner() ==> \result == true;
     public boolean gameOver() {
-        return isFull();
+        return isFull() || hasWinner();
     }
 
     /**
