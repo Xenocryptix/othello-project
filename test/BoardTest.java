@@ -140,5 +140,17 @@ public class BoardTest {
         assertEquals(Disk.WHITE, board.getField(0));
         assertEquals(Disk.BLACK, deepCopyBoard.getField(0));
     }
+
+    @Test
+    public void testFull() {
+        assertFalse(board.isFull());
+
+        for (int i = 0; i < Board.DIM * Board.DIM; i++) {
+            board.setField(i, Disk.BLACK);
+        }
+
+        assertTrue(board.isFull());
+
+    }
 }
 

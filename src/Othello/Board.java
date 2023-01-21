@@ -39,9 +39,9 @@ public class Board {
         ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i] == this.fields[i]))) ;
     */
     public Board deepCopy() {
-        Disk[][] copy = new Disk[DIM][DIM];
+        Disk[][] copy;
         Board board = new Board();
-        copy = this.fields.clone();
+        copy = fields.clone();
         board.fields = copy;
         return board;
     }
@@ -215,14 +215,14 @@ public class Board {
     //@ ensures isFull();
     //@ pure
     public boolean isWinner(Disk d) {
-        return isFull() && (countDisk(d) > countDisk(d.other()));
+        return countDisk(d) > countDisk(d.other());
     }
 
     /**
      * Returns true if the game has a winner. This is the case when the
      * board is full and either of the colors has greater number of disks.
      *
-     * @return true if the student has a winner.
+     * @return true if the board has a winner.
      */
     //@ ensures isWinner(Disk.WHITE) || isWinner(Disk.BLACK) ==> \result == true;
     //@ pure

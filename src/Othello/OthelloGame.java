@@ -7,7 +7,7 @@ public class OthelloGame implements Game {
     private Board board;
     private Player player1;
     private Player player2;
-    private List<Move> validMoves = new ArrayList<>();
+    private List<Move> validMoves;
     //predefined directional array
     private final int[][] dxy = {
         {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
@@ -119,7 +119,7 @@ public class OthelloGame implements Game {
             //Traverse in that direction until meeting the disk with same color
             for (int i = initRow, j = initCol; board.isField(i, j) ; i += dir[0], j += dir[1]) {
                 if (board.getField(i, j).equals(disk)) {
-                    Move newMove = new OthelloMove(disk, initRow, initCol);
+                    Move newMove = new OthelloMove(disk, row - dir[0], col - dir[1]);
                     validMoves.add(newMove);
                     break;
                 }
@@ -156,7 +156,7 @@ public class OthelloGame implements Game {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        if (isValidMove(move)) {
+        if (isValidMove(move)) { //TODO: DOESNT WORK FOR SOME REASON
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
                 int rowDir = row + dir[0];
