@@ -175,12 +175,10 @@ public class OthelloGame implements Game {
                 int rowDir = row + dir[0];
                 int colDir = col + dir[1];
                 for (int i = rowDir, j = colDir ; board.isField(i, j); i += dir[0], j += dir[1]) {
-                    if (board.isEmptyField(i, j))
-                        break;
-                    if (board.getField(rowDir, colDir).equals(disk)) {
-                        for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
-                            board.flip(x, y);
-                        break;
+                    if (board.getField(rowDir, colDir).equals(disk.other())) {
+//                        for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
+                            board.flip(rowDir, colDir);
+  //                      break;
                     }
                 }
             }
