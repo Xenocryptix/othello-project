@@ -1,7 +1,9 @@
 package Othello;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class OthelloGame implements Game {
     private Board board;
@@ -99,7 +101,18 @@ public class OthelloGame implements Game {
      */
     @Override
     public boolean isValidMove(Move move) {
-        return validMoves.contains(move);
+        int rowMove = ((OthelloMove) move).getRow();
+        int colMove = ((OthelloMove) move).getCol();
+        Disk diskMove = ((OthelloMove) move).getDisk();
+        for (Move currentMove : validMoves ) {
+            int rowCurrentMove = ((OthelloMove) currentMove).getRow();
+            int colCurrentMove = ((OthelloMove) currentMove).getCol();
+            Disk diskCurrentMove = ((OthelloMove) currentMove).getDisk();
+            if (Objects.equals(rowMove, rowCurrentMove) && Objects.equals(colCurrentMove, colMove) && Objects.equals(diskCurrentMove, diskMove)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -156,7 +169,7 @@ public class OthelloGame implements Game {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        if (isValidMove(move)) { //TODO: DOESNT WORK FOR SOME REASON
+        if (isValidMove(move)) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
                 int rowDir = row + dir[0];
