@@ -107,20 +107,24 @@ public class OthelloGame implements Game {
      *
      * @return true (if valid)
      */
-    public boolean checkDirection(Move move) {
+    public void checkDirection(Move move) {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk().other();
-        for (int[] i: dxy) {
-            int rowDir = row + i[0];
-            int colDir = col + i[1];
-            for (; board.isField(rowDir, colDir) ; rowDir += i[0], colDir += i[1]) {
-                if (board.getField(rowDir, colDir).equals(disk)) {
-                    return true;
+        for (int[] dir: dxy) {
+            //Starting point of a chosen direction
+            int initRow = row + dir[0];
+            int initCol = col + dir[1];
+
+            //Traverse in that direction until meeting the disk with same color
+            for (int i = initRow, j = initCol; board.isField(i, j) ; i += dir[0], j += dir[1]) {
+                if (board.getField(i, j).equals(disk)) {
+                    Move newMove = new OthelloMove(disk, initRow, initCol);
+                    validMoves.add(newMove);
+                    break;
                 }
             }
         }
-        return false;
     }
 
     /**
@@ -135,9 +139,7 @@ public class OthelloGame implements Game {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
                     Move move = new OthelloMove(board.getField(i, j), i, j);
-                    if (checkDirection(move)) {
-                        validMoves.add(move);
-                    }
+                    checkDirection(move);
                 }
             }
         }
