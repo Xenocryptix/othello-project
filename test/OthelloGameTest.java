@@ -18,8 +18,18 @@ public class OthelloGameTest {
     @Test
     public void testFlipHorizontal() {
         Board board = game.getBoard();
+
+        //Testing flip horizontal right
         assertEquals(board.getField(4,4), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK,5,4));
         assertEquals(Disk.BLACK, board.getField(4,4));
+
+        //Testing flip horizontal left
+        board.setField(3,5,Disk.WHITE);
+        board.flip(3,4);
+
+        assertEquals(board.getField(3,4), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK,2,4));
+        assertEquals(Disk.BLACK, board.getField(3,4));
     }
 }
