@@ -11,15 +11,15 @@ public final class Protocol {
     public static final String MOVE = "MOVE";
     public static final String GAMEOVER = "GAMEOVER";
     public static final String SEPARATOR = "~";
+    public static final String CLIENT = "Client";
 
     /**
      * Build a new protocol description which is responsible for the handshake
      *
-     * @param description The description of the handshake
      * @return the protocol description for handshake
      */
-    public static String handshake(String description) {
-        return HELLO + SEPARATOR + description;
+    public static String handshake(String username) {
+        return HELLO + SEPARATOR + CLIENT;
     }
 
     /**
