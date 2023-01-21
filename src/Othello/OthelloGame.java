@@ -185,8 +185,8 @@ public class OthelloGame implements Game {
                 }
             }
             validMoves = getValidMoves();
+            turn++;
         }
-        turn++;
     }
 
     /**
