@@ -60,6 +60,42 @@ public class BoardTest {
     }
 
     @Test
+    public void testFlipIndex() {
+        //Flipping a white field
+        assertEquals(Disk.WHITE, board.getField(27));
+        board.flip(27);
+        assertEquals(Disk.BLACK, board.getField(27));
+
+        //Flipping a black field
+        assertEquals(Disk.BLACK, board.getField(28));
+        board.flip(28);
+        assertEquals(Disk.WHITE, board.getField(28));
+
+        //Flipping an empty field
+        assertEquals(Disk.EMPTY, board.getField(0));
+        board.flip(0);
+        assertEquals(Disk.EMPTY, board.getField(0));
+    }
+
+    @Test
+    public void testFlipRowCol() {
+        //Flipping a white field
+        assertEquals(Disk.WHITE, board.getField(3, 3));
+        board.flip(3, 3);
+        assertEquals(Disk.BLACK, board.getField(3, 3));
+
+        //Flipping a black field
+        assertEquals(Disk.BLACK, board.getField(4, 3));
+        board.flip(4, 3);
+        assertEquals(Disk.WHITE, board.getField(4, 3));
+
+        //Flipping an empty field
+        assertEquals(Disk.EMPTY, board.getField(0, 0));
+        board.flip(0, 0);
+        assertEquals(Disk.EMPTY, board.getField(0, 0));
+    }
+
+    @Test
     public void testSetup() {
         assertEquals(Disk.BLACK, board.getField(3, 4));
         assertEquals(Disk.BLACK, board.getField(4, 3));
@@ -86,6 +122,7 @@ public class BoardTest {
         assertEquals(Disk.WHITE, board.getField(3, 3));
         assertEquals(Disk.WHITE, board.getField(4, 4));
     }
+
     @Test
     public void testDeepCopy() {
         board.setField(0, Disk.WHITE);

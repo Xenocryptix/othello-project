@@ -284,7 +284,7 @@ public class Board {
     public void flip(int i) {
         int row = getRow(i);
         int col = getColumn(i);
-        if (isEmptyField(row, col)) {
+        if (!isEmptyField(row, col)) {
             Disk disk = getField(row, col);
             setField(row, col, disk.other());
         }
@@ -296,7 +296,7 @@ public class Board {
      * @param row, col
      */
     public void flip(int row, int col) {
-        if (isEmptyField(row, col)) {
+        if (!isEmptyField(row, col)) {
             Disk disk = getField(row, col);
             setField(row, col, disk.other());
         }
