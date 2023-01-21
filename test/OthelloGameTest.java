@@ -48,10 +48,36 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
 
-//    @Test
-//    public void testFlipDiagonal() {
-//        Board board = game.getBoard();
-//
-//
-//    }
+    @Test
+    public void testFlipDiagonal() {
+        Board board = game.getBoard();
+        //Test flip diagonal NE direction
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
+        assertEquals(Disk.WHITE, board.getField(5, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 2));
+        assertEquals(Disk.BLACK, board.getField(5, 3));
+
+        //Test flip diagonal NW direction
+        game.doMove(new OthelloMove(Disk.WHITE, 6, 3));
+        assertEquals(Disk.WHITE, board.getField(3, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 2));
+        assertEquals(Disk.BLACK, board.getField(3, 3));
+
+        board.reset();
+        //Test flip diagonal SW direction
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 4));
+
+        assertEquals(Disk.WHITE, board.getField(2, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 5));
+        assertEquals(Disk.BLACK, board.getField(2, 4));
+
+        //Test flip diagonal SE direction
+        //TODO: MIGHT NOT WORK CHECK
+        assertEquals(Disk.WHITE, board.getField(4, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
+        assertEquals(Disk.BLACK, board.getField(4, 4));
+
+    }
 }
