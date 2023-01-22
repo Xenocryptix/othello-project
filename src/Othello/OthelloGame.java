@@ -215,6 +215,15 @@ public class OthelloGame implements Game {
         }
         return validMoves;
     }
+    public List<Move> getValidMoves(Disk disk) {
+        List<Move> currentMovesForDisk = new ArrayList<>();
+        for (Move move : validMoves) {
+            if (((OthelloMove) move).getDisk().equals(disk)) {
+                currentMovesForDisk.add(move);
+            }
+        }
+        return currentMovesForDisk;
+    }
 
     /**
      * Perform the move, assuming it is a valid move.

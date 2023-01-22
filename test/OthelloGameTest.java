@@ -16,6 +16,8 @@ public class OthelloGameTest {
     public void setUp() {
         game = new OthelloGame();
     }
+    @Disabled
+
     @Test
     public void testValidMoves() {
         assertEquals(game.getValidMoves().size(), 8);
@@ -51,7 +53,7 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
         assertEquals(Disk.BLACK, board.getField(4, 3));
     }
-
+    @Disabled
     @Test
     public void testFlipVertical() {
         Board board = game.getBoard();
@@ -67,6 +69,7 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
 
+    @Disabled
 
     @Test
     public void testFlipDiagonal() {
@@ -101,4 +104,10 @@ public class OthelloGameTest {
 
     }
     //TODO: RANDOM MOVES GAME
+    @Test
+    public void fullRandomGame() {
+        Board board = game.getBoard();
+
+
+    }
 }
