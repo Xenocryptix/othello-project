@@ -144,14 +144,14 @@ public class OthelloGame implements Game {
      */
     @Override
     public boolean isValidMove(Move move) {
-        int rowMove = ((OthelloMove) move).getRow();
-        int colMove = ((OthelloMove) move).getCol();
-        Disk diskMove = ((OthelloMove) move).getDisk();
-        for (Move currentMove : validMoves) {
-            int rowCurrentMove = ((OthelloMove) currentMove).getRow();
-            int colCurrentMove = ((OthelloMove) currentMove).getCol();
-            Disk diskCurrentMove = ((OthelloMove) currentMove).getDisk();
-            if (Objects.equals(rowMove, rowCurrentMove) && Objects.equals(colCurrentMove, colMove) && Objects.equals(diskCurrentMove, diskMove)) {
+        int row = ((OthelloMove) move).getRow();
+        int col = ((OthelloMove) move).getCol();
+        Disk disk = ((OthelloMove) move).getDisk();
+        for (Move current : validMoves) {
+            int cRow = ((OthelloMove) current).getRow();
+            int cCol = ((OthelloMove) current).getCol();
+            Disk cDisk = ((OthelloMove) current).getDisk();
+            if (cRow == row && cCol == col && Objects.equals(cDisk, disk)) {
                 return true;
             }
         }
@@ -161,7 +161,9 @@ public class OthelloGame implements Game {
     /**
      * Much more convenient check (experimental)
      *
-     * @return true (if valid)
+     * @param row row
+     * @param col col
+     * @param disk disk
      */
     public void checkDirection(int row, int col, Disk disk) {
         for (int[] dir: dxy) {
@@ -170,19 +172,21 @@ public class OthelloGame implements Game {
             int dCol = col + dir[1];
             //Traverse in that direction until meeting the disk with same color
             while (board.isField(dRow, dCol)) {
-                if (board.getField(dRow, dCol).equals(disk) || board.isEmptyField(dRow, dCol)) {
+                if (board.getField(dRow, dCol).equals(disk)) {
                     break;
                 }
                 dRow += dir[0];
                 dCol += dir[1];
             }
-            if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk) && !(board.isEmptyField(dRow, dCol))) {
+            if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
                 if ((dRow == row && Math.abs(dCol - col) > 1) ||
                     (dCol == col && Math.abs(dRow - row) > 1) ||
                     (Math.abs(dCol - col) > 1 && Math.abs(dRow - row) > 1)) {
                     Move move = new OthelloMove(disk, row, col);
-                    if (!isValidMove(move))
+                    if (!isValidMove(move)) {
                         validMoves.add(new OthelloMove(disk, row, col));
+                        break;
+                    }
                 }
             }
         }
@@ -221,7 +225,7 @@ public class OthelloGame implements Game {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        if (true) {
+        if (isValidMove(move)) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
                 int dRow = row + dir[0];
