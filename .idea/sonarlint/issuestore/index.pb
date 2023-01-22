@@ -1,6 +1,4 @@
 
-O
-src/Othello/AbstractPlayer.java,9\2\929b01de1008c11c1b3583ddbcd6bd60ed64c418
 E
 src/Othello/Move.java,2\f\2f83c29ba97259f9ff2406306f894c6ef38933a9
 :

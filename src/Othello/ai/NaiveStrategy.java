@@ -1,9 +1,16 @@
 package Othello.ai;
 
-import Othello.Game;
-import Othello.Move;
+import Othello.*;
 
-public class NaiveStrategy implements Strategy{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class NaiveStrategy implements Strategy {
+    private static final String NAME = "NAIVE";
+    private List<Move> allowedMoves = new ArrayList<>();
+    private static final Random RANDOM = new Random();
+
     /**
      * Return the name of the strategy
      *
@@ -11,7 +18,7 @@ public class NaiveStrategy implements Strategy{
      */
     @Override
     public String getName() {
-        return null;
+        return NAME;
     }
 
     /**
@@ -22,6 +29,21 @@ public class NaiveStrategy implements Strategy{
      */
     @Override
     public Move determineMove(Game game) {
-        return null;
+        allowedMoves.clear();
+        int turn = ((OthelloGame) game).getCounter();
+        Disk disk;
+        if (turn % 2 == 0) {
+            disk = Disk.BLACK;
+        } else {
+            disk = Disk.WHITE;
+        }
+        List<Move> moves = ((OthelloGame) game).getValidMoves();
+        for (Move move : moves) {
+            if (((OthelloMove) move).getDisk().equals(disk)) {
+                allowedMoves.add(move);
+            }
+        }
+        int idx = RANDOM.nextInt(allowedMoves.size());
+        return allowedMoves.get(idx);
     }
 }
