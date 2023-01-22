@@ -221,7 +221,7 @@ public class OthelloGame implements Game {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        if (isValidMove(move)) {
+        if (true) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
                 int dRow = row + dir[0];
