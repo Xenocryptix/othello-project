@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
-    private List<Move> allowedMoves = new ArrayList<>();
     private static final Random RANDOM = new Random();
 
     /**
