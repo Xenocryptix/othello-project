@@ -1,4 +1,5 @@
 package Othello.ai;
 
-public class PlayerFactory implements Factory{
+public class PlayerFactory implements Factory {
+
 }
