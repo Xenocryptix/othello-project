@@ -223,8 +223,7 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
-        Move randomMove = currentMovesForDisk.get(new Random().nextInt(currentMovesForDisk.size()));
-        return randomMove;
+        return currentMovesForDisk.get(new Random().nextInt(currentMovesForDisk.size()));
     }
 
     /**
