@@ -144,22 +144,20 @@ public class OthelloGame implements Game {
      *
      * @return true (if valid)
      */
-    public void checkDirection(Move move) {
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        Disk disk = ((OthelloMove) move).getDisk().other();
+    public void checkDirection(int row, int col, Disk disk) {
+        disk = disk.other();
         for (int[] dir: dxy) {
             //Starting point of a chosen direction
-            int initRow = row + dir[0];
-            int initCol = col + dir[1];
-
+            int dRow = row + dir[0];
+            int dCol = col + dir[1];
             //Traverse in that direction until meeting the disk with same color
-            for (int i = initRow, j = initCol; board.isField(i, j) ; i += dir[0], j += dir[1]) {
-                if (board.getField(i, j).equals(disk)) {
-                    Move newMove = new OthelloMove(disk, row - dir[0], col - dir[1]);
-                    validMoves.add(newMove);
+            while (board.isField(dRow, dCol)) {
+                if (board.getField(dRow, dCol).equals(disk)) {
+                    validMoves.add(new OthelloMove(disk, dRow, dCol));
                     break;
                 }
+                dRow += dir[0];
+                dCol += dir[1];
             }
         }
     }
@@ -175,8 +173,13 @@ public class OthelloGame implements Game {
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
-                    Move move = new OthelloMove(board.getField(i, j), i, j);
-                    checkDirection(move);
+//                    Move move = new OthelloMove(board.getField(i, j), i, j);
+//                    checkDirection(move);
+                    for (int[] dir: dxy) {
+                        int row = i + dir[0];
+                        int col = j + dir[1];
+                        checkDirection(row, col, board.getField(i, j));
+                    }
                 }
             }
         }
