@@ -3,10 +3,6 @@ U
 %src/Othello/Server/OthelloServer.java,d\7\d7f4c3f9b8adbb971cf18a2c24b067e2130945a0
 O
 src/Othello/AbstractPlayer.java,9\2\929b01de1008c11c1b3583ddbcd6bd60ed64c418
-N
-src/Othello/Server/Client.java,a\7\a77bd8d68d04917142a0a13f9d660e749fbb3d3a
-U
-%src/Othello/Server/ClientHandler.java,4\2\425444884149b7714ad9c34cfec92492c0f91561
 L
 src/Othello/ai/Strategy.java,1\0\1051970ec9466b5d19c8784c733569bcaed020dd
 Q
@@ -29,4 +25,4 @@ E
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 C
-othello-project.iml,9\3\93821b88c8562057eaa6fba09defbd876f91851b
+test/BoardTest.java,2\e\2ebe72c1fa23a6ebbcca78ad91dde4b240379e08
