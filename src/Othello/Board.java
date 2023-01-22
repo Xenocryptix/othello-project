@@ -231,7 +231,10 @@ public class Board {
      * @return true if the disk has won
      */
     //TODO: JML
-    //@ pure
+    /*@
+    ensures countDisk(d) > countDisk(d.other()) ==> true;
+    pure
+    */
     public boolean isWinner(Disk d) {
         return countDisk(d) > countDisk(d.other());
     }

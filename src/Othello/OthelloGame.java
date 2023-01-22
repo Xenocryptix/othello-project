@@ -58,6 +58,7 @@ public class OthelloGame implements Game {
      */
     /*@
     ensures \result >= 0;
+    pure
     */
     public int getCounter() {
         return turn;
@@ -69,7 +70,8 @@ public class OthelloGame implements Game {
      * @return whether the game is over
      */
     /*@
-    ensures board.gameOver() ==> turn || validMoves.isEmpty() ==> turn;
+    ensures board.gameOver() ==>  \result == true || validMoves.isEmpty() ==> \result == true;
+    pure;
     */
     @Override
     public boolean isGameover() {
@@ -81,6 +83,9 @@ public class OthelloGame implements Game {
      *
      * @return the player whose turn it is
      */
+    /*@
+    pure;
+    */
     @Override
     public Player getTurn() {
         //Depends if we default player1 go first
@@ -96,6 +101,11 @@ public class OthelloGame implements Game {
      *
      * @return the winner, or null if no player is the winner
      */
+    /*@
+    ensures board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE) ==> \result == player1;
+    ensures board.countDisk(Disk.WHITE) > board.countDisk(Disk.BLACK) ==> \result == player2;
+    pure;
+    */
     @Override
     public Player getWinner() {
         if (board.isWinner(Disk.BLACK)) {
