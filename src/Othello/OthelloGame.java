@@ -224,13 +224,22 @@ public class OthelloGame implements Game {
         if (isValidMove(move)) {
             board.setField(row, col, disk);
             for (int[] dir: dxy) {
-                int rowDir = row + dir[0];
-                int colDir = col + dir[1];
-                for (int i = rowDir, j = colDir ; board.isField(i, j); i += dir[0], j += dir[1]) {
-                    if (board.getField(rowDir, colDir).equals(disk.other())) {
-//                        for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
-                            board.flip(rowDir, colDir);
-//                        break;
+                int dRow = row + dir[0];
+                int dCol = col + dir[1];
+                while (board.isField(dRow, dCol)) {
+                    if (board.getField(dRow, dCol).equals(disk)) {
+                        break;
+                    }
+                    dRow += dir[0];
+                    dCol += dir[1];
+                }
+                if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
+                    dRow -= dir[0];
+                    dCol -= dir[1];
+                    while (!board.getField(dRow, dCol).equals(disk)) {
+                        board.flip(dRow, dCol);
+                        dRow -= dir[0];
+                        dCol -= dir[1];
                     }
                 }
             }
