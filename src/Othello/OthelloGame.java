@@ -18,7 +18,7 @@ public class OthelloGame implements Game {
     };
     private int[][] checked = new int[10][10];
     private Disk current;
-    Random rand = new Random();
+    Random RANDOM = new Random();
 
     public OthelloGame() {
         this.board = new Board();
@@ -193,7 +193,7 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
-        return currentMovesForDisk.get(rand.nextInt(currentMovesForDisk.size()));
+        return currentMovesForDisk.get(RANDOM.nextInt(currentMovesForDisk.size()));
     }
 
     /**
