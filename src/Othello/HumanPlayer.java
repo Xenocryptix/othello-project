@@ -1,21 +1,48 @@
 package Othello;
 
 import java.io.*;
+import java.util.*;
 
 public class HumanPlayer extends AbstractPlayer {
-    String name;
-    public Disk current = Disk.BLACK;
+    private String name;
+    private Disk current = Disk.BLACK;
+    private List<Move> allowedMoves = new ArrayList<>();
+    private PrintWriter out;
+    private BufferedReader in;
     public HumanPlayer(String name, Reader reader, Writer writer) {
         super(name);
-        PrintWriter out = new PrintWriter(writer);
-        BufferedReader in = new BufferedReader(reader);
+        out = new PrintWriter(writer, true);
+        in = new BufferedReader(reader);
     }
     public Move determineMove(Game game) {
-        //TODO
-        return null;
-    }
-    public Move getMove() {
-        //TODO
+        Disk disk = ((OthelloGame) game).getCurrentDisk();
+        allowedMoves.clear();
+        List<Move> moves = ((OthelloGame) game).getValidMoves();
+        for (Move move: moves) {
+            if (((OthelloMove) move).getDisk().equals(disk)) {
+                allowedMoves.add(move);
+            }
+        }
+
+        try {
+            while (true) {
+                String line = in.readLine();
+                String[] split = line.split("~");
+                if (!line.contains("MOVE~") || split.length < 2) {
+                    out.write("Invalid format");
+                    continue;
+                }
+                int row = split[1].charAt(0) - 65;
+                int col = split[1].charAt(1);
+                Move move = new OthelloMove(disk, row, col);
+                if (game.isValidMove(move)) {
+                    return move;
+                }
+                out.write("Illegal move");
+            }
+        } catch (IOException e) {
+            out.write("Invalid format");
+        }
         return null;
     }
 }
