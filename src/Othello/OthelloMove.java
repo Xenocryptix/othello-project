@@ -1,9 +1,12 @@
 package Othello;
 
+/**
+ * Class that is responsible for representing an othello move, it stores the row, column and the disk of the move
+ */
 public class OthelloMove implements Move {
-    private int row;
-    private int col;
-    private Disk disk;
+    private final int row;
+    private final int col;
+    private final Disk disk;
     public OthelloMove(Disk disk, int row, int col) {
         this.col = col;
         this.row = row;

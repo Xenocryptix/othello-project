@@ -1,5 +1,8 @@
 package Othello;
 
+/**
+ * Represents a board for an othello game
+ */
 public class Board {
     /*@
         public invariant ((\forall int row; row >= 0 && row < DIM;
@@ -16,8 +19,10 @@ public class Board {
     /**
      * Creates an empty board.
      */
-    //@ ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j;j <DIM && j >= 0 ;fields[i][j] == Disk.EMPTY)));
-    //TODO: EDIT THE JML SO IT CHECKS THE ONES FOR THE MIDDLE
+    /*@
+       ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+       ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+    */
     public Board() {
         fields = new Disk[DIM][DIM];
         for (int i = 0; i < DIM; i++) {
@@ -36,7 +41,7 @@ public class Board {
      */
     /*@
         ensures \result != this;
-        ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i] == this.fields[i]))) ;
+        ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i][j] == this.fields[i][j]))) ;
     */
     public Board deepCopy() {
         Disk[][] copy;
@@ -65,8 +70,10 @@ public class Board {
      *
      * @return true if 0 <= index < DIM*DIM
      */
-    //@ ensures index >= 0 && index < DIM*DIM ==> \result == true;
-    //@ pure;
+    /*@
+    ensures index >= 0 && index < DIM*DIM ==> \result == true;
+    pure;
+    */
     public boolean isField(int index) {
         return index >= 0 && index < DIM * DIM;
     }
@@ -158,8 +165,10 @@ public class Board {
      *
      * @return true if all fields are occupied
      */
-    //@ ensures (\forall int i; (i >= 0 && i < DIM); (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
-    //@ pure
+    /*@
+        ensures (\forall int i; (i >= 0 && i < DIM); (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
+        pure
+    */
     public boolean isFull() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
@@ -190,7 +199,7 @@ public class Board {
      */
     /*@
         requires disk != null;
-        ensures \result > 0;
+        ensures \result >= 0;
         pure
     */
     public int countDisk(Disk disk) {
@@ -212,7 +221,7 @@ public class Board {
      * @param d the disk in question
      * @return true if the disk has won
      */
-    //@ ensures isFull();
+    //TODO: JML
     //@ pure
     public boolean isWinner(Disk d) {
         return countDisk(d) > countDisk(d.other());
@@ -224,8 +233,11 @@ public class Board {
      *
      * @return true if the board has a winner.
      */
-    //@ ensures isWinner(Disk.WHITE) || isWinner(Disk.BLACK) ==> \result == true;
-    //@ pure
+
+    /*@
+     ensures isWinner(Disk.WHITE) || isWinner(Disk.BLACK) ==> \result == true;
+     pure
+    */
     public boolean hasWinner() {
         return isWinner(Disk.WHITE) || isWinner(Disk.BLACK);
     }
@@ -261,26 +273,36 @@ public class Board {
         int col = getColumn(i);
         fields[row][col] = disk;
     }
+
     /**
      * Empties all fields of this board excepts the disks in the middle.
      */
-    //@
-    //TODO: JML HEREEEEEE
+    /*@
+       ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+       ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+    */
     public void reset() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
-                if (i != 3 && j != 3 && i != 4 && j != 4){
-                    fields[i][j] = Disk.EMPTY;
-                }
+                fields[i][j] = Disk.EMPTY;
             }
         }
+        fields[3][3] = Disk.WHITE;
+        fields[3][4] = Disk.BLACK;
+        fields[4][3] = Disk.BLACK;
+        fields[4][4] = Disk.WHITE;
     }
 
     /**
-     * Flip a cell
+     * Flip a cell using the index given
      *
-     * @param i index
+     * @param i index of the field to be flipped
      */
+    /*@
+     requires isField(i);
+     ensures getField(i) == \old(getField(i)).other();
+     ensures countDisk(getField(i)) == \old(countDisk(getField(i)))+1;
+    */
     public void flip(int i) {
         int row = getRow(i);
         int col = getColumn(i);
@@ -291,10 +313,16 @@ public class Board {
     }
 
     /**
-     * Flip a cell
+     * Flip a cell using row and column
      *
-     * @param row, col
+     * @param row the row of the cell to be flipped
+     * @param col the column of the cell to be flipped
      */
+    /*@
+     requires isField(row,col);
+     ensures getField(row,col) == \old(getField(row,col)).other();
+     ensures countDisk(getField(row,col)) == \old(countDisk(getField(row,col)))+1;
+    */
     public void flip(int row, int col) {
         if (!isEmptyField(row, col)) {
             Disk disk = getField(row, col);
@@ -304,12 +332,15 @@ public class Board {
 
     /**
      * Set the whole current board
+     *
      * @param board the 2D array
      */
+    //TODO: JML
     public void setBoard(Disk[][] board) {
         this.fields = board;
     }
 
+    //TODO: JML and JAVADOC
     @Override
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";

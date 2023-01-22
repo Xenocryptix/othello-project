@@ -11,7 +11,7 @@ public enum Disk {
      *
      * @return the other disk is this disk is not EMPTY or EMPTY
      */
-    //@ ensures this == BLACK ==> \result == WHITE && this == WHITE ==> \result == BLACK;
+    //@ ensures this == BLACK ==> \result == WHITE && this == WHITE ==> \result == BLACK && this == EMPTY ==> \result == EMPTY;
     public Disk other() {
         if (this == BLACK) {
             return WHITE;

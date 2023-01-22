@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OthelloGameTest {
     private OthelloGame game;
@@ -14,6 +15,23 @@ public class OthelloGameTest {
     @BeforeEach
     public void setUp() {
         game = new OthelloGame();
+    }
+    @Test
+    public void testValidMoves() {
+        assertEquals(game.getValidMoves().size(), 8);
+
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3,2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK,2,3)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5,4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4,5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE,2,4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3,5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4,2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE,5,3)));
+
+        game.doMove(new OthelloMove(Disk.BLACK,4,5));
+        game.doMove(new OthelloMove(Disk.WHITE,5,3));
+
     }
 
     @Test
@@ -27,14 +45,13 @@ public class OthelloGameTest {
 
         //Testing flip horizontal left
         board.setField(5, 3, Disk.WHITE);
-        board.flip(4, 3);
+        board.flipRowAndCol(4, 3);
 
         assertEquals(board.getField(4, 3), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
         assertEquals(Disk.BLACK, board.getField(4, 3));
     }
 
-    @Disabled
     @Test
     public void testFlipVertical() {
         Board board = game.getBoard();
@@ -83,4 +100,5 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 4));
 
     }
+    //TODO: RANDOM MOVES GAME
 }

@@ -1,9 +1,9 @@
 package Othello;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
 
 public class OthelloGame implements Game {
     private Board board;
@@ -178,7 +178,7 @@ public class OthelloGame implements Game {
                     if (board.getField(rowDir, colDir).equals(disk.other())) {
 //                        for (int x = i - dir[0], y = j - dir[1]; x != rowDir && y != colDir; x -= dir[0], y -= dir[1])
                             board.flip(rowDir, colDir);
-  //                      break;
+//                        break;
                     }
                 }
             }
