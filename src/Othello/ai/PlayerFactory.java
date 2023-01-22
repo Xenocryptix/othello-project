@@ -2,14 +2,21 @@ package Othello.ai;
 
 import Othello.*;
 
+import java.io.Reader;
+import java.io.Writer;
+
 public class PlayerFactory implements Factory {
     /**
      * Make a new human player
-     * @param name name
+     *
+     * @param name   name
+     * @param reader reader stream
+     * @param writer writer stream
      * @return human player object
      */
-    public HumanPlayer makeHumanPlayer(String name) {
-        return new HumanPlayer(name);
+    @Override
+    public HumanPlayer makeHumanPlayer(String name, Reader reader, Writer writer) {
+        return new HumanPlayer(name, reader, writer);
     }
 
     /**
