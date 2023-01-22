@@ -17,13 +17,14 @@ public class OthelloGame implements Game {
         {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
     private int[][] checked = new int[10][10];
-    private int turn;
+    private Disk current;
+    Random rand = new Random();
 
     public OthelloGame() {
         this.board = new Board();
         this.player1 = null;
         this.player2 = null;
-        turn = 0;
+        current = Disk.BLACK;
         validMoves = getValidMoves();
     }
 
@@ -54,19 +55,6 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Return turn counter
-     *
-     * @return turn
-     */
-    /*@
-    ensures \result >= 0;
-    pure
-    */
-    public int getCounter() {
-        return turn;
-    }
-
-    /**
      * Check if the game is over, i.e., there is a winner or no more moves are available.
      *
      * @return whether the game is over
@@ -81,17 +69,22 @@ public class OthelloGame implements Game {
     }
 
     /**
+     * Return current disk
+     * @return disk current
+     */
+    public Disk getCurrentDisk() {
+        return current;
+    }
+
+    /**
      * Query whose turn it is
      *
      * @return the player whose turn it is
      */
-    /*@
-    pure;
-    */
+    //@pure;
     @Override
     public Player getTurn() {
-        //Depends if we default player1 go first
-        if (turn % 2 == 0) {
+        if (current.equals(Disk.BLACK)) {
             return player1;
         } else {
             return player2;
@@ -167,31 +160,8 @@ public class OthelloGame implements Game {
      * @param disk disk
      */
     public void checkDirection(int row, int col, Disk disk) {
-        //fucked up
         for (int[] dir: dxy) {
-            //Starting point of a chosen direction
-            int dRow = row + dir[0];
-            int dCol = col + dir[1];
-            //Traverse in that direction until meeting the disk with same color
-            while (board.isField(dRow, dCol)) {
-                if (board.getField(dRow, dCol).equals(disk)) {
-                    break;
-                }
-                dRow += dir[0];
-                dCol += dir[1];
-            }
-            if (board.isField(dRow, dCol)) {
-                if (board.getField(dRow, dCol).equals(disk) &&
-                   ((dRow == row && Math.abs(dCol - col) > 1) ||
-                    (dCol == col && Math.abs(dRow - row) > 1) ||
-                    (Math.abs(dCol - col) > 1 && Math.abs(dRow - row) > 1))) {
-                    Move move = new OthelloMove(disk, row, col);
-                    if (!isValidMove(move)) {
-                        validMoves.add(new OthelloMove(disk, row, col));
-                        break;
-                    }
-                }
-            }
+            //TODO: implement
         }
     }
 
@@ -209,8 +179,7 @@ public class OthelloGame implements Game {
                     for (int[] dir: dxy) {
                         int row = i + dir[0];
                         int col = j + dir[1];
-                        if (board.isEmptyField(row, col))
-                            checkDirection(row, col, board.getField(i, j).other());
+                        //TODO: implement
                     }
                 }
             }
@@ -224,7 +193,7 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
-        return currentMovesForDisk.get(new Random().nextInt(currentMovesForDisk.size()));
+        return currentMovesForDisk.get(rand.nextInt(currentMovesForDisk.size()));
     }
 
     /**
@@ -260,7 +229,7 @@ public class OthelloGame implements Game {
                 }
             }
             validMoves = getValidMoves();
-            turn++;
+            current = disk.other();
         }
     }
 
