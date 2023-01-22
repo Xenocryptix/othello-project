@@ -26,19 +26,27 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Set player 1
+     * Set player 1 to p1
      *
      * @param p1 Player 1 object
      */
+    /*@
+    requires p1 != null;
+    ensures player1 == p1 ==> true;
+    */
     public void setPlayer1(Player p1) {
         this.player1 = p1;
     }
 
     /**
-     * Set player 2
+     * Set player 2 to p2
      *
      * @param p2 Player 2 object
      */
+    /*@
+    requires p2 != null;
+    ensures player2 == p2 ==> true;
+    */
     public void setPlayer2(Player p2) {
         this.player2 = p2;
     }
@@ -48,6 +56,9 @@ public class OthelloGame implements Game {
      *
      * @return turn
      */
+    /*@
+    ensures \result >= 0;
+    */
     public int getCounter() {
         return turn;
     }
@@ -57,6 +68,9 @@ public class OthelloGame implements Game {
      *
      * @return whether the game is over
      */
+    /*@
+    ensures board.gameOver() ==> turn || validMoves.isEmpty() ==> turn;
+    */
     @Override
     public boolean isGameover() {
         return board.gameOver() || validMoves.isEmpty();

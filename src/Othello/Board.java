@@ -128,7 +128,10 @@ public class Board {
      * @param i the index
      * @return the column
      */
-    //@pure
+    /*@
+        requires isField(i);
+        ensures \result >= 0 && \result < DIM;
+    */
     public int getColumn(int i) {
         return i % DIM;
     }
@@ -139,7 +142,10 @@ public class Board {
      * @param i the index
      * @return the column
      */
-    //@pure
+    /*@
+        requires isField(i);
+        ensures \result >= 0 && \result < DIM;
+    */
     public int getRow(int i) {
         return i / DIM;
     }
@@ -186,7 +192,10 @@ public class Board {
      *
      * @return true if the game is over
      */
-    //@ ensures isFull() || hasWinner() ==> \result == true;
+    /*@
+         ensures isFull() ==> \result == true || hasWinner() ==> \result == true;
+         pure;
+    */
     public boolean gameOver() {
         return isFull() || hasWinner();
     }

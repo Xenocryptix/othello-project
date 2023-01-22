@@ -45,7 +45,7 @@ public class OthelloGameTest {
 
         //Testing flip horizontal left
         board.setField(5, 3, Disk.WHITE);
-        board.flipRowAndCol(4, 3);
+        board.flip(4, 3);
 
         assertEquals(board.getField(4, 3), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
