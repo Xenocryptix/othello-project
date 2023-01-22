@@ -1,14 +1,6 @@
 
 O
 src/Othello/AbstractPlayer.java,9\2\929b01de1008c11c1b3583ddbcd6bd60ed64c418
-L
-src/Othello/ai/Strategy.java,1\0\1051970ec9466b5d19c8784c733569bcaed020dd
-Q
-!src/Othello/ai/SmartStrategy.java,1\0\1081dc1b20f8238c60b1449df5de7ad363b68684
-Q
-!src/Othello/ai/NaiveStrategy.java,c\8\c8073899b98b8c94c0baa511367ab04ef71db117
-R
-"src/Othello/ai/ComputerPlayer.java,9\0\9054e9aaf5f9c2233a9cf2baad2856e1c36d9053
 E
 src/Othello/Move.java,2\f\2f83c29ba97259f9ff2406306f894c6ef38933a9
 :

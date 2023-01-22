@@ -167,6 +167,7 @@ public class OthelloGame implements Game {
      * @param disk disk
      */
     public void checkDirection(int row, int col, Disk disk) {
+        //fucked up
         for (int[] dir: dxy) {
             //Starting point of a chosen direction
             int dRow = row + dir[0];
