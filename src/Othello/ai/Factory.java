@@ -1,18 +1,18 @@
 package Othello.ai;
 
-import Othello.Player;
+import Othello.*;
 
 public interface Factory {
     /**
      * Make a new human player
      * @return human player object
      */
-    Player makeHumanPlayer();
+    HumanPlayer makeHumanPlayer();
 
     /**
      * Make a new computer player with specified strategy
      * @param strategy
      * @return computer player object
      */
-    Player makeComputerPlayer(Strategy strategy);
+    ComputerPlayer makeComputerPlayer(Strategy strategy);
 }

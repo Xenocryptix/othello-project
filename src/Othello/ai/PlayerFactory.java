@@ -1,7 +1,6 @@
 package Othello.ai;
 
-import Othello.HumanPlayer;
-import Othello.Player;
+import Othello.*;
 
 public class PlayerFactory implements Factory {
     /**
