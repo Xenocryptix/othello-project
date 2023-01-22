@@ -29,15 +29,7 @@ public class NaiveStrategy implements Strategy {
      */
     @Override
     public Move determineMove(Game game) {
-        allowedMoves.clear();
         Disk disk = ((OthelloGame) game).getCurrentDisk();
-        List<Move> moves = ((OthelloGame) game).getValidMoves();
-        for (Move move : moves) {
-            if (((OthelloMove) move).getDisk().equals(disk)) {
-                allowedMoves.add(move);
-            }
-        }
-        int idx = RANDOM.nextInt(allowedMoves.size());
-        return allowedMoves.get(idx);
+        return ((OthelloGame) game).getRandomValidMove(disk);
     }
 }
