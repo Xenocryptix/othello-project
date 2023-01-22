@@ -178,10 +178,11 @@ public class OthelloGame implements Game {
                 dRow += dir[0];
                 dCol += dir[1];
             }
-            if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
-                if ((dRow == row && Math.abs(dCol - col) > 1) ||
+            if (board.isField(dRow, dCol)) {
+                if (board.getField(dRow, dCol).equals(disk) &&
+                   ((dRow == row && Math.abs(dCol - col) > 1) ||
                     (dCol == col && Math.abs(dRow - row) > 1) ||
-                    (Math.abs(dCol - col) > 1 && Math.abs(dRow - row) > 1)) {
+                    (Math.abs(dCol - col) > 1 && Math.abs(dRow - row) > 1))) {
                     Move move = new OthelloMove(disk, row, col);
                     if (!isValidMove(move)) {
                         validMoves.add(new OthelloMove(disk, row, col));
