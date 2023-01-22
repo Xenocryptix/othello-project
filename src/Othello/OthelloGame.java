@@ -6,7 +6,7 @@ import java.util.Objects;
 
 
 public class OthelloGame implements Game {
-    private Board board;
+    private final Board board;
     private Player player1;
     private Player player2;
     private List<Move> validMoves;

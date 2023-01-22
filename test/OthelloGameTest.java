@@ -74,9 +74,9 @@ public class OthelloGameTest {
         //Test flip diagonal NE direction
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         game.doMove(new OthelloMove(Disk.WHITE, 3, 5));
-        assertEquals(Disk.WHITE, board.getField(3, 5));
+        assertEquals(Disk.WHITE, board.getField(3, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 2, 5));
-        assertEquals(Disk.BLACK, board.getField(3, 5));
+        assertEquals(Disk.BLACK, board.getField(3, 4));
 
         //Test flip diagonal NW direction
         game.doMove(new OthelloMove(Disk.WHITE, 3, 6));
