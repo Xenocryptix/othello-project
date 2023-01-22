@@ -135,7 +135,6 @@ public class OthelloGame implements Game {
      * @return true (if valid)
      */
     public void checkDirection(int row, int col, Disk disk) {
-        disk = disk.other();
         for (int[] dir: dxy) {
             //Starting point of a chosen direction
             int dRow = row + dir[0];
@@ -143,7 +142,7 @@ public class OthelloGame implements Game {
             //Traverse in that direction until meeting the disk with same color
             while (board.isField(dRow, dCol)) {
                 if (board.getField(dRow, dCol).equals(disk)) {
-                    validMoves.add(new OthelloMove(disk, dRow, dCol));
+                    validMoves.add(new OthelloMove(disk, row, col));
                     break;
                 }
                 dRow += dir[0];
@@ -163,12 +162,10 @@ public class OthelloGame implements Game {
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
-//                    Move move = new OthelloMove(board.getField(i, j), i, j);
-//                    checkDirection(move);
                     for (int[] dir: dxy) {
                         int row = i + dir[0];
                         int col = j + dir[1];
-                        checkDirection(row, col, board.getField(i, j));
+                        checkDirection(row, col, board.getField(i, j).other());
                     }
                 }
             }
