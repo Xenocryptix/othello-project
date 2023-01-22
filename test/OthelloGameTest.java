@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OthelloGameTest {
     private OthelloGame game;
@@ -108,5 +107,12 @@ public class OthelloGameTest {
     @Test
     public void fullRandomGame() {
         Board board = game.getBoard();
+        assertFalse(game.isGameover());
+        while (!game.isGameover()) {
+            game.doMove(game.getRandomValidMove(Disk.BLACK));
+            game.doMove(game.getRandomValidMove(Disk.WHITE));
+        }
+        assertTrue(game.isGameover());
+
     }
 }
