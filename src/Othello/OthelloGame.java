@@ -3,6 +3,7 @@ package Othello;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class OthelloGame implements Game {
@@ -215,14 +216,15 @@ public class OthelloGame implements Game {
         }
         return validMoves;
     }
-    public List<Move> getValidMoves(Disk disk) {
+    public Move getRandomValidMove(Disk disk) {
         List<Move> currentMovesForDisk = new ArrayList<>();
         for (Move move : validMoves) {
             if (((OthelloMove) move).getDisk().equals(disk)) {
                 currentMovesForDisk.add(move);
             }
         }
-        return currentMovesForDisk;
+        Move randomMove = currentMovesForDisk.get(new Random().nextInt(currentMovesForDisk.size()));
+        return randomMove;
     }
 
     /**

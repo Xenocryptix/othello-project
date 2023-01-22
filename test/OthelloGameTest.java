@@ -1,10 +1,10 @@
-import Othello.Board;
-import Othello.Disk;
-import Othello.OthelloGame;
-import Othello.OthelloMove;
+import Othello.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -103,11 +103,10 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 4));
 
     }
+    //TODO: Gameover
     //TODO: RANDOM MOVES GAME
     @Test
     public void fullRandomGame() {
         Board board = game.getBoard();
-
-
     }
 }
