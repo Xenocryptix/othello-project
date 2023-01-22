@@ -5,10 +5,11 @@ import Othello.*;
 public class PlayerFactory implements Factory {
     /**
      * Make a new human player
+     * @param name name
      * @return human player object
      */
-    public HumanPlayer makeHumanPlayer() {
-        return new HumanPlayer();
+    public HumanPlayer makeHumanPlayer(String name) {
+        return new HumanPlayer(name);
     }
 
     /**

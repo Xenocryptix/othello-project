@@ -6,8 +6,8 @@ public class ComputerPlayer extends AbstractPlayer {
     private String name;
     private Strategy strategy;
 
-    public ComputerPlayer(Strategy strategy, Disk disk) {
-        super(strategy.getName() + " - " + disk);
+    public ComputerPlayer(Strategy strategy) {
+        super(strategy.getName());
         this.strategy = strategy;
     }
 

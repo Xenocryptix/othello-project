@@ -12,7 +12,7 @@ public class HumanPlayer extends AbstractPlayer {
         //TODO
         return null;
     }
-    public Move getMove(int count) {
+    public Move getMove() {
         //TODO
         return null;
     }
