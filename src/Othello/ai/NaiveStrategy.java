@@ -30,13 +30,7 @@ public class NaiveStrategy implements Strategy {
     @Override
     public Move determineMove(Game game) {
         allowedMoves.clear();
-        int turn = ((OthelloGame) game).getCounter();
-        Disk disk;
-        if (turn % 2 == 0) {
-            disk = Disk.BLACK;
-        } else {
-            disk = Disk.WHITE;
-        }
+        Disk disk = ((OthelloGame) game).getCurrentDisk();
         List<Move> moves = ((OthelloGame) game).getValidMoves();
         for (Move move : moves) {
             if (((OthelloMove) move).getDisk().equals(disk)) {
