@@ -12,8 +12,9 @@ public class OthelloGame implements Game {
     private final Board board;
     private Player player1;
     private Player player2;
-    private List<Move> validMoves = new ArrayList<>();
-    //predefined directional array
+    private List<Move> validMoves = new ArrayList<>(); //Valid move array list
+
+    //Predefined directional array
     private final int[][] dxy = {
         {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
         {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
@@ -35,8 +36,8 @@ public class OthelloGame implements Game {
      * @param p1 Player 1 object
      */
     /*@
-    requires p1 != null;
-    ensures player1 == p1 ==> true;
+        requires p1 != null;
+        ensures player1 == p1 ==> true;
     */
     public void setPlayer1(Player p1) {
         this.player1 = p1;
@@ -48,8 +49,8 @@ public class OthelloGame implements Game {
      * @param p2 Player 2 object
      */
     /*@
-    requires p2 != null;
-    ensures player2 == p2 ==> true;
+        requires p2 != null;
+        ensures player2 == p2 ==> true;
     */
     public void setPlayer2(Player p2) {
         this.player2 = p2;
@@ -61,8 +62,8 @@ public class OthelloGame implements Game {
      * @return whether the game is over
      */
     /*@
-    ensures validMoves.isEmpty() ==> \result == true;
-    pure;
+        ensures validMoves.isEmpty() ==> \result == true;
+        pure;
     */
     @Override
     public boolean isGameover() {
@@ -74,6 +75,7 @@ public class OthelloGame implements Game {
      * Return current disk
      * @return disk current
      */
+    //@ ensures \result == Disk.BLACK || \result == Disk.WHITE;
     public Disk getCurrentDisk() {
         return current;
     }
@@ -83,7 +85,8 @@ public class OthelloGame implements Game {
      *
      * @return the player whose turn it is
      */
-    //@pure;
+    //@ ensures \result == player1 || \result == player2;
+    //@ pure;
     @Override
     public Player getTurn() {
         if (current.equals(Disk.BLACK)) {
@@ -99,9 +102,10 @@ public class OthelloGame implements Game {
      * @return the winner, or null if no player is the winner
      */
     /*@
-    ensures board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE) ==> \result == player1;
-    ensures board.countDisk(Disk.WHITE) > board.countDisk(Disk.BLACK) ==> \result == player2;
-    pure;
+        ensures board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE) ==> \result == player1;
+        ensures board.countDisk(Disk.WHITE) > board.countDisk(Disk.BLACK) ==> \result == player2;
+        ensures board.countDisk(Disk.WHITE) == board.countDisk(Disk.BLACK) ==> \result == null;
+        pure;
     */
     @Override
     public Player getWinner() {
@@ -120,15 +124,16 @@ public class OthelloGame implements Game {
      * @param move the move to check
      * @return true if the move is a valid move
      */
+    //@ ensures \result == true || \result == false;
     @Override
     public boolean isValidMove(Move move) {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
-        for (Move current : validMoves) {
-            int cRow = ((OthelloMove) current).getRow();
-            int cCol = ((OthelloMove) current).getCol();
-            Disk cDisk = ((OthelloMove) current).getDisk();
+        for (Move curMove : validMoves) {
+            int cRow = ((OthelloMove) curMove).getRow();
+            int cCol = ((OthelloMove) curMove).getCol();
+            Disk cDisk = ((OthelloMove) curMove).getDisk();
             if (cRow == row && cCol == col && Objects.equals(cDisk, disk)) {
                 return true;
             }
@@ -185,6 +190,13 @@ public class OthelloGame implements Game {
         }
         return validMoves;
     }
+
+    /**
+     * Return a random valid move for a specified disk
+     *
+     * @param disk the disk color
+     * @return move
+     */
     public Move getRandomValidMove(Disk disk) {
         List<Move> currentMovesForDisk = new ArrayList<>();
         for (Move move : validMoves) {
@@ -200,6 +212,8 @@ public class OthelloGame implements Game {
      *
      * @param move the move to play
      */
+    //@ ensures validMoves != \old(validMoves);
+    //@ ensures current == \old(current.other());
     @Override
     public void doMove(Move move) {
         int row = ((OthelloMove) move).getRow();
@@ -252,13 +266,19 @@ public class OthelloGame implements Game {
 
     /**
      * Set the whole current board
-     * @param newBoard the 2D array
+     *
      */
+    //@ ensures validMoves != \old(validMoves);
     public void setBoard(Disk[][] newBoard) {
         board.setBoard(newBoard);
         getValidMoves();
     }
 
+    /**
+     * Reset current board
+     *
+     */
+    //@ ensures validMoves != \old(validMoves);
     public void reset() {
         board.reset();
         getValidMoves();
