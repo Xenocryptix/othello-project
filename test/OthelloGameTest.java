@@ -85,6 +85,7 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
+
     /**
      * Test if flipping in the two directions horizontally to the left works correctly
      */
@@ -105,6 +106,7 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         assertEquals(Disk.BLACK, board.getField(3, 3));
     }
+
     /**
      * Test if flipping in the two directions vertically downwards works correctly
      */
@@ -154,6 +156,26 @@ public class OthelloGameTest {
         assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
+    }
+
+    /**
+     * Test that when multiple flips occur at the same time it flips
+     */
+    @Test
+    public void testMultipleFlips() {
+        //Setting up the board for a move that flips more than one field
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
+
+        assertEquals(board.getField(4, 2), Disk.WHITE);
+        assertEquals(board.getField(4, 3), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 2));
+        assertEquals(board.getField(4, 2), Disk.BLACK);
+        assertEquals(board.getField(4, 3), Disk.BLACK);
+
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 1));
+        assertEquals(board.getField(4, 2), Disk.WHITE);
+        assertEquals(board.getField(4, 3), Disk.WHITE);
     }
 
     //TODO: Gameover
