@@ -3,6 +3,10 @@ package Othello;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Class representing a human player of the game that extends an abstract class called AbstractPlayer.
+ * //TODO:CONTINUE
+ */
 public class HumanPlayer extends AbstractPlayer {
     private final List<Move> allowedMoves = new ArrayList<>();
     private final PrintWriter out;

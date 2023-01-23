@@ -6,7 +6,11 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Represent a game for Othello
+ * A class representing and othello game which implements and interface Game. The class handles
+ * the full implementation of the game. It creates a new board for the game and adds two players
+ * to the game. It also generates all valid moves for a game and has a method which allows making a move
+ * for the game which flips all the tiles in the middle of the two disks. IT shows the state of the game
+ * using a method and the board can be reset through OthelloGame and even set to a new array
  */
 public class OthelloGame implements Game {
     private final Board board;
@@ -16,12 +20,16 @@ public class OthelloGame implements Game {
 
     //Predefined directional array
     private final int[][] dxy = {
-        {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
-        {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
+            {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+            {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
     private Disk current;
-    private Random rand = new Random();
+    private final Random RANDOM = new Random();
 
+    /**
+     * Creates a new othello game by initialising the board to a new board, two players and setting the first move to be a
+     * black disc
+     */
     public OthelloGame() {
         this.board = new Board();
         this.player1 = null;
@@ -31,7 +39,7 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Set player 1 to p1
+     * Sets player 1 to p1 passed as a parameter
      *
      * @param p1 Player 1 object
      */
@@ -44,7 +52,7 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Set player 2 to p2
+     * Set player 2 to p2 passed as a parameter
      *
      * @param p2 Player 2 object
      */
@@ -57,9 +65,9 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Check if the game is over, i.e., there is a winner or no more moves are available.
+     * Check if the game is over, i.e., there are no more valid moves or the board is full.
      *
-     * @return whether the game is over
+     * @return True, if the game is over, otherwise false.
      */
     /*@
         ensures validMoves.isEmpty() ==> \result == true;
@@ -72,8 +80,9 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Return current disk
-     * @return disk current
+     * Returns the disk that has the current turn
+     *
+     * @return Current disk
      */
     //@ ensures \result == Disk.BLACK || \result == Disk.WHITE;
     public Disk getCurrentDisk() {
@@ -83,7 +92,7 @@ public class OthelloGame implements Game {
     /**
      * Query whose turn it is
      *
-     * @return the player whose turn it is
+     * @return The player whose turn it is
      */
     //@ ensures \result == player1 || \result == player2;
     //@ pure;
@@ -97,9 +106,9 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Get the winner of the game. If the game is a draw, then this method returns null.
+     * Gets the winner of the game. If the game is a draw, then this null is returned.
      *
-     * @return the winner, or null if no player is the winner
+     * @return The player that won the game, or null if no player is the winner
      */
     /*@
         ensures board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE) ==> \result == player1;
@@ -121,10 +130,14 @@ public class OthelloGame implements Game {
     /**
      * Check if a move is a valid move
      *
-     * @param move the move to check
-     * @return true if the move is a valid move
+     * @param move The move to check
+     * @return True if the move is valid, otherwise false
      */
-    //@ ensures \result == true || \result == false;
+    /*@
+    requires move != null;
+    ensures \result == true ==> validMoves.contains(move);
+    pure
+    */
     @Override
     public boolean isValidMove(Move move) {
         int row = ((OthelloMove) move).getRow();
@@ -142,14 +155,18 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Much more convenient check (experimental)
+     * Checks all 8 directions of a disc to find a move that could be valid.
+     * A check is made to look at the neighboring tile in a certain direction that it is the other disc,
+     * and it is not empty. If it passes that, then it moves another tile and checks it again until
+     * an empty tile is found and then that tile is added to the valid moves list as a new valid move.
      *
-     * @param row row
-     * @param col col
-     * @param disk disk
+     * @param row  row The row of the move to check valid moves for
+     * @param col  col The column of the move to check valid moves for
+     * @param disk disk The disk of the move to check valid moves for
      */
+    //TODO:JML
     public void checkDirection(int row, int col, Disk disk) {
-        for (int[] dir: dxy) {
+        for (int[] dir : dxy) {
             int nRow = row + dir[0];
             int nCol = col + dir[1];
             int count = 0;
@@ -157,7 +174,7 @@ public class OthelloGame implements Game {
                 if (board.getField(nRow, nCol).equals(disk))
                     break;
                 if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
-                    if (board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0){
+                    if (board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0) {
                         Move move = new OthelloMove(disk, nRow, nCol);
                         if (!isValidMove(move)) {
                             validMoves.add(move);
@@ -173,10 +190,15 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Return all moves that are valid in the current state of the game
+     * Return all moves that are valid in the current state of the game by checking all directions
+     * of all the tiles in the game that are not empty.
      *
      * @return the list of currently valid moves
      */
+    /*@
+    //TODO:JML
+    pure
+    */
     @Override
     public List<Move> getValidMoves() {
         validMoves.clear();
@@ -194,9 +216,13 @@ public class OthelloGame implements Game {
     /**
      * Return a random valid move for a specified disk
      *
-     * @param disk the disk color
-     * @return move
+     * @param disk The disk color which random move would be generated for
+     * @return move The random move
      */
+    /*@
+    requires disk != Disk.EMPTY;
+    ensures getValidMoves().contains(\result) && ((OthelloMove) \result).getDisk().equals(disk);
+    */
     public Move getRandomValidMove(Disk disk) {
         List<Move> currentMovesForDisk = new ArrayList<>();
         for (Move move : validMoves) {
@@ -204,16 +230,21 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
-        return currentMovesForDisk.get(rand.nextInt(currentMovesForDisk.size()));
+        return currentMovesForDisk.get(RANDOM.nextInt(currentMovesForDisk.size()));
     }
 
     /**
-     * Perform the move, assuming it is a valid move.
+     * Performing the gives move, unless this move is not a valid move which is done by going through
+     * the tiles that are between the valid move given and another disk of the same color and switching
+     * the other tiles between them to the color of the given move.
      *
-     * @param move the move to play
+     * @param move The move to play
      */
-    //@ ensures validMoves != \old(validMoves);
-    //@ ensures current == \old(current.other());
+    /*@
+    ensures validMoves != \old(validMoves);
+    ensures current == \old(current.other());
+    */
+    //TODO: DON'T UNDERSTAND
     @Override
     public void doMove(Move move) {
         int row = ((OthelloMove) move).getRow();
@@ -221,7 +252,7 @@ public class OthelloGame implements Game {
         Disk disk = ((OthelloMove) move).getDisk();
         if (isValidMove(move)) {
             board.setField(row, col, disk);
-            for (int[] dir: dxy) {
+            for (int[] dir : dxy) {
                 int dRow = row + dir[0];
                 int dCol = col + dir[1];
                 while (board.isField(dRow, dCol)) {
@@ -247,9 +278,10 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Return the board as a string
+     * Return the current state of the board as a string
+     * with a description of whose turn it is to play
      *
-     * @return string
+     * @return The board with the player's turn
      */
     public String toString() {
         return board + "\nIt's " + getTurn() + " turn\n";
@@ -258,25 +290,33 @@ public class OthelloGame implements Game {
     /**
      * Return the board object
      *
-     * @return board
+     * @return board that is used in the game
      */
+    /*@
+    ensures (\forall int i; i >= 0 && i <= 63; \result.getField(i) == board.getField(i));
+    pure
+    */
     public Board getBoard() {
         return board;
     }
 
     /**
-     * Set the whole current board
+     * Sets the current board to a new board
      *
+     * @param newBoard The new board to change the current board
      */
-    //@ ensures validMoves != \old(validMoves);
+    /*@
+    ensures (\forall int i; i >= 0 && i <= 7; (\forall int j;j >= 0 && j <= 7; newBoard[i][j] == board.getField(i,j)));
+    ensures validMoves != \old(validMoves);
+    pure
+    */
     public void setBoard(Disk[][] newBoard) {
         board.setBoard(newBoard);
         getValidMoves();
     }
 
     /**
-     * Reset current board
-     *
+     * Resets the current board to the initial board by initialising the board
      */
     //@ ensures validMoves != \old(validMoves);
     public void reset() {

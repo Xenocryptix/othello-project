@@ -272,4 +272,5 @@ public class OthelloGameTest {
         assertFalse(board.isFull());
         assertTrue(game.isGameover());
     }
+
 }
