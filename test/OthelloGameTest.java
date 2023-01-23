@@ -138,7 +138,7 @@ public class OthelloGameTest {
     }
 
     /**
-     * Tes if flipping works correctly in the south direction
+     * Test if flipping works correctly in the south direction
      */
     @Test
     public void testFlipDiagonalSouth() {
