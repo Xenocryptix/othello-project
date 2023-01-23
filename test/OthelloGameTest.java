@@ -77,46 +77,51 @@ public class OthelloGameTest {
 
 
     /**
-     * Test if flipping in the two directions horizontally works correctly, i.e. right and left
+     * Test if flipping in the two directions horizontally to the right works correctly
      */
     @Test
-    public void testFlipHorizontal() {
-        //Testing flip horizontal right
+    public void testFlipHorizontalRight() {
         assertEquals(board.getField(4, 4), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
-
-        //Testing flip horizontal left
-        game.reset();
-
+    }
+    /**
+     * Test if flipping in the two directions horizontally to the left works correctly
+     */
+    @Test
+    public void testFlipHorizontalLeft() {
         assertEquals(board.getField(3, 3), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
         assertEquals(Disk.BLACK, board.getField(3, 3));
     }
 
     /**
-     * Test if flipping in the two directions vertically works correctly, i.e. up and down
+     * Test if flipping in the two directions vertically upwards works correctly
      */
 
     @Test
-    public void testFlipVertical() {
-        //Testing flip vertical up
+    public void testFlipVerticalUp() {
         assertEquals(board.getField(3, 3), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         assertEquals(Disk.BLACK, board.getField(3, 3));
+    }
+    /**
+     * Test if flipping in the two directions vertically downwards works correctly
+     */
 
-        //Testing flip vertical down
+    @Test
+    public void testFlipVerticalDown() {
         assertEquals(board.getField(4, 4), Disk.WHITE);
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
 
     /**
-     * Test if flipping is performed directly in all 4 diagonal directions, i.e. North East, North West, South West and South East
+     * Test if flipping is performed correctly in the north direction
      */
 
     @Test
-    public void testFlipDiagonal() {
+    public void testFlipDiagonalNorth() {
         //Test flip diagonal NE direction
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         game.doMove(new OthelloMove(Disk.WHITE, 3, 5));
@@ -130,7 +135,13 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 2, 2));
         assertEquals(Disk.BLACK, board.getField(3, 3));
 
-        game.reset();
+    }
+
+    /**
+     * Tes if flipping works correctly in the south direction
+     */
+    @Test
+    public void testFlipDiagonalSouth() {
         //Test flip diagonal SW direction
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
@@ -140,11 +151,9 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 2));
 
         //Test flip diagonal SE direction
-        //TODO: MIGHT NOT WORK CHECK
         assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
-
     }
 
     //TODO: Gameover
