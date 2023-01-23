@@ -62,12 +62,12 @@ public class OthelloGame implements Game {
      * @return whether the game is over
      */
     /*@
-    ensures board.gameOver() ==>  \result == true || validMoves.isEmpty() ==> \result == true;
+    ensures validMoves.isEmpty() ==> \result == true;
     pure;
     */
     @Override
     public boolean isGameover() {
-        return board.gameOver() || validMoves.isEmpty();
+        return validMoves.isEmpty();
     }
 
     /**
