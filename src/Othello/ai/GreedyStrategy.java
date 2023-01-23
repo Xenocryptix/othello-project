@@ -5,7 +5,7 @@ import Othello.*;
 import java.util.*;
 
 public class GreedyStrategy implements Strategy {
-    private static final String NAME = "SMART";
+    private static final String NAME = "GREEDY";
 
     /**
      * Return the name of the strategy
