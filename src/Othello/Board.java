@@ -194,20 +194,6 @@ public class Board {
     }
 
     /**
-     * Returns true if the game is over. The game is over when there is a winner
-     * or the whole board is full.
-     *
-     * @return true if the game is over
-     */
-    /*@
-    ensures isFull() ==> \result == true || hasWinner() ==> \result == true;
-    pure
-    */
-    public boolean gameOver() {
-        return isFull() || hasWinner();
-    }
-
-    /**
      * Counts the number of times a certain disk is on the board
      *
      * @param disk the disk to be counted
@@ -238,8 +224,8 @@ public class Board {
      * @return true if the disk has won
      */
     /*@
-    requires d == Disk.BLACK || d == Disk.WHITE;
-    ensures countDisk(d) > countDisk(d.other()) ==> true;
+    requires disk == Disk.BLACK || disk == Disk.WHITE;
+    ensures countDisk(disk) > countDisk(disk.other()) ==> true;
     pure
     */
     public boolean isWinner(Disk disk) {

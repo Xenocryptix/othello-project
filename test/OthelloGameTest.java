@@ -81,7 +81,7 @@ public class OthelloGameTest {
      */
     @Test
     public void testFlipHorizontalRight() {
-        assertEquals(board.getField(4, 4), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
@@ -91,7 +91,7 @@ public class OthelloGameTest {
      */
     @Test
     public void testFlipHorizontalLeft() {
-        assertEquals(board.getField(3, 3), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(3, 3));
         game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
         assertEquals(Disk.BLACK, board.getField(3, 3));
     }
@@ -102,7 +102,7 @@ public class OthelloGameTest {
 
     @Test
     public void testFlipVerticalUp() {
-        assertEquals(board.getField(3, 3), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(3, 3));
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         assertEquals(Disk.BLACK, board.getField(3, 3));
     }
@@ -113,7 +113,7 @@ public class OthelloGameTest {
 
     @Test
     public void testFlipVerticalDown() {
-        assertEquals(board.getField(4, 4), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
@@ -167,15 +167,15 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
         game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
 
-        assertEquals(board.getField(4, 2), Disk.WHITE);
-        assertEquals(board.getField(4, 3), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(4, 2));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 2));
-        assertEquals(board.getField(4, 2), Disk.BLACK);
-        assertEquals(board.getField(4, 3), Disk.BLACK);
+        assertEquals(Disk.BLACK, board.getField(4, 2));
+        assertEquals(Disk.BLACK, board.getField(4, 3));
 
         game.doMove(new OthelloMove(Disk.WHITE, 4, 1));
-        assertEquals(board.getField(4, 2), Disk.WHITE);
-        assertEquals(board.getField(4, 3), Disk.WHITE);
+        assertEquals(Disk.WHITE, board.getField(4, 2));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
     }
 
     //TODO: Gameover
@@ -189,17 +189,19 @@ public class OthelloGameTest {
 
         game.doMove(game.getRandomValidMove(Disk.WHITE));
 
-
         assertTrue(game.isGameover());
 
     }
 
     /**
-     * This test would go through possible board representations for gmae ending before the board is full
+     * This test would go through possible board representations for game ending before the board is full
      */
     @Test
     public void gameOverNotFull() {
         /**
+         * The following will be a representation of the board when there are no possible
+         * moves available for both discs but he board is not full
+         *
          *    A   B   C   D   E   F   G   H
          * 1  W | W | W | W | W | W | W | W
          *   ---+---+---+---+---+---+---+---
@@ -227,10 +229,13 @@ public class OthelloGameTest {
             }
         }
         assertFalse(board.isFull());
+        game.getValidMoves();
         assertTrue(game.isGameover());
 
         game.reset();
         /**
+         * The following will be another representation of the board when there are no possible
+         * moves available for both discs but he board is not full
          *    A   B   C   D   E   F   G   H
          * 1    | B | B | B | B | B | B | B
          *   ---+---+---+---+---+---+---+---

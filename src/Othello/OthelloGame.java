@@ -15,8 +15,8 @@ public class OthelloGame implements Game {
     private List<Move> validMoves;
     //predefined directional array
     private final int[][] dxy = {
-        {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
-        {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
+            {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+            {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
     private int[][] checked = new int[10][10];
     private Disk current;
@@ -62,16 +62,17 @@ public class OthelloGame implements Game {
      * @return whether the game is over
      */
     /*@
-    ensures board.gameOver() ==>  \result == true || validMoves.isEmpty() ==> \result == true;
+    ensures board.isFull() ==>  \result == true || validMoves.isEmpty() ==> \result == true;
     pure;
     */
     @Override
     public boolean isGameover() {
-        return board.gameOver() || validMoves.isEmpty();
+        return board.isFull() || validMoves.isEmpty();
     }
 
     /**
      * Return current disk
+     *
      * @return disk current
      */
     public Disk getCurrentDisk() {
@@ -117,11 +118,12 @@ public class OthelloGame implements Game {
     /**
      * Check if a move is a valid move
      * (could go unused)
+     *
      * @param row, col
      * @return true false
      */
     public boolean hasNearby(int row, int col) {
-        for (int[] dir: dxy) {
+        for (int[] dir : dxy) {
             int dRow = row + dir[0];
             int dCol = col + dir[1];
             if (!board.isField(dRow, dCol))
@@ -157,19 +159,19 @@ public class OthelloGame implements Game {
     /**
      * Much more convenient check (experimental)
      *
-     * @param row row
-     * @param col col
+     * @param row  row
+     * @param col  col
      * @param disk disk
      */
     public void checkDirection(int row, int col, Disk disk) {
-        for (int[] dir: dxy) {
+        for (int[] dir : dxy) {
             int nRow = row + dir[0];
             int nCol = col + dir[1];
             while (board.isField(nRow, nCol)) {
                 if (board.getField(nRow, nCol).equals(disk))
                     break;
                 if (board.getField(nRow, nCol).equals(Disk.EMPTY) &&
-                    board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other())) {
+                        board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other())) {
                     Move move = new OthelloMove(disk, nRow, nCol);
                     if (!isValidMove(move)) {
                         validMoves.add(move);
@@ -200,6 +202,7 @@ public class OthelloGame implements Game {
         }
         return validMoves;
     }
+
     public Move getRandomValidMove(Disk disk) {
         List<Move> currentMovesForDisk = new ArrayList<>();
         for (Move move : validMoves) {
@@ -222,7 +225,7 @@ public class OthelloGame implements Game {
         Disk disk = ((OthelloMove) move).getDisk();
         if (isValidMove(move)) {
             board.setField(row, col, disk);
-            for (int[] dir: dxy) {
+            for (int[] dir : dxy) {
                 int dRow = row + dir[0];
                 int dCol = col + dir[1];
                 while (board.isField(dRow, dCol)) {
@@ -267,6 +270,7 @@ public class OthelloGame implements Game {
 
     /**
      * Set the whole current board
+     *
      * @param newBoard the 2D array
      */
     public void setBoard(Disk[][] newBoard) {
