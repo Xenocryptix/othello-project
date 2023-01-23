@@ -67,7 +67,8 @@ public class OthelloGame implements Game {
     */
     @Override
     public boolean isGameover() {
-        return validMoves.isEmpty();
+        getValidMoves();
+        return board.isFull() || validMoves.isEmpty();
     }
 
     /**
