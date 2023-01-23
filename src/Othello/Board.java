@@ -20,8 +20,8 @@ public class Board {
      * Creates an empty board.
      */
     /*@
-       ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
-       ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+    ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+    ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
     */
     public Board() {
         fields = new Disk[DIM][DIM];
@@ -40,8 +40,8 @@ public class Board {
      * Creates a deep copy of this field.
      */
     /*@
-        ensures \result != this;
-        ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i][j] == this.fields[i][j]))) ;
+    ensures \result != this;
+    ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i][j] == this.fields[i][j]))) ;
     */
     public Board deepCopy() {
         Disk[][] copy;
@@ -58,8 +58,10 @@ public class Board {
      * @return the index belonging to the (row,col)-field
      */
     /*@
-        requires row >= 0 && row < DIM;
-        requires col >= 0 && row < DIM;
+    requires row >= 0 && row < DIM;
+    requires col >= 0 && row < DIM;
+    ensures \result >= 0 && \result < 64;
+    pure
     */
     public int index(int row, int col) {
         return row * DIM + col;
@@ -83,8 +85,10 @@ public class Board {
      *
      * @return true if 0 <= row < DIM && 0 <= col < DIM
      */
-    //@ ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
-    //@pure;
+    /*@
+    ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
+    pure;
+    */
     public boolean isField(int row, int col) {
         return row >= 0 && row < DIM && col >= 0 && col < DIM;
     }
@@ -97,9 +101,9 @@ public class Board {
      * @return the disk on the field
      */
     /*@
-        requires isField(row, col);
-        ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
-        pure;
+    requires isField(row, col);
+    ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
+    pure
     */
     public Disk getField(int row, int col) {
         return fields[row][col];
@@ -112,9 +116,9 @@ public class Board {
      * @return the mark on the field
      */
     /*@
-        requires isField(i);
-        ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
-        pure;
+    requires isField(i);
+    ensures \result == Disk.EMPTY || \result == Disk.BLACK || \result == Disk.WHITE;
+    pure
     */
     public Disk getField(int i) {
         int row = getRow(i);
@@ -129,38 +133,39 @@ public class Board {
      * @return the column
      */
     /*@
-        requires isField(i);
-        ensures \result >= 0 && \result < DIM;
+    requires isField(i);
+    ensures \result >= 0 && \result < DIM;
+    pure
     */
     public int getColumn(int i) {
         return i % DIM;
     }
 
     /**
-     * Returns the column from a given index
+     * Returns the row from a given index
      *
      * @param i the index
-     * @return the column
+     * @return the row
      */
     /*@
-        requires isField(i);
-        ensures \result >= 0 && \result < DIM;
+    requires isField(i);
+    ensures \result >= 0 && \result < DIM;
     */
     public int getRow(int i) {
         return i / DIM;
     }
 
     /**
-     * Returns true if the field referred to by the (row,col) pair it empty.
+     * Returns true if the field referred to by the (row,col) pair if empty.
      *
      * @param row the row of the field
      * @param col the column of the field
      * @return true if the field is empty
      */
     /*@
-        requires isField(row, col);
-        ensures getField(row, col) == Disk.EMPTY ==> \result == true;
-        pure
+    requires isField(row, col);
+    ensures getField(row, col) == Disk.EMPTY ==> \result == true;
+    pure
     */
     public boolean isEmptyField(int row, int col) {
         return getField(row, col) == Disk.EMPTY;
@@ -172,8 +177,8 @@ public class Board {
      * @return true if all fields are occupied
      */
     /*@
-        ensures (\forall int i; (i >= 0 && i < DIM); (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
-        pure
+    ensures (\forall int i; i >= 0 && i < DIM; (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
+    pure
     */
     public boolean isFull() {
         for (int i = 0; i < DIM; i++) {
@@ -193,8 +198,8 @@ public class Board {
      * @return true if the game is over
      */
     /*@
-         ensures isFull() ==> \result == true || hasWinner() ==> \result == true;
-         pure;
+    ensures isFull() ==> \result == true || hasWinner() ==> \result == true;
+    pure
     */
     public boolean gameOver() {
         return isFull() || hasWinner();
@@ -207,9 +212,9 @@ public class Board {
      * @return the number of times that disk is on the board
      */
     /*@
-        requires disk != null;
-        ensures \result >= 0;
-        pure
+    requires disk != null;
+    ensures \result >= 0;
+    pure
     */
     public int countDisk(Disk disk) {
         int count = 0;
@@ -224,19 +229,19 @@ public class Board {
     }
 
     /**
-     * Checks if the disk d has won. A disk wins if it has more
+     * Checks if the Disk disk has won. A disk wins if it has more
      * disk in the board, and when the board is full.
      *
-     * @param d the disk in question
+     * @param disk the disk in question
      * @return true if the disk has won
      */
-    //TODO: JML
     /*@
+    requires d == Disk.BLACK || d == Disk.WHITE;
     ensures countDisk(d) > countDisk(d.other()) ==> true;
     pure
     */
-    public boolean isWinner(Disk d) {
-        return countDisk(d) > countDisk(d.other());
+    public boolean isWinner(Disk disk) {
+        return countDisk(disk) > countDisk(disk.other());
     }
 
     /**
@@ -263,8 +268,8 @@ public class Board {
      * @param disk the mark to be placed
      */
     /*@
-        requires isField(row, col);
-        ensures getField(row, col) == disk;
+     requires isField(row, col);
+     ensures getField(row, col) == disk;
     */
     public void setField(int row, int col, Disk disk) {
         fields[row][col] = disk;
@@ -277,8 +282,8 @@ public class Board {
      * @param disk the mark to be placed
      */
     /*@
-        requires isField(i);
-        ensures getField(i) == disk;
+    requires isField(i);
+    ensures getField(i) == disk;
     */
     public void setField(int i, Disk disk) {
         int row = getRow(i);
@@ -290,8 +295,8 @@ public class Board {
      * Empties all fields of this board excepts the disks in the middle.
      */
     /*@
-       ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
-       ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+     ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+     ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
     */
     public void reset() {
         for (int i = 0; i < DIM; i++) {

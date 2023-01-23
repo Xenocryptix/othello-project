@@ -115,4 +115,11 @@ public class OthelloGameTest {
         assertTrue(game.isGameover());
 
     }
+    @Test
+    public void gameOver() {
+        Board board = game.getBoard();
+        assertFalse(game.isGameover());
+        assertFalse(board.hasWinner());
+
+    }
 }

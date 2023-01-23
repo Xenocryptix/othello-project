@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-
+/**
+ * Represent a game for Othello
+ */
 public class OthelloGame implements Game {
     private final Board board;
     private Player player1;
