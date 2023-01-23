@@ -2,13 +2,9 @@ package Othello.ai;
 
 import Othello.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
-    private static final Random RANDOM = new Random();
 
     /**
      * Return the name of the strategy

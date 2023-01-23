@@ -4,7 +4,9 @@ import Othello.*;
 
 import java.util.*;
 
-public class SmartStrategy implements Strategy {
+public class GreedyStrategy implements Strategy {
+    private static final String NAME = "SMART";
+
     /**
      * Return the name of the strategy
      *
@@ -12,14 +14,14 @@ public class SmartStrategy implements Strategy {
      */
     @Override
     public String getName() {
-        return null;
+        return NAME;
     }
 
     /**
      * Return the move that flips the most disks
      *
-     * @param game
-     * @return move
+     * @param game the game for which the move should be returned
+     * @return move The move with the highest number of flips
      */
     @Override
     public Move determineMove(Game game) {
@@ -35,10 +37,18 @@ public class SmartStrategy implements Strategy {
         for (Move currentMove : movesForDisk) {
             Board board = ((OthelloGame) game).getBoard();
             int currentCount = board.countDisk(disk);
-            game.doMove(currentMove);;
+            game.doMove(currentMove);
             int newCount = board.countDisk(disk);
             moveAndFlips.put(currentMove, newCount-currentCount);
         }
-        //TODO: SORT AND GET THE HIGHEST FLIPS
+        int highest = 0;
+        Move highestFlippingMove = null;
+        for (Move move : moveAndFlips.keySet()){
+            if (moveAndFlips.get(move) > highest) {
+                highest = moveAndFlips.get(move);
+                highestFlippingMove = move;
+            }
+        }
+        return highestFlippingMove;
     }
 }

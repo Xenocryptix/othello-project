@@ -4,11 +4,9 @@ import java.io.*;
 import java.util.*;
 
 public class HumanPlayer extends AbstractPlayer {
-    private String name;
-    private Disk current = Disk.BLACK;
-    private List<Move> allowedMoves = new ArrayList<>();
-    private PrintWriter out;
-    private BufferedReader in;
+    private final List<Move> allowedMoves = new ArrayList<>();
+    private final PrintWriter out;
+    private final BufferedReader in;
     public HumanPlayer(String name, Reader reader, Writer writer) {
         super(name);
         out = new PrintWriter(writer, true);
