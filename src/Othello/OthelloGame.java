@@ -165,20 +165,19 @@ public class OthelloGame implements Game {
         for (int[] dir: dxy) {
             int nRow = row + dir[0];
             int nCol = col + dir[1];
-            if (board.getField(nRow, nCol).equals(disk.other())) {
-                while (board.isField(nRow, nCol)) {
-                    if (board.getField(nRow, nCol).equals(disk))
-                        break;
-                    if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
-                        Move move = new OthelloMove(disk, nRow, nCol);
-                        if (!isValidMove(move)) {
-                            validMoves.add(move);
-                        }
-                        break;
+            while (board.isField(nRow, nCol)) {
+                if (board.getField(nRow, nCol).equals(disk))
+                    break;
+                if (board.getField(nRow, nCol).equals(Disk.EMPTY) &&
+                    board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other())) {
+                    Move move = new OthelloMove(disk, nRow, nCol);
+                    if (!isValidMove(move)) {
+                        validMoves.add(move);
                     }
-                    nRow += dir[0];
-                    nCol += dir[1];
+                    break;
                 }
+                nRow += dir[0];
+                nCol += dir[1];
             }
         }
     }
