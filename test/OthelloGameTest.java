@@ -87,11 +87,11 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 4));
 
         //Testing flip horizontal left
-        game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
+        game.reset();
 
-        assertEquals(board.getField(4, 3), Disk.WHITE);
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
-        assertEquals(Disk.BLACK, board.getField(4, 3));
+        assertEquals(board.getField(3, 3), Disk.WHITE);
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        assertEquals(Disk.BLACK, board.getField(3, 3));
     }
 
     /**
