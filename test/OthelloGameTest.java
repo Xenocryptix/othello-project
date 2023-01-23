@@ -229,7 +229,6 @@ public class OthelloGameTest {
             }
         }
         assertFalse(board.isFull());
-        game.getValidMoves();
         assertTrue(game.isGameover());
 
         game.reset();
