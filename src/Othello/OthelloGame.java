@@ -278,4 +278,9 @@ public class OthelloGame implements Game {
         board.setBoard(newBoard);
         getValidMoves();
     }
+
+    public void reset() {
+        board.reset();
+        validMoves = getValidMoves();
+    }
 }
