@@ -21,10 +21,13 @@ public class OthelloGameTest {
     public void testValidMoves() {
         assertEquals(game.getValidMoves().size(), 8);
 
+        //Ensuring that validMoves contains all the valid moves for the black disk
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 3)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 4)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 5)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 4)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 2)));
@@ -34,16 +37,44 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
 
         assertEquals(game.getValidMoves().size(), 9);
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after making two moves
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 2)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 2)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 2)));
-        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 6, 2)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after making two moves
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 6)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
-        //TODO: ADD LAST
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 5)));
+
+        game.reset();
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
+
+        assertEquals(9, game.getValidMoves().size());
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after resetting and doing two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 1)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 5)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 3)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 2)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after resetting and doing two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 3)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 3)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 2)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 1)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
+
 
     /**
      * Test if flipping in the two directions horizontally works correctly, i.e. right and left
