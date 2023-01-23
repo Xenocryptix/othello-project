@@ -18,7 +18,7 @@ public class OthelloGameTest {
         board = game.getBoard();
     }
 
-    @Disabled
+//    @Disabled
     @Test
     public void testValidMoves() {
         assertEquals(game.getValidMoves().size(), 8);
@@ -59,7 +59,7 @@ public class OthelloGameTest {
     /**
      * Test if flipping in the two directions vertically works correctly, i.e. up and down
      */
-    @Disabled
+//    @Disabled
     @Test
     public void testFlipVertical() {
         //Testing flip vertical up
@@ -76,7 +76,7 @@ public class OthelloGameTest {
     /**
      * Test if flipping is performed directly in all 4 diagonal directions, i.e. North East, North West, South West and South East
      */
-    @Disabled
+//    @Disabled
     @Test
     public void testFlipDiagonal() {
         //Test flip diagonal NE direction

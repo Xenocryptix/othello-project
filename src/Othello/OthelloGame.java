@@ -163,7 +163,22 @@ public class OthelloGame implements Game {
      */
     public void checkDirection(int row, int col, Disk disk) {
         for (int[] dir: dxy) {
-            //TODO: implement
+            int nRow = row + dir[0];
+            int nCol = col + dir[1];
+            while (board.getField(nRow, nCol).equals(disk.other())) {
+                if (!board.isField(nRow, nCol))
+                    break;
+                if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
+                    Move move = new OthelloMove(disk, nRow, nCol);
+                    if (!isValidMove(move)) {
+                        validMoves.add(move);
+                    }
+                    break;
+                }
+                nRow += dir[0];
+                nCol += dir[1];
+            }
+
         }
     }
 
@@ -178,11 +193,8 @@ public class OthelloGame implements Game {
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
-                    for (int[] dir: dxy) {
-                        int row = i + dir[0];
-                        int col = j + dir[1];
-                        //TODO: implement
-                    }
+                    Disk disk = board.getField(i, j);
+                    checkDirection(i, j, disk);
                 }
             }
         }
