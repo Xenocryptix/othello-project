@@ -12,22 +12,21 @@ public class OthelloGame implements Game {
     private final Board board;
     private Player player1;
     private Player player2;
-    private List<Move> validMoves;
+    private List<Move> validMoves = new ArrayList<>();
     //predefined directional array
     private final int[][] dxy = {
         {0, 1}, {1,  0}, {0,  -1}, {-1, 0},
         {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
-    private int[][] checked = new int[10][10];
     private Disk current;
-    Random RANDOM = new Random();
+    private Random rand = new Random();
 
     public OthelloGame() {
         this.board = new Board();
         this.player1 = null;
         this.player2 = null;
         current = Disk.BLACK;
-        validMoves = getValidMoves();
+        getValidMoves();
     }
 
     /**
@@ -117,24 +116,6 @@ public class OthelloGame implements Game {
 
     /**
      * Check if a move is a valid move
-     * (could go unused)
-     * @param row, col
-     * @return true false
-     */
-    public boolean hasNearby(int row, int col) {
-        for (int[] dir: dxy) {
-            int dRow = row + dir[0];
-            int dCol = col + dir[1];
-            if (!board.isField(dRow, dCol))
-                continue;
-            if (!board.isEmptyField(dRow, dCol))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * Check if a move is a valid move
      *
      * @param move the move to check
      * @return true if the move is a valid move
@@ -170,11 +151,12 @@ public class OthelloGame implements Game {
             while (board.isField(nRow, nCol)) {
                 if (board.getField(nRow, nCol).equals(disk))
                     break;
-                if (board.getField(nRow, nCol).equals(Disk.EMPTY) &&
-                    board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0) {
-                    Move move = new OthelloMove(disk, nRow, nCol);
-                    if (!isValidMove(move)) {
-                        validMoves.add(move);
+                if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
+                    if (board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0){
+                        Move move = new OthelloMove(disk, nRow, nCol);
+                        if (!isValidMove(move)) {
+                            validMoves.add(move);
+                        }
                     }
                     break;
                 }
@@ -192,7 +174,7 @@ public class OthelloGame implements Game {
      */
     @Override
     public List<Move> getValidMoves() {
-        validMoves = new ArrayList<>();
+        validMoves.clear();
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
@@ -210,7 +192,7 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
-        return currentMovesForDisk.get(RANDOM.nextInt(currentMovesForDisk.size()));
+        return currentMovesForDisk.get(rand.nextInt(currentMovesForDisk.size()));
     }
 
     /**
@@ -279,6 +261,6 @@ public class OthelloGame implements Game {
 
     public void reset() {
         board.reset();
-        validMoves = getValidMoves();
+        getValidMoves();
     }
 }
