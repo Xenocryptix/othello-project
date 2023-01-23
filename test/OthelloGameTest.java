@@ -3,7 +3,6 @@ import Othello.Disk;
 import Othello.OthelloGame;
 import Othello.OthelloMove;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,10 +21,13 @@ public class OthelloGameTest {
     public void testValidMoves() {
         assertEquals(game.getValidMoves().size(), 8);
 
+        //Ensuring that validMoves contains all the valid moves for the black disk
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 3)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 4)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 5)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 4)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
         assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 2)));
@@ -34,49 +36,94 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
 
+        assertEquals(game.getValidMoves().size(), 9);
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after making two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 6, 2)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after making two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 6)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 5)));
+
+        game.reset();
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
+
+        assertEquals(9, game.getValidMoves().size());
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after resetting and doing two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 2, 1)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 3, 2)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 5)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.BLACK, 5, 3)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.BLACK, 4, 2)));
+
+        //Ensuring that validMoves contains all the valid moves for the black disk after resetting and doing two moves
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 2, 4)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 3)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 3, 5)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 3)));
+        assertTrue(game.isValidMove(new OthelloMove(Disk.WHITE, 4, 2)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 1)));
+        assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
 
+
     /**
-     * Test if flipping in the two directions horizontally works correctly, i.e. right and left
+     * Test if flipping in the two directions horizontally to the right works correctly
      */
     @Test
-    public void testFlipHorizontal() {
-        //Testing flip horizontal right
-        assertEquals(board.getField(4, 4), Disk.WHITE);
+    public void testFlipHorizontalRight() {
+        assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
-
-        //Testing flip horizontal left
-        game.doMove(new OthelloMove(Disk.WHITE, 5,3));
-
-        assertEquals(board.getField(4, 3), Disk.WHITE);
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
-        assertEquals(Disk.BLACK, board.getField(4, 3));
     }
 
     /**
-     * Test if flipping in the two directions vertically works correctly, i.e. up and down
+     * Test if flipping in the two directions horizontally to the left works correctly
+     */
+    @Test
+    public void testFlipHorizontalLeft() {
+        assertEquals(Disk.WHITE, board.getField(3, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        assertEquals(Disk.BLACK, board.getField(3, 3));
+    }
+
+    /**
+     * Test if flipping in the two directions vertically upwards works correctly
      */
 
     @Test
-    public void testFlipVertical() {
-        //Testing flip vertical up
-        assertEquals(board.getField(3, 3), Disk.WHITE);
+    public void testFlipVerticalUp() {
+        assertEquals(Disk.WHITE, board.getField(3, 3));
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         assertEquals(Disk.BLACK, board.getField(3, 3));
+    }
 
-        //Testing flip vertical down
-        assertEquals(board.getField(4, 4), Disk.WHITE);
+    /**
+     * Test if flipping in the two directions vertically downwards works correctly
+     */
+
+    @Test
+    public void testFlipVerticalDown() {
+        assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         assertEquals(Disk.BLACK, board.getField(4, 4));
     }
 
     /**
-     * Test if flipping is performed directly in all 4 diagonal directions, i.e. North East, North West, South West and South East
+     * Test if flipping is performed correctly in the north direction
      */
 
     @Test
-    public void testFlipDiagonal() {
+    public void testFlipDiagonalNorth() {
         //Test flip diagonal NE direction
         game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
         game.doMove(new OthelloMove(Disk.WHITE, 3, 5));
@@ -90,7 +137,13 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 2, 2));
         assertEquals(Disk.BLACK, board.getField(3, 3));
 
-        game.reset();
+    }
+
+    /**
+     * Test if flipping works correctly in the south direction
+     */
+    @Test
+    public void testFlipDiagonalSouth() {
         //Test flip diagonal SW direction
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
@@ -100,11 +153,29 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, board.getField(4, 2));
 
         //Test flip diagonal SE direction
-        //TODO: MIGHT NOT WORK CHECK
         assertEquals(Disk.WHITE, board.getField(4, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
+    }
 
+    /**
+     * Test that when multiple flips occur at the same time it flips
+     */
+    @Test
+    public void testMultipleFlips() {
+        //Setting up the board for a move that flips more than one field
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
+
+        assertEquals(Disk.WHITE, board.getField(4, 2));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 2));
+        assertEquals(Disk.BLACK, board.getField(4, 2));
+        assertEquals(Disk.BLACK, board.getField(4, 3));
+
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 1));
+        assertEquals(Disk.WHITE, board.getField(4, 2));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
     }
 
     //TODO: Gameover
@@ -118,17 +189,19 @@ public class OthelloGameTest {
 
         game.doMove(game.getRandomValidMove(Disk.WHITE));
 
-
         assertTrue(game.isGameover());
 
     }
 
     /**
-     * This test would go through possible board representations for gmae ending before the board is full
+     * This test would go through possible board representations for game ending before the board is full
      */
     @Test
     public void gameOverNotFull() {
         /**
+         * The following will be a representation of the board when there are no possible
+         * moves available for both discs but he board is not full
+         *
          *    A   B   C   D   E   F   G   H
          * 1  W | W | W | W | W | W | W | W
          *   ---+---+---+---+---+---+---+---
@@ -160,6 +233,8 @@ public class OthelloGameTest {
 
         game.reset();
         /**
+         * The following will be another representation of the board when there are no possible
+         * moves available for both discs but he board is not full
          *    A   B   C   D   E   F   G   H
          * 1    | B | B | B | B | B | B | B
          *   ---+---+---+---+---+---+---+---
@@ -191,8 +266,8 @@ public class OthelloGameTest {
         for (int i = 1; i < 7; i++) {
             board.setField(i, Disk.BLACK);
         }
-        for (int i = 7; i <= 55 ; i = i + 8) {
-            board.setField(i,Disk.BLACK);
+        for (int i = 7; i <= 55; i = i + 8) {
+            board.setField(i, Disk.BLACK);
         }
         assertFalse(board.isFull());
         assertTrue(game.isGameover());
