@@ -12,8 +12,6 @@ U
 %src/Othello/client/ClientHandler.java,b\5\b5c991d556597183a4d0e33c58ab1a217806eb72
 N
 src/Othello/client/Client.java,1\c\1c1f6a70c2421324d51652802db256259800c454
-F
-src/Othello/Board.java,4\9\496ace2c5ac77aa4ef7e109c912c840473e9b0e6
 O
 src/Othello/AbstractPlayer.java,9\2\929b01de1008c11c1b3583ddbcd6bd60ed64c418
 G

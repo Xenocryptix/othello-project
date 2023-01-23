@@ -106,6 +106,8 @@ public class Board {
     pure
     */
     public Disk getField(int row, int col) {
+        if (!isField(row, col))
+            return null;
         return fields[row][col];
     }
 
@@ -123,7 +125,7 @@ public class Board {
     public Disk getField(int i) {
         int row = getRow(i);
         int column = getColumn(i);
-        return fields[row][column];
+        return getField(row, column);
     }
 
     /**
@@ -168,7 +170,7 @@ public class Board {
     pure
     */
     public boolean isEmptyField(int row, int col) {
-        return getField(row, col) == Disk.EMPTY;
+         return getField(row, col) == Disk.EMPTY;
     }
 
     /**
