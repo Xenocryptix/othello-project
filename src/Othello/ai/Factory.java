@@ -18,6 +18,7 @@ public interface Factory {
      * @param writer writer stream
      * @return human player object
      */
+    //@ requires name != null && reader != null && writer != null;
     HumanPlayer makeHumanPlayer(String name, Reader reader, Writer writer);
 
     /**
@@ -26,5 +27,6 @@ public interface Factory {
      * @param strategy strategy
      * @return computer player object
      */
+    //@ requires strategy != null;
     ComputerPlayer makeComputerPlayer(Strategy strategy);
 }

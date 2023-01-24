@@ -17,6 +17,7 @@ public class PlayerFactory implements Factory {
      * @param writer writer stream
      * @return human player object
      */
+    //@ requires name != null && reader != null && writer != null;
     @Override
     public HumanPlayer makeHumanPlayer(String name, Reader reader, Writer writer) {
         return new HumanPlayer(name, reader, writer);
@@ -28,6 +29,7 @@ public class PlayerFactory implements Factory {
      * @param strategy
      * @return computer player object
      */
+    //@ requires strategy != null;
     public ComputerPlayer makeComputerPlayer(Strategy strategy) {
         return new ComputerPlayer(strategy);
     }
