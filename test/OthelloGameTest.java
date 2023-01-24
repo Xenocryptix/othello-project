@@ -318,7 +318,7 @@ public class OthelloGameTest {
     public void gameOverNotFull() {
         /**
          * The following will be a representation of the board when there are no possible
-         * moves available for both discs but he board is not full
+         * moves available for both discs when the board is not full
          *
          *    A   B   C   D   E   F   G   H
          * 1  W | W | W | W | W | W | W | W

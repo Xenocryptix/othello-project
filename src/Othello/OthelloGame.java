@@ -26,9 +26,14 @@ public class OthelloGame implements Game {
     private Disk current;
 
     /**
-     * Creates a new othello game by initialising the board to a new board, two players and setting the first move to be a
-     * black disc
+     * Creates a new Othello game by initialising the board to a new board, two players and
+     * setting the first move to be a black disc
      */
+    /*@
+        ensures current == Disk.BLACK;
+        ensures player1 == null;
+        ensures player2 == null;
+    */
     public OthelloGame() {
         this.board = new Board();
         this.player1 = null;
@@ -94,8 +99,10 @@ public class OthelloGame implements Game {
      *
      * @return The player whose turn it is
      */
-    //@ ensures \result == player1 || \result == player2;
-    //@ pure;
+    /*@
+        ensures \result == player1 || \result == player2;
+        pure;
+    */
     @Override
     public Player getTurn() {
         if (current.equals(Disk.BLACK)) {
@@ -111,8 +118,8 @@ public class OthelloGame implements Game {
      * @return The player that won the game, or null if no player is the winner
      */
     /*@
-        ensures board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE) ==> \result == player1;
-        ensures board.countDisk(Disk.WHITE) > board.countDisk(Disk.BLACK) ==> \result == player2;
+        ensures board.countDisk(Disk.BLACK) >  board.countDisk(Disk.WHITE) ==> \result == player1;
+        ensures board.countDisk(Disk.WHITE) >  board.countDisk(Disk.BLACK) ==> \result == player2;
         ensures board.countDisk(Disk.WHITE) == board.countDisk(Disk.BLACK) ==> \result == null;
         pure;
     */
@@ -135,9 +142,9 @@ public class OthelloGame implements Game {
      * @return True if the move is valid, otherwise false
      */
     /*@
-    requires move != null;
-    ensures \result == true ==> validMoves.contains(move);
-    pure
+        requires move != null;
+        ensures \result == true ==> validMoves.contains(move);
+        pure;
     */
     @Override
     public boolean isValidMove(Move move) {
@@ -350,7 +357,6 @@ public class OthelloGame implements Game {
      */
     /*@
         ensures (\forall int i; i >= 0 && i <= 63; newBoard.getField(i) == board.getField(i));
-        ensures validMoves != \old(validMoves);
     */
     public void setBoard(Board newBoard) {
         this.board = newBoard;
