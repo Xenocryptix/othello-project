@@ -12,10 +12,10 @@ public class PlayerFactory implements Factory {
     /**
      * Make a new human player
      *
-     * @param name   name
-     * @param reader reader stream
-     * @param writer writer stream
-     * @return human player object
+     * @param name   name The name of the human player
+     * @param reader The reader stream of the socket
+     * @param writer The writer stream of the socket
+     * @return The human player object
      */
     //@ requires name != null && reader != null && writer != null;
     @Override
@@ -26,8 +26,8 @@ public class PlayerFactory implements Factory {
     /**
      * Make a new computer player with specified strategy
      *
-     * @param strategy
-     * @return computer player object
+     * @param strategy The strategy to be used
+     * @return The computer player object
      */
     //@ requires strategy != null;
     public ComputerPlayer makeComputerPlayer(Strategy strategy) {
