@@ -200,11 +200,14 @@ public class OthelloGameTest {
         assertEquals(board.countDisk(Disk.WHITE), board.countDisk(Disk.BLACK));
         assertEquals(Disk.BLACK, game.getCurrentDisk());
 
+        Move move;
         while (!game.isGameover()) {
-            if (!game.isGameover())
-                game.doMove(player1.determineMove(game));
-            if (!game.isGameover())
-                game.doMove(player2.determineMove(game));
+            move = player1.determineMove(game);
+            if (move != null)
+                game.doMove(move);
+            move = player2.determineMove(game);
+            if (move != null)
+                game.doMove(move);
         }
 
         assertTrue(game.isGameover());

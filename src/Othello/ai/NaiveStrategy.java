@@ -29,6 +29,10 @@ public class NaiveStrategy implements Strategy {
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         List<Move> validMoves = ((OthelloGame) game).getValidMoves(disk);
+        if (validMoves.isEmpty()) {
+            ((OthelloGame) game).nextTurn();
+            return null;
+        }
         return validMoves.get(rand.nextInt(validMoves.size()));
     }
 }
