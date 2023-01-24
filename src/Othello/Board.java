@@ -15,7 +15,7 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
-    private static final String LINE = "  ———+———+———+———+———+———+———+———";
+    private static final String LINE = "  ---+---+---+---+---+---+---+---";
     private /*@ spec_public */ Disk[][] fields;
 
     /**
@@ -348,8 +348,16 @@ public class Board {
         String s = "   A   B   C   D   E   F   G   H\n";
         for (int i = 0; i < DIM; i++) {
             String row = i + 1 + " ";
+            String sym;
             for (int j = 0; j < DIM; j++) {
-                row += " " + getField(i, j).toString().substring(0, 1).replace("E", " ") + " ";
+                if (getField(i, j).equals(Disk.BLACK)) {
+                    sym = "○";
+                } else if (getField(i, j).equals(Disk.WHITE)) {
+                    sym = "●";
+                } else {
+                    sym = " ";
+                }
+                row += " " + sym + " ";
                 if (j < DIM - 1) {
                     row = row + "|";
                 }

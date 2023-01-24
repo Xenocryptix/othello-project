@@ -1,6 +1,7 @@
 ### IntelliJ IDEA ###
 .idea/
 .idea/**
+.idea/sonarlint/issuestore
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
