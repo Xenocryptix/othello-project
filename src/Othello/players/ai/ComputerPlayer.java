@@ -1,8 +1,8 @@
 package Othello.players.ai;
 
-import Othello.AbstractPlayer;
-import Othello.Game;
-import Othello.Move;
+import Othello.players.AbstractPlayer;
+import Othello.model.Game;
+import Othello.model.Move;
 import Othello.players.Strategy;
 
 /**

@@ -1,7 +1,7 @@
 package Othello.players;
 
-import Othello.Game;
-import Othello.Move;
+import Othello.model.Game;
+import Othello.model.Move;
 
 /**
  * A strategy to be used by the computer player

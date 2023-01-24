@@ -1,4 +1,4 @@
-package Othello;
+package Othello.model;
 
 /**
  * Represents a disk in the Othello game. There three possible values:

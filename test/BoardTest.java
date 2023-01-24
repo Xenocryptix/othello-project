@@ -1,5 +1,5 @@
-import Othello.Board;
-import Othello.Disk;
+import Othello.model.Board;
+import Othello.model.Disk;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

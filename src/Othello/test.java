@@ -1,5 +1,7 @@
 package Othello;
 
+import Othello.model.Game;
+import Othello.model.OthelloGame;
 import Othello.players.ai.ComputerPlayer;
 import Othello.players.ai.GreedyStrategy;
 import Othello.players.ai.NaiveStrategy;

@@ -1,4 +1,5 @@
-import Othello.*;
+import Othello.model.*;
+import Othello.players.AbstractPlayer;
 import Othello.players.ai.NaiveStrategy;
 import Othello.players.PlayerFactory;
 import org.junit.jupiter.api.BeforeEach;

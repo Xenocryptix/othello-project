@@ -1,9 +1,9 @@
 package Othello.players.ai;
 
-import Othello.Disk;
-import Othello.Game;
-import Othello.Move;
-import Othello.OthelloGame;
+import Othello.model.Disk;
+import Othello.model.Game;
+import Othello.model.Move;
+import Othello.model.OthelloGame;
 import Othello.players.Strategy;
 
 import java.util.List;

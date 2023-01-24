@@ -1,6 +1,7 @@
-package Othello;
+package Othello.players;
 
-import Othello.players.Player;
+import Othello.model.Game;
+import Othello.model.Move;
 
 /**
  * An abstract class representing a player of the game.
