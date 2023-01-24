@@ -5,6 +5,8 @@ import Othello.ai.PlayerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OthelloGameTest {
@@ -201,6 +203,7 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, game.getCurrentDisk());
 
         Move move;
+        Disk disk = game.getCurrentDisk();
         while (!game.isGameover()) {
             move = player1.determineMove(game);
             if (move != null)
@@ -208,6 +211,7 @@ public class OthelloGameTest {
             move = player2.determineMove(game);
             if (move != null)
                 game.doMove(move);
+            assertEquals(disk, game.getCurrentDisk());
         }
 
         assertTrue(game.isGameover());
@@ -301,4 +305,20 @@ public class OthelloGameTest {
         assertTrue(game.isGameover());
     }
 
+
+    @Test
+    public void testFull() {
+        assertFalse(game.isGameover());
+        Random rand = new Random();
+        Disk disk;
+        for (int i = 0; i < Board.DIM * Board.DIM; i++) {
+            if (rand.nextInt() % 2 == 0)
+                disk = Disk.BLACK;
+            else
+                disk = Disk.WHITE;
+            board.setField(i, disk);
+        }
+        assertEquals(0, game.getValidMoves().size());
+        assertTrue(game.isGameover());
+    }
 }

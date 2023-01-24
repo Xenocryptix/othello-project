@@ -339,16 +339,6 @@ public class Board {
         }
     }
 
-    /**
-     * Set the whole current board
-     *
-     * @param board the 2D array
-     */
-    //TODO: JML
-    public void setBoard(Disk[][] board) {
-        this.fields = board;
-    }
-
     //TODO: JML and JAVADOC
     @Override
     public String toString() {

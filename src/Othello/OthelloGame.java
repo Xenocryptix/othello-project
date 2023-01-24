@@ -327,21 +327,6 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Sets the current board to a new board using a 2D array
-     *
-     * @param newBoard The new board as a 2D array to change the current board
-     */
-    /*@
-        ensures (\forall int i; i >= 0 && i <= 7; (\forall int j;j >= 0 && j <= 7; newBoard[i][j] == board.getField(i,j)));
-        ensures validMoves != \old(validMoves);
-        pure
-    */
-    public void setBoard(Disk[][] newBoard) {
-        board.setBoard(newBoard);
-        getValidMoves();
-    }
-
-    /**
      * Sets the current board to a new board using a board object
      *
      * @param newBoard The new board as an object to change the current board
