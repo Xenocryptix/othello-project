@@ -3,7 +3,6 @@ package Othello;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * A class representing and othello game which implements and interface Game. The class handles
@@ -63,22 +62,6 @@ public class OthelloGame implements Game {
     */
     public void setPlayer2(Player p2) {
         this.player2 = p2;
-    }
-
-    /**
-     * Check if black disk ran out of moves
-     *
-     * @return True, if the game is over for black, otherwise false.
-     */
-    /*@
-        ensures validBlack.isEmpty() ==> \result == true;
-        pure;
-    */
-    public boolean currentPlayerOver() {
-        if (current.equals(Disk.BLACK))
-            return validBlack.isEmpty();
-        else
-            return validWhite.isEmpty();
     }
 
 
@@ -273,25 +256,33 @@ public class OthelloGame implements Game {
     //TODO: DON'T UNDERSTAND
     @Override
     public void doMove(Move move) {
+        //Getting the coordinates and the disk color from the move object
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
+        //If the move is valid, we execute the move
         if (isValidMove(move)) {
+            //First place the disk in the coordinate
             board.setField(row, col, disk);
+            //We iterate in 8 direction, looking for flippable lines
             for (int[] dir : dxy) {
                 int dRow = row + dir[0];
                 int dCol = col + dir[1];
+                int count = 0;
+                //We look for opposite disk in adjacent fields
                 while (board.isField(dRow, dCol)) {
-                    if (board.getField(dRow, dCol).equals(disk)) {
+                    if (board.getField(dRow, dCol).equals(disk.other())) {
+                        dRow += dir[0];
+                        dCol += dir[1];
+                        count++;
+                    } else {
                         break;
                     }
-                    dRow += dir[0];
-                    dCol += dir[1];
                 }
                 if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
                     dRow -= dir[0];
                     dCol -= dir[1];
-                    while (!board.getField(dRow, dCol).equals(disk)) {
+                    for (int i = 0; i < count; i++) {
                         board.flip(dRow, dCol);
                         dRow -= dir[0];
                         dCol -= dir[1];
