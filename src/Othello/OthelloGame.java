@@ -165,7 +165,7 @@ public class OthelloGame implements Game {
      * @param col  The column of the move to check valid moves for
      * @param disk The disk of the move to check valid moves for
      */
-    //TODO:JML
+    //@ requires board.isField(row, col);
     public void checkDirection(int row, int col, Disk disk) {
         //Traverse from 8 direction from a specified tile
         for (int[] dir : dxy) {
@@ -217,9 +217,9 @@ public class OthelloGame implements Game {
      * @return the list of currently valid moves
      */
     /*@
-        pure
+        ensures (\forall int i; i > 0 && i < validMoves.size(); !validMoves.get(i - 1).equals(validMoves.get(i)));
+        pure;
     */
-    //TODO:JML
     @Override
     public List<Move> getValidMoves() {
         //Initialize the move-lists
@@ -244,6 +244,10 @@ public class OthelloGame implements Game {
      * @param disk The disk color
      * @return move The move-list
      */
+    /*@
+        ensures disk.equals(Disk.BLACK) ==> \result == validBlack;
+        ensures disk.equals(Disk.WHITE) ==> \result == validWhite;
+    */
     public List<Move> getValidMoves(Disk disk) {
         getValidMoves();
         if (disk.equals(Disk.BLACK))
@@ -269,8 +273,10 @@ public class OthelloGame implements Game {
      */
     /*@
         ensures validMoves != \old(validMoves);
+        ensures validBlack != \old(validBlack);
+        ensures validWhite != \old(validWhite);
+        ensures current == \old(current).other();
     */
-    //TODO: DON'T UNDERSTAND
     @Override
     public void doMove(Move move) {
         //Getting the coordinates and the disk color from the move object
@@ -342,6 +348,10 @@ public class OthelloGame implements Game {
      *
      * @param newBoard The new board as an object to change the current board
      */
+    /*@
+        ensures (\forall int i; i >= 0 && i <= 63; newBoard.getField(i) == board.getField(i));
+        ensures validMoves != \old(validMoves);
+    */
     public void setBoard(Board newBoard) {
         this.board = newBoard;
         getValidMoves();
