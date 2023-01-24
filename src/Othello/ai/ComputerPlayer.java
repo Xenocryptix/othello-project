@@ -27,10 +27,23 @@ public class ComputerPlayer extends AbstractPlayer {
         return strategy.determineMove(game);
     }
 
+    /**
+     * Returns the current strategy of the computer player
+     *
+     * @return The current strategy
+     */
+    //@ pure
     public Strategy getStrategy() {
         return strategy;
     }
 
+    /**
+     * Updates the current strategy with a new strategy
+     *
+     * @param strategy The new strategy
+     */
+    //@ requires strategy != null;
+    //@ ensures getStrategy() == strategy;
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
