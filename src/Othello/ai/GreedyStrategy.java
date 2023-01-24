@@ -26,30 +26,25 @@ public class GreedyStrategy implements Strategy {
     @Override
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
-        List<Move> movesForDisk = new ArrayList<>();
-        List<Move> moves = game.getValidMoves();
-        for (Move currentMove : moves) {
-            if (((OthelloMove) currentMove).getDisk().equals(disk)) {
-                movesForDisk.add(currentMove);
-            }
-        }
-        Map<Move,Integer> moveAndFlips = new HashMap<>();
+        List<Move> movesForDisk;
+        movesForDisk = ((OthelloGame) game).getValidMoves(disk);
+
+        Move highestMove = movesForDisk.get(0);
+        int highestFlips = 0;
+
         for (Move currentMove : movesForDisk) {
             Board board = ((OthelloGame) game).getBoard().deepCopy();
-            int currentCount = board.countDisk(disk);
-            game.doMove(currentMove);
-            int newCount = board.countDisk(disk);
-            moveAndFlips.put(currentMove, newCount-currentCount);
-//            ((OthelloGame) game).setBoard(board);
-        }
-        int highest = 0;
-        Move highestFlippingMove = null;
-        for (Move move : moveAndFlips.keySet()){
-            if (moveAndFlips.get(move) > highest) {
-                highest = moveAndFlips.get(move);
-                highestFlippingMove = move;
+            OthelloGame newGame = new OthelloGame();
+            newGame.setBoard(board);
+            int currentCount = newGame.getBoard().countDisk(disk);
+            newGame.doMove(currentMove);
+            int flips = newGame.getBoard().countDisk(disk) - currentCount;
+
+            if (flips >= highestFlips) {
+                highestMove = currentMove;
             }
         }
-        return highestFlippingMove;
+
+        return highestMove;
     }
 }

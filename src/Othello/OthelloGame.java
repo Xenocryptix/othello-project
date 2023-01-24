@@ -13,7 +13,7 @@ import java.util.Random;
  * using a method and the board can be reset through OthelloGame and even set to a new array
  */
 public class OthelloGame implements Game {
-    private final Board board;
+    private Board board;
     private Player player1;
     private Player player2;
     private List<Move> validMoves = new ArrayList<>(); //Valid move array list
@@ -95,7 +95,7 @@ public class OthelloGame implements Game {
     @Override
     public boolean isGameover() {
         getValidMoves();
-        return board.isFull() || currentPlayerOver();
+        return board.isFull() || currentPlayerOver() ;
     }
 
     /**
@@ -336,9 +336,9 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Sets the current board to a new board
+     * Sets the current board to a new board using a 2D array
      *
-     * @param newBoard The new board to change the current board
+     * @param newBoard The new board as a 2D array to change the current board
      */
     /*@
         ensures (\forall int i; i >= 0 && i <= 7; (\forall int j;j >= 0 && j <= 7; newBoard[i][j] == board.getField(i,j)));
@@ -347,6 +347,16 @@ public class OthelloGame implements Game {
     */
     public void setBoard(Disk[][] newBoard) {
         board.setBoard(newBoard);
+        getValidMoves();
+    }
+
+    /**
+     * Sets the current board to a new board using a board object
+     *
+     * @param newBoard The new board as an object to change the current board
+     */
+    public void setBoard(Board newBoard) {
+        this.board = newBoard;
         getValidMoves();
     }
 
