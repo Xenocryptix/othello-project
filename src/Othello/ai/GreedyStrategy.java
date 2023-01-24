@@ -42,6 +42,7 @@ public class GreedyStrategy implements Strategy {
 
             if (flips >= highestFlips) {
                 highestMove = currentMove;
+                highestFlips = flips;
             }
         }
 
