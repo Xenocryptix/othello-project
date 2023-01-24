@@ -14,6 +14,28 @@ public class BoardTest {
         board = new Board();
     }
 
+    /**
+     * Ensure that the setup of the game is correct where the middle tiles are set correctly to white and black
+     * while other tiles are empty
+     */
+    @Test
+    public void testSetup() {
+        assertEquals(Disk.BLACK, board.getField(3, 4));
+        assertEquals(Disk.BLACK, board.getField(4, 3));
+        assertEquals(Disk.WHITE, board.getField(3, 3));
+        assertEquals(Disk.WHITE, board.getField(4, 4));
+        for (int i = 0; i < Board.DIM; i++) {
+            for (int j = 0; j < Board.DIM; j++) {
+                if (i != 3 && j != 3 && i != 4 && j != 4) {
+                    assertEquals(Disk.EMPTY, board.getField(i, j));
+                }
+            }
+        }
+    }
+
+    /**
+     * Ensures that converting from (row,col) pair work's correctly
+     */
     @Test
     public void testIndex() {
         int index = 0;
@@ -25,6 +47,9 @@ public class BoardTest {
         }
     }
 
+    /**
+     * Ensures that all fields of the board are from 0 till Board.DIM * Board.DIM
+     */
     @Test
     public void testIsFieldIndex() {
         assertFalse(board.isField(-1));
@@ -33,16 +58,22 @@ public class BoardTest {
         assertFalse(board.isField(Board.DIM * Board.DIM));
     }
 
+    /**
+     * Ensures that the board has fields at row and column 0 till Board.DIM - 1
+     */
     @Test
     public void testIsFieldRowCol() {
         assertFalse(board.isField(-1, 0));
         assertFalse(board.isField(0, -1));
         assertTrue(board.isField(0, 0));
-        assertTrue(board.isField(7, 7));
-        assertFalse(board.isField(7, 8));
-        assertFalse(board.isField(8, 7));
+        assertTrue(board.isField(Board.DIM - 1, Board.DIM - 1));
+        assertFalse(board.isField(7, Board.DIM + 1));
+        assertFalse(board.isField(Board.DIM + 1, 7));
     }
 
+    /**
+     * Ensures that setting a field with index to a disk works
+     */
     @Test
     public void testSetAndGetFieldIndex() {
         board.setField(0, Disk.WHITE);
@@ -50,6 +81,9 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(1));
     }
 
+    /**
+     * Ensures that setting a field with row and col to a disk work
+     */
     @Test
     public void testSetAndGetFieldRowCol() {
         board.setField(0, 0, Disk.BLACK);
@@ -59,6 +93,9 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(1, 1));
     }
 
+    /**
+     * Ensures that flipping a field with index works
+     */
     @Test
     public void testFlipIndex() {
         //Flipping a white field
@@ -77,6 +114,9 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(0));
     }
 
+    /**
+     * Ensures flipping a field with row and col works
+     */
     @Test
     public void testFlipRowCol() {
         //Flipping a white field
@@ -95,21 +135,11 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(0, 0));
     }
 
-    @Test
-    public void testSetup() {
-        assertEquals(Disk.BLACK, board.getField(3, 4));
-        assertEquals(Disk.BLACK, board.getField(4, 3));
-        assertEquals(Disk.WHITE, board.getField(3, 3));
-        assertEquals(Disk.WHITE, board.getField(4, 4));
-        for (int i = 0; i < Board.DIM; i++) {
-            for (int j = 0; j < Board.DIM; j++) {
-                if (i != 3 && j != 3 && i != 4 && j != 4) {
-                    assertEquals(Disk.EMPTY, board.getField(i, j));
-                }
-            }
-        }
-    }
-
+    //TODO: LOOK HEREEE
+    /**
+     * Tests when there is a winner in the board. This is when a disk
+     * has more disks than another disk
+     */
     @Test
     public void testWinning() {
         assertFalse(board.hasWinner());
@@ -119,10 +149,15 @@ public class BoardTest {
         assertTrue(board.isWinner(Disk.WHITE));
         assertFalse(board.isWinner(Disk.BLACK));
 
-        board.setField(0,Disk.BLACK);
+        board.setField(0, Disk.BLACK);
         assertTrue(board.isWinner(Disk.BLACK));
         assertFalse(board.isWinner(Disk.WHITE));
     }
+
+    /**
+     * Ensures after a reset is made that the board is back to it is
+     * original initialisation
+     */
     @Test
     public void testReset() {
         board.setField(0, Disk.WHITE);
@@ -136,6 +171,10 @@ public class BoardTest {
         assertEquals(Disk.WHITE, board.getField(4, 4));
     }
 
+    /**
+     * Ensures that changes made on a deep copy of the board do not affect the
+     * original board
+     */
     @Test
     public void testDeepCopy() {
         board.setField(0, Disk.WHITE);
@@ -154,6 +193,9 @@ public class BoardTest {
         assertEquals(Disk.BLACK, deepCopyBoard.getField(0));
     }
 
+    /**
+     * Tests the condition where the board is full
+     */
     @Test
     public void testFull() {
         assertFalse(board.isFull());
