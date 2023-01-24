@@ -201,8 +201,10 @@ public class OthelloGameTest {
         assertEquals(Disk.BLACK, game.getCurrentDisk());
 
         while (!game.isGameover()) {
-            game.doMove(player1.determineMove(game));
-            game.doMove(player2.determineMove(game));
+            if (!game.isGameover())
+                game.doMove(player1.determineMove(game));
+            if (!game.isGameover())
+                game.doMove(player2.determineMove(game));
         }
 
         assertTrue(game.isGameover());

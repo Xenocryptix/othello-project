@@ -75,22 +75,13 @@ public class OthelloGame implements Game {
         ensures validBlack.isEmpty() ==> \result == true;
         pure;
     */
-    public boolean isBlackOver() {
-        return validBlack.isEmpty();
+    public boolean currentPlayerOver() {
+        if (current.equals(Disk.BLACK))
+            return validBlack.isEmpty();
+        else
+            return validWhite.isEmpty();
     }
 
-    /**
-     * Check if white disk ran out of moves
-     *
-     * @return True, if the game is over for white, otherwise false.
-     */
-    /*@
-        ensures validWhite.isEmpty() ==> \result == true;
-        pure;
-    */
-    public boolean isWhiteOver() {
-        return validWhite.isEmpty();
-    }
 
     /**
      * Check if the game is over, i.e., there are no more valid moves or the board is full.
@@ -104,7 +95,7 @@ public class OthelloGame implements Game {
     @Override
     public boolean isGameover() {
         getValidMoves();
-        return board.isFull() || validBlack.isEmpty() || validWhite.isEmpty();
+        return board.isFull() || currentPlayerOver();
     }
 
     /**
