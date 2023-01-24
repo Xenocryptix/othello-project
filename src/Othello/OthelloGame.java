@@ -284,8 +284,6 @@ public class OthelloGame implements Game {
     //TODO: DON'T UNDERSTAND
     @Override
     public void doMove(Move move) {
-        if (move == null)
-            return;
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
