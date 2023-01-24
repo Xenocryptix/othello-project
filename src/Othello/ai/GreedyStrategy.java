@@ -2,7 +2,7 @@ package Othello.ai;
 
 import Othello.*;
 
-import java.util.*;
+import java.util.List;
 
 public class GreedyStrategy implements Strategy {
     private static final String NAME = "GREEDY";

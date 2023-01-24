@@ -1,13 +1,17 @@
 package Othello.ai;
 
-import Othello.*;
+import Othello.Disk;
+import Othello.Game;
+import Othello.Move;
+import Othello.OthelloGame;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
-    private final Random rand = new Random();
+    private final Random RAND = new Random();
 
     /**
      * Return the name of the strategy
@@ -33,6 +37,6 @@ public class NaiveStrategy implements Strategy {
             ((OthelloGame) game).nextTurn();
             return null;
         }
-        return validMoves.get(rand.nextInt(validMoves.size()));
+        return validMoves.get(RAND.nextInt(validMoves.size()));
     }
 }

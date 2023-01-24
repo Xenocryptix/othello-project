@@ -12,6 +12,7 @@ public interface Server {
 
     /**
      * Returns the port of the server. This method returns the actual port the server is accepting connections on.
+     *
      * @return the port number, between 0 and 65535.
      */
     //@ ensures isAccepting() ==> \result > 0 && \result <= 65535;

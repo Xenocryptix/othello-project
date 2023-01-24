@@ -111,6 +111,19 @@ public class BoardTest {
     }
 
     @Test
+    public void testWinning() {
+        assertFalse(board.hasWinner());
+
+        board.setField(0, Disk.WHITE);
+        assertTrue(board.hasWinner());
+        assertTrue(board.isWinner(Disk.WHITE));
+        assertFalse(board.isWinner(Disk.BLACK));
+
+        board.setField(0,Disk.BLACK);
+        assertTrue(board.isWinner(Disk.BLACK));
+        assertFalse(board.isWinner(Disk.WHITE));
+    }
+    @Test
     public void testReset() {
         board.setField(0, Disk.WHITE);
         board.setField(Board.DIM * Board.DIM - 1, Disk.BLACK);

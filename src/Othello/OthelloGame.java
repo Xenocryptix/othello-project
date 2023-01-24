@@ -12,18 +12,17 @@ import java.util.Objects;
  * using a method and the board can be reset through OthelloGame and even set to a new array
  */
 public class OthelloGame implements Game {
-    private Board board;
-    private Player player1;
-    private Player player2;
-    private List<Move> validMoves = new ArrayList<>(); //Valid move array list
-    private List<Move> validBlack = new ArrayList<>(); //Valid move for black
-    private List<Move> validWhite = new ArrayList<>(); //Valid move for white
-
     //Predefined directional array
     private final int[][] dxy = {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
+    private final List<Move> validBlack = new ArrayList<>(); //Valid move for black
+    private final List<Move> validWhite = new ArrayList<>(); //Valid move for white
+    private Board board;
+    private Player player1;
+    private Player player2;
+    private List<Move> validMoves = new ArrayList<>(); //Valid move array list
     private Disk current;
 
     /**
@@ -255,7 +254,6 @@ public class OthelloGame implements Game {
 
     /**
      * Change turn to the opposite color
-     *
      */
     //@ensures current == \old(current.other());
     public void nextTurn() {

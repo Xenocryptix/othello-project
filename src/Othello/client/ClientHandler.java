@@ -1,7 +1,6 @@
 package Othello.client;
 
 import Othello.Server.OthelloServer;
-import Othello.Server.Protocol;
 import Othello.Server.Server;
 
 import java.io.*;

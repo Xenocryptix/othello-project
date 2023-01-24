@@ -1,6 +1,8 @@
 package Othello.ai;
 
-import Othello.*;
+import Othello.AbstractPlayer;
+import Othello.Game;
+import Othello.Move;
 
 public class ComputerPlayer extends AbstractPlayer {
     private String name;
@@ -22,11 +24,11 @@ public class ComputerPlayer extends AbstractPlayer {
         return strategy.determineMove(game);
     }
 
-    public void setStrategy(Strategy strategy) {
-        this.strategy = strategy;
-    }
-
     public Strategy getStrategy() {
         return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 }

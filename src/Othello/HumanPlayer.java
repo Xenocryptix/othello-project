@@ -1,21 +1,24 @@
 package Othello;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing a human player of the game that extends an abstract class called AbstractPlayer.
  * //TODO:CONTINUE
  */
 public class HumanPlayer extends AbstractPlayer {
-    private List<Move> allowedMoves = new ArrayList<>();
     private final PrintWriter out;
     private final BufferedReader in;
+    private List<Move> allowedMoves = new ArrayList<>();
+
     public HumanPlayer(String name, Reader reader, Writer writer) {
         super(name);
         out = new PrintWriter(writer, true);
         in = new BufferedReader(reader);
     }
+
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         allowedMoves.clear();

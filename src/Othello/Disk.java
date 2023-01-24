@@ -1,4 +1,5 @@
 package Othello;
+
 /**
  * Represents a disk in the Othello game. There three possible values:
  * Disk.Black, Disk.WHITE and Disk.EMPTY.

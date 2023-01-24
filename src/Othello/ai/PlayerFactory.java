@@ -1,6 +1,6 @@
 package Othello.ai;
 
-import Othello.*;
+import Othello.HumanPlayer;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -21,6 +21,7 @@ public class PlayerFactory implements Factory {
 
     /**
      * Make a new computer player with specified strategy
+     *
      * @param strategy
      * @return computer player object
      */

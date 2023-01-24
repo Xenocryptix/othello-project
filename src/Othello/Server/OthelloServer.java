@@ -10,18 +10,18 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class OthelloServer implements Server, Runnable{
-    private ServerSocket serverSocket;
+public class OthelloServer implements Server, Runnable {
     private final ArrayList<ClientHandler> clients;
     private final Queue<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
+    private ServerSocket serverSocket;
 
     public OthelloServer(int port) {
         this.port = port;
         clients = new ArrayList<ClientHandler>();
         playersQueue = new PriorityQueue<>();
-        serverThread =  new Thread(this);
+        serverThread = new Thread(this);
     }
 
     /**
@@ -78,6 +78,7 @@ public class OthelloServer implements Server, Runnable{
     public synchronized void addClient(ClientHandler handler) {
         clients.add(handler);
     }
+
     public void addToQueue(ClientHandler handler) {
         playersQueue.add(handler);
     }
