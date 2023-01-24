@@ -17,6 +17,8 @@ public class OthelloGame implements Game {
     private Player player1;
     private Player player2;
     private List<Move> validMoves = new ArrayList<>(); //Valid move array list
+    private List<Move> validBlack = new ArrayList<>(); //Valid move for black
+    private List<Move> validWhite = new ArrayList<>(); //Valid move for white
 
     //Predefined directional array
     private final int[][] dxy = {
@@ -65,6 +67,32 @@ public class OthelloGame implements Game {
     }
 
     /**
+     * Check if black disk ran out of moves
+     *
+     * @return True, if the game is over for black, otherwise false.
+     */
+    /*@
+        ensures validBlack.isEmpty() ==> \result == true;
+        pure;
+    */
+    public boolean isBlackOver() {
+        return validBlack.isEmpty();
+    }
+
+    /**
+     * Check if white disk ran out of moves
+     *
+     * @return True, if the game is over for white, otherwise false.
+     */
+    /*@
+        ensures validWhite.isEmpty() ==> \result == true;
+        pure;
+    */
+    public boolean isWhiteOver() {
+        return validWhite.isEmpty();
+    }
+
+    /**
      * Check if the game is over, i.e., there are no more valid moves or the board is full.
      *
      * @return True, if the game is over, otherwise false.
@@ -76,7 +104,7 @@ public class OthelloGame implements Game {
     @Override
     public boolean isGameover() {
         getValidMoves();
-        return board.isFull() || validMoves.isEmpty();
+        return board.isFull() || validBlack.isEmpty() || validWhite.isEmpty();
     }
 
     /**
@@ -178,6 +206,10 @@ public class OthelloGame implements Game {
                         Move move = new OthelloMove(disk, nRow, nCol);
                         if (!isValidMove(move)) {
                             validMoves.add(move);
+                            if (disk.equals(Disk.WHITE))
+                                validWhite.add(move);
+                            else
+                                validBlack.add(move);
                         }
                     }
                     break;
@@ -196,12 +228,14 @@ public class OthelloGame implements Game {
      * @return the list of currently valid moves
      */
     /*@
-    //TODO:JML
-    pure
+        pure
     */
+    //TODO:JML
     @Override
     public List<Move> getValidMoves() {
         validMoves.clear();
+        validBlack.clear();
+        validWhite.clear();
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
@@ -244,8 +278,8 @@ public class OthelloGame implements Game {
      * @param move The move to play
      */
     /*@
-    ensures validMoves != \old(validMoves);
-    ensures current == \old(current.other());
+        ensures validMoves != \old(validMoves);
+        ensures current == \old(current.other());
     */
     //TODO: DON'T UNDERSTAND
     @Override
@@ -296,8 +330,8 @@ public class OthelloGame implements Game {
      * @return board that is used in the game
      */
     /*@
-    ensures (\forall int i; i >= 0 && i <= 63; \result.getField(i) == board.getField(i));
-    pure
+        ensures (\forall int i; i >= 0 && i <= 63; \result.getField(i) == board.getField(i));
+        pure
     */
     public Board getBoard() {
         return board;
@@ -309,9 +343,9 @@ public class OthelloGame implements Game {
      * @param newBoard The new board to change the current board
      */
     /*@
-    ensures (\forall int i; i >= 0 && i <= 7; (\forall int j;j >= 0 && j <= 7; newBoard[i][j] == board.getField(i,j)));
-    ensures validMoves != \old(validMoves);
-    pure
+        ensures (\forall int i; i >= 0 && i <= 7; (\forall int j;j >= 0 && j <= 7; newBoard[i][j] == board.getField(i,j)));
+        ensures validMoves != \old(validMoves);
+        pure
     */
     public void setBoard(Disk[][] newBoard) {
         board.setBoard(newBoard);
