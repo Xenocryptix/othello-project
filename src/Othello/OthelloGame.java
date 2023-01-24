@@ -248,26 +248,33 @@ public class OthelloGame implements Game {
     }
 
     /**
+     * Return valid moves for a specified color
+     *
+     * @param disk The disk color
+     * @return move The move-list
+     */
+    public List<Move> getValidMoves(Disk disk) {
+        getValidMoves();
+        if (disk.equals(Disk.BLACK))
+            return validBlack;
+        else
+            return validWhite;
+    }
+
+
+    /**
      * Return a random valid move for a specified disk
      *
      * @param disk The disk color which random move would be generated for
      * @return move The random move
      */
     /*@
-    requires disk != Disk.EMPTY;
-    ensures getValidMoves().contains(\result) && ((OthelloMove) \result).getDisk().equals(disk);
+        requires disk != Disk.EMPTY;
+        ensures getValidMoves().contains(\result) && ((OthelloMove) \result).getDisk().equals(disk);
     */
     public Move getRandomValidMove(Disk disk) {
-        List<Move> currentMovesForDisk = new ArrayList<>();
-        for (Move move : validMoves) {
-            if (((OthelloMove) move).getDisk().equals(disk)) {
-                currentMovesForDisk.add(move);
-            }
-        }
-        if (currentMovesForDisk.isEmpty()) {
-            return null;
-        }
-        return currentMovesForDisk.get(RANDOM.nextInt(currentMovesForDisk.size()));
+        List<Move> currentMoves = getValidMoves(disk);
+        return currentMoves.get(RANDOM.nextInt(currentMoves.size()));
     }
 
     /**

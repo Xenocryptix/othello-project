@@ -8,7 +8,7 @@ import java.util.*;
  * //TODO:CONTINUE
  */
 public class HumanPlayer extends AbstractPlayer {
-    private final List<Move> allowedMoves = new ArrayList<>();
+    private List<Move> allowedMoves = new ArrayList<>();
     private final PrintWriter out;
     private final BufferedReader in;
     public HumanPlayer(String name, Reader reader, Writer writer) {
@@ -19,12 +19,7 @@ public class HumanPlayer extends AbstractPlayer {
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         allowedMoves.clear();
-        List<Move> moves = ((OthelloGame) game).getValidMoves();
-        for (Move move: moves) {
-            if (((OthelloMove) move).getDisk().equals(disk)) {
-                allowedMoves.add(move);
-            }
-        }
+        allowedMoves = ((OthelloGame) game).getValidMoves(disk);
 
         try {
             while (true) {
