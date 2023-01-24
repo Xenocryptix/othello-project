@@ -28,6 +28,8 @@ public class GreedyStrategy implements Strategy {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         List<Move> movesForDisk;
         movesForDisk = ((OthelloGame) game).getValidMoves(disk);
+        if (movesForDisk.isEmpty())
+            return new OthelloMove(disk, 8, 0);
 
         Move highestMove = movesForDisk.get(0);
         int highestFlips = 0;

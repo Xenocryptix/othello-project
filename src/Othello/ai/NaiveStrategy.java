@@ -2,9 +2,12 @@ package Othello.ai;
 
 import Othello.*;
 
+import java.util.*;
+
 
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
+    private final Random rand = new Random();
 
     /**
      * Return the name of the strategy
@@ -25,6 +28,7 @@ public class NaiveStrategy implements Strategy {
     @Override
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
-        return ((OthelloGame) game).getRandomValidMove(disk);
+        List<Move> validMoves = ((OthelloGame) game).getValidMoves(disk);
+        return validMoves.get(rand.nextInt(validMoves.size()));
     }
 }

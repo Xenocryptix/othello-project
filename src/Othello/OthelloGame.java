@@ -95,7 +95,7 @@ public class OthelloGame implements Game {
     @Override
     public boolean isGameover() {
         getValidMoves();
-        return board.isFull() || currentPlayerOver() ;
+        return board.isFull() || validMoves.isEmpty();
     }
 
     /**
@@ -269,6 +269,15 @@ public class OthelloGame implements Game {
     }
 
     /**
+     * Change turn to the opposite color
+     *
+     */
+    //@ensures current == \old(current.other());
+    public void nextTurn() {
+        current = current.other();
+    }
+
+    /**
      * Performing the gives move, unless this move is not a valid move which is done by going through
      * the tiles that are between the valid move given and another disk of the same color and switching
      * the other tiles between them to the color of the given move.
@@ -277,7 +286,6 @@ public class OthelloGame implements Game {
      */
     /*@
         ensures validMoves != \old(validMoves);
-        ensures current == \old(current.other());
     */
     //TODO: DON'T UNDERSTAND
     @Override
@@ -308,7 +316,7 @@ public class OthelloGame implements Game {
                 }
             }
             validMoves = getValidMoves();
-            current = disk.other();
+            nextTurn();
         }
     }
 
