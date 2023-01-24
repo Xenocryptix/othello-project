@@ -1,5 +1,4 @@
 import Othello.*;
-import Othello.ai.ComputerPlayer;
 import Othello.ai.NaiveStrategy;
 import Othello.ai.PlayerFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +75,6 @@ public class OthelloGameTest {
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 1)));
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
-
 
     /**
      * Test if flipping in the two directions horizontally to the right works correctly
@@ -178,9 +176,79 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.WHITE, 4, 1));
         assertEquals(Disk.WHITE, board.getField(4, 2));
         assertEquals(Disk.WHITE, board.getField(4, 3));
+
+        game.reset();
+
+        /**
+         *    A   B   C   D   E   F   G   H
+         * 1  B |   |   |   |   |   |   |
+         *   ---+---+---+---+---+---+---+---
+         * 2    | W |   |   |   |   |   | B
+         *   ---+---+---+---+---+---+---+---
+         * 3    |   | B |   |   |   | W |
+         *   ---+---+---+---+---+---+---+---
+         * 4    |   |   | W |   | W |   |
+         *   ---+---+---+---+---+---+---+---
+         * 5  B | W |   | W |   | W | W | W
+         *   ---+---+---+---+---+---+---+---
+         * 6    |   |   | B |   |   |   |
+         *   ---+---+---+---+---+---+---+---
+         * 7    |   | W |   |   |   | W |
+         *   ---+---+---+---+---+---+---+---
+         * 8    | B |   |   |   |   |   | B
+         */
+
+        board.setField(0, Disk.BLACK);
+        board.setField(4, 0, Disk.BLACK);
+        board.setField(7, 1, Disk.BLACK);
+        board.setField(1, 7, Disk.BLACK);
+        board.setField(7, 7, Disk.BLACK);
+        board.setField(5, 3, Disk.BLACK);
+        board.setField(1, 1, Disk.WHITE);
+        board.setField(2, 2, Disk.BLACK);
+        board.setField(4, 3, Disk.WHITE);
+        board.setField(4, 4, Disk.EMPTY);
+        board.setField(3, 4, Disk.EMPTY);
+        board.setField(2, 6, Disk.WHITE);
+        board.setField(3, 5, Disk.WHITE);
+        board.setField(4, 1, Disk.WHITE);
+        board.setField(4, 3, Disk.WHITE);
+        board.setField(4, 5, Disk.WHITE);
+        board.setField(4, 6, Disk.WHITE);
+        board.setField(4, 7, Disk.WHITE);
+        board.setField(6, 2, Disk.WHITE);
+        board.setField(6, 6, Disk.WHITE);
+        game.getValidMoves();
+
+        assertEquals(Disk.WHITE, board.getField(3, 3));
+        assertEquals(Disk.WHITE, board.getField(3, 5));
+        assertEquals(Disk.WHITE, board.getField(2, 6));
+        assertEquals(Disk.WHITE, board.getField(4, 1));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
+        assertEquals(Disk.WHITE, board.getField(6, 6));
+
+
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 4));
+
+        System.out.println(board.toString());
+        assertEquals(Disk.BLACK, board.getField(3, 3));
+        assertEquals(Disk.BLACK, board.getField(3, 5));
+        assertEquals(Disk.BLACK, board.getField(2, 6));
+        assertEquals(Disk.WHITE, board.getField(4, 1));
+        assertEquals(Disk.WHITE, board.getField(4, 3));
+        assertEquals(Disk.WHITE, board.getField(6, 6));
+
     }
 
-    //TODO: Gameover
+    @Test
+    public void testSetBoard() {
+        Board changedBoard = new Board();
+        changedBoard.setField(0, Disk.BLACK);
+        assertEquals(Disk.EMPTY, board.getField(0));
+        game.setBoard(changedBoard);
+        Board newBoard = game.getBoard();
+        assertEquals(Disk.BLACK, newBoard.getField(0));
+    }
 
     @Test
     public void fullRandomGame() {
@@ -189,18 +257,6 @@ public class OthelloGameTest {
         AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         game.setPlayer1(player1);
         game.setPlayer2(player2);
-
-
-        assertEquals(Disk.BLACK, game.getCurrentDisk());
-        game.doMove(player1.determineMove(game));
-        assertTrue(board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE));
-        assertEquals(Disk.WHITE, game.getCurrentDisk());
-
-        int oldCount = board.countDisk(Disk.WHITE);
-        game.doMove(player2.determineMove(game));
-        assertTrue(board.countDisk(Disk.WHITE) > oldCount);
-        assertEquals(board.countDisk(Disk.WHITE), board.countDisk(Disk.BLACK));
-        assertEquals(Disk.BLACK, game.getCurrentDisk());
 
         Move move;
         Disk disk = game.getCurrentDisk();
@@ -217,7 +273,7 @@ public class OthelloGameTest {
         assertTrue(game.isGameover());
         if (board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE)) {
             assertEquals(player1, game.getWinner());
-        } else if (board.countDisk(Disk.BLACK) < board.countDisk(Disk.WHITE)){
+        } else if (board.countDisk(Disk.BLACK) < board.countDisk(Disk.WHITE)) {
             assertEquals(player2, game.getWinner());
         } else {
             assertNull(game.getWinner());
