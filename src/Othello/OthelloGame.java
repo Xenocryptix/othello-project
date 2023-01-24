@@ -230,6 +230,9 @@ public class OthelloGame implements Game {
                 currentMovesForDisk.add(move);
             }
         }
+        if (currentMovesForDisk.isEmpty()) {
+            return null;
+        }
         return currentMovesForDisk.get(RANDOM.nextInt(currentMovesForDisk.size()));
     }
 

@@ -1,7 +1,7 @@
-import Othello.Board;
-import Othello.Disk;
-import Othello.OthelloGame;
-import Othello.OthelloMove;
+import Othello.*;
+import Othello.ai.ComputerPlayer;
+import Othello.ai.NaiveStrategy;
+import Othello.ai.PlayerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -179,17 +179,40 @@ public class OthelloGameTest {
     }
 
     //TODO: Gameover
-    //TODO: RANDOM MOVES GAME
+
     @Test
     public void fullRandomGame() {
         assertFalse(game.isGameover());
+        AbstractPlayer player1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
 
-        game.doMove(game.getRandomValidMove(Disk.BLACK));
+
+        assertEquals(Disk.BLACK, game.getCurrentDisk());
+        game.doMove(player1.determineMove(game));
         assertTrue(board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE));
+        assertEquals(Disk.WHITE, game.getCurrentDisk());
 
-        game.doMove(game.getRandomValidMove(Disk.WHITE));
+        int oldCount = board.countDisk(Disk.WHITE);
+        game.doMove(player2.determineMove(game));
+        assertTrue(board.countDisk(Disk.WHITE) > oldCount);
+        assertEquals(board.countDisk(Disk.WHITE), board.countDisk(Disk.BLACK));
+        assertEquals(Disk.BLACK, game.getCurrentDisk());
+
+        while (!game.isGameover()) {
+            game.doMove(player1.determineMove(game));
+            game.doMove(player2.determineMove(game));
+        }
 
         assertTrue(game.isGameover());
+        if (board.countDisk(Disk.BLACK) > board.countDisk(Disk.WHITE)) {
+            assertEquals(player1, game.getWinner());
+        } else if (board.countDisk(Disk.BLACK) < board.countDisk(Disk.WHITE)){
+            assertEquals(player2, game.getWinner());
+        } else {
+            assertNull(game.getWinner());
+        }
 
     }
 

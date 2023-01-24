@@ -1,5 +1,7 @@
 package Othello;
 
+import java.util.Arrays;
+
 /**
  * Represents a board for an othello game
  */
@@ -44,9 +46,11 @@ public class Board {
     ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i][j] == this.fields[i][j]))) ;
     */
     public Board deepCopy() {
-        Disk[][] copy;
+        Disk[][] copy = Arrays.copyOf(fields, fields.length);
+        for (int i = 0; i < copy.length; i++) {
+            copy[i] = Arrays.copyOf(fields[i], fields[i].length);
+        }
         Board board = new Board();
-        copy = fields.clone();
         board.fields = copy;
         return board;
     }

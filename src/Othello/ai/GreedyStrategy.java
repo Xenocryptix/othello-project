@@ -20,7 +20,7 @@ public class GreedyStrategy implements Strategy {
     /**
      * Return the move that flips the most disks
      *
-     * @param game the game for which the move should be returned
+     * @param game The game for which the move should be returned
      * @return move The move with the highest number of flips
      */
     @Override
@@ -35,11 +35,12 @@ public class GreedyStrategy implements Strategy {
         }
         Map<Move,Integer> moveAndFlips = new HashMap<>();
         for (Move currentMove : movesForDisk) {
-            Board board = ((OthelloGame) game).getBoard();
+            Board board = ((OthelloGame) game).getBoard().deepCopy();
             int currentCount = board.countDisk(disk);
             game.doMove(currentMove);
             int newCount = board.countDisk(disk);
             moveAndFlips.put(currentMove, newCount-currentCount);
+//            ((OthelloGame) game).setBoard(board);
         }
         int highest = 0;
         Move highestFlippingMove = null;
