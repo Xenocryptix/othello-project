@@ -1,4 +1,4 @@
-package Othello.ai;
+package Othello.players;
 
 import Othello.Game;
 import Othello.Move;

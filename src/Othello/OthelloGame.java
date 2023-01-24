@@ -1,5 +1,7 @@
 package Othello;
 
+import Othello.players.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

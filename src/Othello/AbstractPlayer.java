@@ -1,5 +1,7 @@
 package Othello;
 
+import Othello.players.Player;
+
 /**
  * An abstract class representing a player of the game.
  */

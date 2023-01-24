@@ -1,9 +1,10 @@
-package Othello.ai;
+package Othello.players.ai;
 
 import Othello.Disk;
 import Othello.Game;
 import Othello.Move;
 import Othello.OthelloGame;
+import Othello.players.Strategy;
 
 import java.util.List;
 import java.util.Random;

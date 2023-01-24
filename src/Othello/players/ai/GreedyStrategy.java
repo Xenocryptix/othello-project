@@ -1,6 +1,7 @@
-package Othello.ai;
+package Othello.players.ai;
 
 import Othello.*;
+import Othello.players.Strategy;
 
 import java.util.List;
 

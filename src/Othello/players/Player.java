@@ -1,4 +1,4 @@
-package Othello;
+package Othello.players;
 
 /**
  * Interface to represent players in a game

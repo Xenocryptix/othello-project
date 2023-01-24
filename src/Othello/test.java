@@ -1,9 +1,10 @@
 package Othello;
 
-import Othello.ai.ComputerPlayer;
-import Othello.ai.GreedyStrategy;
-import Othello.ai.NaiveStrategy;
-import Othello.ai.PlayerFactory;
+import Othello.players.ai.ComputerPlayer;
+import Othello.players.ai.GreedyStrategy;
+import Othello.players.ai.NaiveStrategy;
+import Othello.players.PlayerFactory;
+import Othello.players.Player;
 
 public class test {
     public static void main(String[] args) {

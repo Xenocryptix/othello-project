@@ -1,6 +1,6 @@
-package Othello.ai;
+package Othello.players;
 
-import Othello.HumanPlayer;
+import Othello.players.ai.ComputerPlayer;
 
 import java.io.Reader;
 import java.io.Writer;
