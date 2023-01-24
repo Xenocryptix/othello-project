@@ -26,7 +26,6 @@ public class OthelloGame implements Game {
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
     private Disk current;
-    private final Random RANDOM = new Random();
 
     /**
      * Creates a new othello game by initialising the board to a new board, two players and setting the first move to be a
@@ -250,22 +249,6 @@ public class OthelloGame implements Game {
             return validBlack;
         else
             return validWhite;
-    }
-
-
-    /**
-     * Return a random valid move for a specified disk
-     *
-     * @param disk The disk color which random move would be generated for
-     * @return move The random move
-     */
-    /*@
-        requires disk != Disk.EMPTY;
-        ensures getValidMoves().contains(\result) && ((OthelloMove) \result).getDisk().equals(disk);
-    */
-    public Move getRandomValidMove(Disk disk) {
-        List<Move> currentMoves = getValidMoves(disk);
-        return currentMoves.get(RANDOM.nextInt(currentMoves.size()));
     }
 
     /**
