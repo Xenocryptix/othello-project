@@ -5,6 +5,9 @@ import Othello.HumanPlayer;
 import java.io.Reader;
 import java.io.Writer;
 
+/**
+ * A player factory used to make human players and computer players.
+ */
 public class PlayerFactory implements Factory {
     /**
      * Make a new human player

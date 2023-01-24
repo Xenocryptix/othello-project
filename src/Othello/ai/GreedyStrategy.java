@@ -12,6 +12,7 @@ public class GreedyStrategy implements Strategy {
      *
      * @return name
      */
+    //@ ensures \result == NAME;
     @Override
     public String getName() {
         return NAME;
@@ -23,6 +24,8 @@ public class GreedyStrategy implements Strategy {
      * @param game The game for which the move should be returned
      * @return move The move with the highest number of flips
      */
+    //@ requires game != null;
+    //@ ensures ((OthelloGame) game).isValidMove(\result);
     @Override
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();

@@ -12,6 +12,12 @@ import java.util.Objects;
  * using a method and the board can be reset through OthelloGame and even set to a new array
  */
 public class OthelloGame implements Game {
+    /*@
+     public invariant !isGameover() ==> getValidMoves().size() > 0;
+     public invariant !isGameover() ==> getWinner() == null;
+     public invariant !isGameover() ==> getTurn() != null;
+    */
+
     //Predefined directional array
     private final int[][] dxy = {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},

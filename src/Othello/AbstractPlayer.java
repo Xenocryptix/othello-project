@@ -1,5 +1,8 @@
 package Othello;
 
+/**
+ * An abstract class representing a player of the game.
+ */
 public abstract class AbstractPlayer implements Player {
     private final String name;
 

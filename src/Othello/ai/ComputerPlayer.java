@@ -4,6 +4,9 @@ import Othello.AbstractPlayer;
 import Othello.Game;
 import Othello.Move;
 
+/**
+ * Class that represents a computer player in the game
+ */
 public class ComputerPlayer extends AbstractPlayer {
     private String name;
     private Strategy strategy;

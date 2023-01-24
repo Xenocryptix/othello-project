@@ -2,10 +2,11 @@ package Othello;
 
 import java.util.List;
 
+/**
+ * A simple turn-based game.
+ */
+
 public interface Game {
-    //@ public invariant !isGameover() ==> getValidMoves().size() > 0;
-    //@ public invariant !isGameover() ==> getWinner() == null;
-    //@ public invariant !isGameover() ==> getTurn() != null;
 
     /**
      * Check if the game is over, i.e., there is a winner or no more moves are available.

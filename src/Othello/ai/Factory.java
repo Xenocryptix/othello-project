@@ -5,6 +5,10 @@ import Othello.HumanPlayer;
 import java.io.Reader;
 import java.io.Writer;
 
+/**
+ * Interface factory for creating players.
+ */
+
 public interface Factory {
     /**
      * Make a new human player

@@ -3,19 +3,22 @@ package Othello.ai;
 import Othello.Game;
 import Othello.Move;
 
+/**
+ * A strategy to be used by the computer player
+ */
 public interface Strategy {
     /**
-     * Return the name of the strategy
-     *
-     * @return name
+     * Get the name of the strategy being used.
+     * @return the name of the strategy used
      */
+    //@ pure;
     String getName();
 
     /**
-     * Return the final move
-     *
-     * @param game
-     * @return move
+     * Checks the state of the game and determines the next possible move.
+     * @param game The current game
+     * @return the next legal move
      */
+    //@ requires game != null;
     Move determineMove(Game game);
 }

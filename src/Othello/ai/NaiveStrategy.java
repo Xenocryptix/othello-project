@@ -8,27 +8,30 @@ import Othello.OthelloGame;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * A naive strategy for the othello game which picks a move randomly from the valid moves
+ */
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
-    private final Random RAND = new Random();
+    private final Random RANDOM = new Random();
 
     /**
-     * Return the name of the strategy
-     *
-     * @return name
+     * Get the name of the strategy being used.
+     * @return the name of the strategy used
      */
+    //@ ensures \result == NAME;
     @Override
     public String getName() {
         return NAME;
     }
 
     /**
-     * Return the final move
-     *
-     * @param game
-     * @return move
+     * Checks the state of the game and determines the next possible random move.
+     * @param game The current game
+     * @return the next legal move
      */
+    //@ requires game != null;
+    //@ ensures ((OthelloGame) game).isValidMove(\result);
     @Override
     public Move determineMove(Game game) {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
@@ -37,6 +40,6 @@ public class NaiveStrategy implements Strategy {
             ((OthelloGame) game).nextTurn();
             return null;
         }
-        return validMoves.get(RAND.nextInt(validMoves.size()));
+        return validMoves.get(RANDOM.nextInt(validMoves.size()));
     }
 }

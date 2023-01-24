@@ -3,7 +3,9 @@ package Othello;
 import java.util.Arrays;
 
 /**
- * Represents a board for an othello game
+ * Represents a board for an othello game. The board is initialised with the middle being white and black
+ * The class can be used to set fields on the board and flip an already set field. It also checks for winners
+ * inside the board and can reset it. Lastly, it has a toString for the presentation of the board.
  */
 public class Board {
     /*@
