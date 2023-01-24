@@ -129,7 +129,8 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Check if a move is a valid move
+     * Check if a move is a valid move, by checking whether the move exists in the valid moves list
+     * Could've been 1 line if contains() works
      *
      * @param move The move to check
      * @return True if the move is valid, otherwise false
@@ -157,24 +158,34 @@ public class OthelloGame implements Game {
 
     /**
      * Checks all 8 directions of a disc to find a move that could be valid.
-     * A check is made to look at the neighboring tile in a certain direction that it is the other disc,
-     * and it is not empty. If it passes that, then it moves another tile and checks it again until
-     * an empty tile is found and then that tile is added to the valid moves list as a new valid move.
+     * The check looks for lines in all 8 direction, seeing if there's a full and uninterrupted line of opposite
+     * color with an empty tile as the endpoint. This endpoint would be a possible coordinate to place in the
+     * tile with the same color as the starting point
      *
-     * @param row  row The row of the move to check valid moves for
-     * @param col  col The column of the move to check valid moves for
-     * @param disk disk The disk of the move to check valid moves for
+     * @param row  The row of the move to check valid moves for
+     * @param col  The column of the move to check valid moves for
+     * @param disk The disk of the move to check valid moves for
      */
     //TODO:JML
     public void checkDirection(int row, int col, Disk disk) {
+        //Traverse from 8 direction from a specified tile
         for (int[] dir : dxy) {
             int nRow = row + dir[0];
             int nCol = col + dir[1];
             int count = 0;
+            //Iterate in the chosen direction
             while (board.isField(nRow, nCol)) {
                 if (board.getField(nRow, nCol).equals(disk))
+                    //If a tile with the same color as the starting point is encountered, break immediately
                     break;
                 if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
+                    /*
+                        If a tile is empty, there could be 2 possible cases:
+                        There's nothing in between the starting point and the empty tile, in this case we would simply break
+                        There's at least one tile with different color in between, in this case the tile position would be a valid move
+                        After both of these, we just break and move to the next direction
+                        We check if the number of tiles in between by counting
+                     */
                     if (board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0) {
                         Move move = new OthelloMove(disk, nRow, nCol);
                         if (!isValidMove(move)) {
@@ -187,6 +198,10 @@ public class OthelloGame implements Game {
                     }
                     break;
                 }
+                /*
+                    Keep moving in the specified direction, while increment the count to
+                    keep track of the number of tiles in between
+                */
                 nRow += dir[0];
                 nCol += dir[1];
                 count++;
@@ -195,8 +210,10 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Return all moves that are valid in the current state of the game by checking all directions
-     * of all the tiles in the game that are not empty.
+     * For this method, we look for possible moves by going from each occupied tile, in all 8 direction
+     * If we managed to find a straight line of opposite color after the selected tile with the endpoint being
+     * an empty tile, that tile will be a possible move
+     * For example: B W W W, then position [4] would be a possible move
      *
      * @return the list of currently valid moves
      */
@@ -206,9 +223,11 @@ public class OthelloGame implements Game {
     //TODO:JML
     @Override
     public List<Move> getValidMoves() {
+        //Initialize the move-lists
         validMoves.clear();
         validBlack.clear();
         validWhite.clear();
+        //For every occupied tile, we do a directional check
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
                 if (!board.isEmptyField(i, j)) {
@@ -269,16 +288,19 @@ public class OthelloGame implements Game {
                 int dRow = row + dir[0];
                 int dCol = col + dir[1];
                 int count = 0;
-                //We look for opposite disk in adjacent fields
+                //Continue to iterate in that direction while the tile is of opposite color
                 while (board.isField(dRow, dCol)) {
                     if (board.getField(dRow, dCol).equals(disk.other())) {
+                        //Continue to move in that direction while counting the tiles that traversed
                         dRow += dir[0];
                         dCol += dir[1];
                         count++;
                     } else {
+                        //Once we encountered another tile or empty tile, break out immediately
                         break;
                     }
                 }
+                //We backtrack to the first tile, flipping all the disks in the middle
                 if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
                     dRow -= dir[0];
                     dCol -= dir[1];
