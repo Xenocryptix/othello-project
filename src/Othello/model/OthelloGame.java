@@ -1,5 +1,6 @@
 package Othello.model;
 
+import Othello.players.AbstractPlayer;
 import Othello.players.Player;
 
 import java.util.ArrayList;
@@ -349,7 +350,7 @@ public class OthelloGame implements Game {
      * @return The board with the player's turn
      */
     public String toString() {
-        return board + "\nIt's " + getTurn().toString() + " turn\n";
+        return board + "\nIt's " + getTurn() + " turn\n";
     }
 
     /**
