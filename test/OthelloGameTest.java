@@ -144,7 +144,7 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.WHITE, 6, 7));
         game.doMove(new OthelloMove(Disk.BLACK, 5, 1));
         //PASSING
-//        assertNull(game.getValidMoves(Disk.WHITE));
+        assertNull(game.getValidMoves(Disk.WHITE));
         game.doMove(new OthelloMove(Disk.BLACK, 7, 1));
         game.doMove(new OthelloMove(Disk.WHITE, 7, 2));
         game.doMove(new OthelloMove(Disk.BLACK, 0, 7));
@@ -291,7 +291,6 @@ public class OthelloGameTest {
      * moves until both of them do not have any valid moves remaining and checks the winner
      * at the end if there's a winner
      */
-    @Disabled
     @Test
     public void fullRandomGame() {
         assertFalse(game.isGameover());
@@ -299,7 +298,7 @@ public class OthelloGameTest {
         AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         game.setPlayer1(player1);
         game.setPlayer2(player2);
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100; i++) {
             //Allows both players to make moves while the game is not over
             //Get the disk of the current turn
             Disk disk = game.getCurrentDisk();

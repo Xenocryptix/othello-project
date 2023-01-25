@@ -304,9 +304,6 @@ public class OthelloGame implements Game {
         }
         validMoves = getValidMoves();
         nextTurn();
-        if (getValidMoves(current).isEmpty()) {
-            nextTurn();
-        }
     }
 
     /**
