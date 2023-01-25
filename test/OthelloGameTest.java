@@ -281,10 +281,8 @@ public class OthelloGameTest {
         //Get the disk of the current turn
         Disk disk = game.getCurrentDisk();
         while (!game.isGameover()) {
-            move = player1.determineMove(game);
-            game.doMove(move);
-            move = player2.determineMove(game);
-            game.doMove(move);
+            game.doMove(player1.determineMove(game));
+            game.doMove(player2.determineMove(game));
             //Since 2 turns happen in each loop, the disk color will be flipped 2 times,
             //therefore stays the same
             assertEquals(disk, game.getCurrentDisk());
