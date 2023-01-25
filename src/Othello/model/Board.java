@@ -17,7 +17,7 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
-    private static final String LINE = "  ═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════";
+    private static final String LINE = "  ———+———+———+———+———+———+———+———";
     private /*@ spec_public */ Disk[][] fields;
 
     /**
@@ -41,7 +41,9 @@ public class Board {
     }
 
     /**
-     * Creates a deep copy of this field.
+     * Creates a deep copy of this field and creates a new board with it
+     *
+     * @return A deep copy of the board
      */
     /*@
         ensures \result != this;
@@ -61,6 +63,8 @@ public class Board {
      * Calculates the index in the linear array of fields from a (row, col)
      * pair.
      *
+     * @param row The row of the field
+     * @param col The column of the field
      * @return the index belonging to the (row,col)-field
      */
     /*@
@@ -76,7 +80,8 @@ public class Board {
     /**
      * Returns true if index is a valid index of a field on the board.
      *
-     * @return true if 0 <= index < DIM*DIM
+     * @param index The index of the field
+     * @return True if the index is greater than or equal 0 and less than the dimension of the board
      */
     /*@
         ensures index >= 0 && index < DIM*DIM ==> \result == true;
@@ -89,7 +94,9 @@ public class Board {
     /**
      * Returns true of the (row,col) pair refers to a valid field on the board.
      *
-     * @return true if 0 <= row < DIM && 0 <= col < DIM
+     * @param col The column of the field
+     * @param row The row of the field
+     * @return True if the row and column given are between 0 and DIM - 1 inclusive
      */
     /*@
         ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
@@ -359,7 +366,7 @@ public class Board {
                 }
                 row += "  " + sym + "  ";
                 if (j < DIM - 1) {
-                    row = row + "║";
+                    row = row + "|";
                 }
             }
             s = s + row;

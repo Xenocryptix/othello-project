@@ -135,7 +135,6 @@ public class BoardTest {
         assertEquals(Disk.EMPTY, board.getField(0, 0));
     }
 
-    //TODO: LOOK HEREEE
     /**
      * Tests when there is a winner in the board. This is when a disk
      * has more disks than another disk
