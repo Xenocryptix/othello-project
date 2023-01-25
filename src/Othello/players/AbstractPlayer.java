@@ -44,6 +44,7 @@ public abstract class AbstractPlayer implements Player {
      *
      * @return the String representation of this object
      */
+    //@ ensures \result.contains(name);
     @Override
     public String toString() {
         return "Player " + name;

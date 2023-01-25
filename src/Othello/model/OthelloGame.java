@@ -330,6 +330,12 @@ public class OthelloGame implements Game {
         getValidMoves();
     }
 
+    /**
+     * Creates a deep copy of the current game status
+     *
+     * @return a new board of the current game status
+     */
+    //@ ensures board == \result;
     public Board deepCopy() {
         return board.deepCopy();
     }
