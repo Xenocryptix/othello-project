@@ -19,14 +19,16 @@ public class Board {
     public static final int DIM = 8;
     private static final String LINE = "  ---+---+---+---+---+---+---+---";
     private /*@ spec_public */ Disk[][] fields;
-    //Predefined directional array
+    /**
+     * Predefined directional array
+     */
     protected static final int[][] DIRECTION_X_AND_Y = {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
 
     /**
-     * Creates an empty board.
+     * Creates an empty board with the middle tiles being initialised.
      */
     /*@
         ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
@@ -47,6 +49,8 @@ public class Board {
 
     /**
      * Creates a deep copy of this field.
+     *
+     * @return The deep copied board
      */
     /*@
         ensures \result != this;
@@ -66,7 +70,9 @@ public class Board {
      * Calculates the index in the linear array of fields from a (row, col)
      * pair.
      *
-     * @return the index belonging to the (row,col)-field
+     * @param row the row of the field
+     * @param col the column of the field
+     * @return the index belonging to the (row,col) field
      */
     /*@
         requires row >= 0 && row < DIM;
@@ -81,7 +87,8 @@ public class Board {
     /**
      * Returns true if index is a valid index of a field on the board.
      *
-     * @return true if 0 <= index < DIM*DIM
+     * @param index The index to be checked
+     * @return True if the index falls in the range of [0,Dim), otherwise false
      */
     /*@
         ensures index >= 0 && index < DIM*DIM ==> \result == true;
@@ -94,7 +101,9 @@ public class Board {
     /**
      * Returns true of the (row,col) pair refers to a valid field on the board.
      *
-     * @return true if 0 <= row < DIM && 0 <= col < DIM
+     * @param row the row of the field
+     * @param col the column of the field
+     * @return True if the row and column fall in the range of [0,DIM), otherwise false
      */
     /*@
         ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
@@ -304,7 +313,7 @@ public class Board {
         Disk disk = ((OthelloMove) move).getDisk();
         //First place the disk in the coordinate
         setField(row, col, disk);
-        for (int[] dir: DIRECTION_X_AND_Y) {
+        for (int[] dir : DIRECTION_X_AND_Y) {
             //We iterate in 8 direction, looking for flippable lines
             int directionRow = row + dir[0];
             int directionColumn = col + dir[1];
@@ -399,7 +408,7 @@ public class Board {
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";
         for (int i = 0; i < DIM; i++) {
-            String row = Integer.toString(i+1) + " ";
+            String row = Integer.toString(i + 1) + " ";
             for (int j = 0; j < DIM; j++) {
                 row += " " + getField(i, j).toString().substring(0, 1).replace("E", " ") + " ";
                 if (j < DIM - 1) {

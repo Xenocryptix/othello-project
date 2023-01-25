@@ -90,6 +90,8 @@ public class OthelloGameTest {
 
     /**
      * A test to ensure that the game is able to handle passing move
+     *
+     * @throws FileNotFoundException if a file is not found
      */
     @Test
     public void testPassingMove() throws FileNotFoundException {

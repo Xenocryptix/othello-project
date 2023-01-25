@@ -12,6 +12,12 @@ import java.util.Random;
  * A naive strategy for the othello game which picks a move randomly from the valid moves
  */
 public class NaiveStrategy implements Strategy {
+    /**
+     * Creates a new instance of NaiveStrategy
+     */
+    public NaiveStrategy() {
+
+    }
     private static final String NAME = "NAIVE";
     private final Random rand = new Random();
 

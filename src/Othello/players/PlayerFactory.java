@@ -11,6 +11,10 @@ import java.io.Writer;
  */
 public class PlayerFactory implements Factory {
     /**
+     * Creates a new instance of PlayerFactory
+     */
+    public PlayerFactory(){}
+    /**
      * Make a new human player
      *
      * @param name   name The name of the human player

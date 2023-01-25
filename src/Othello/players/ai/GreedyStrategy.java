@@ -4,7 +4,14 @@ import Othello.model.*;
 
 import java.util.List;
 
+/**
+ * Represents a greedy strategy that picks the move that flips the most disks
+ */
 public class GreedyStrategy implements Strategy {
+    /**
+     * Creates a new instance of GreedyStrategy
+     */
+    public GreedyStrategy(){}
     private static final String NAME = "GREEDY";
 
     /**
