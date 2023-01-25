@@ -303,7 +303,7 @@ public class OthelloGameTest {
         AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         game.setPlayer1(player1);
         game.setPlayer2(player2);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             //Allows both players to make moves while the game is not over
             //Get the disk of the current turn
             Disk disk = game.getCurrentDisk();
