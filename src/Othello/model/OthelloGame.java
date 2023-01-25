@@ -277,7 +277,6 @@ public class OthelloGame implements Game {
     //@ensures current == \old(current.other());
     public void nextTurn() {
         current = current.other();
-//        System.out.println("Turn flipped to " + current);
     }
 
     /**
