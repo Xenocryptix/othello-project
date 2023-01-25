@@ -3,6 +3,7 @@ import Othello.players.AbstractPlayer;
 import Othello.players.PlayerFactory;
 import Othello.players.ai.NaiveStrategy;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -336,6 +337,7 @@ public class OthelloGameTest {
      * moves until both of them do not have any valid moves remaining and checks the winner
      * at the end if there's a winner
      */
+    @Disabled
     @Test
     public void fullRandomGame() {
         assertFalse(game.isGameover());

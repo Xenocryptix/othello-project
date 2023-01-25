@@ -326,6 +326,7 @@ public class OthelloGame implements Game {
     //@ ensures validMoves != \old(validMoves);
     public void reset() {
         board.reset();
+        current = Disk.BLACK;
         getValidMoves();
     }
 
