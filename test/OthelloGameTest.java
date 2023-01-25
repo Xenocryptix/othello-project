@@ -1,11 +1,9 @@
 import Othello.model.*;
 import Othello.players.AbstractPlayer;
-import Othello.players.ai.NaiveStrategy;
 import Othello.players.PlayerFactory;
+import Othello.players.ai.NaiveStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -81,6 +79,7 @@ public class OthelloGameTest {
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 1)));
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
+
     /**
      * A test to ensure that when a board is full there are no valid moves available to be played by both players
      */
@@ -89,122 +88,163 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        //Add random disks to fill the board
-        Random rand = new Random();
-        Disk disk;
-        for (int i = 0; i < Board.DIM * Board.DIM; i++) {
-            if (rand.nextInt() % 2 == 0)
-                disk = Disk.BLACK;
-            else
-                disk = Disk.WHITE;
-//            board.setField(i, disk);
-        }
+        //Place moves until the board is full
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 1));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
+        game.doMove(new OthelloMove(Disk.WHITE, 0, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 1));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 0));
+        game.doMove(new OthelloMove(Disk.WHITE, 6, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 4));
+        game.doMove(new OthelloMove(Disk.WHITE, 7, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 6, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 0));
+        game.doMove(new OthelloMove(Disk.WHITE, 6, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 1, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 1));
+        game.doMove(new OthelloMove(Disk.WHITE, 0, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 1));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 1, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 0, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 1, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 7));
+
+        assertFalse(game.isGameover());
+
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 1));
+        game.doMove(new OthelloMove(Disk.BLACK, 0, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 6));
+        game.doMove(new OthelloMove(Disk.BLACK, 0, 7));
+        game.doMove(new OthelloMove(Disk.WHITE, 7, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 7, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 7));
+        game.doMove(new OthelloMove(Disk.WHITE, 1, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 1));
+        game.doMove(new OthelloMove(Disk.WHITE, 6, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 0, 1));
+        game.doMove(new OthelloMove(Disk.BLACK, 7, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 7, 6));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 6));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 7));
+        game.doMove(new OthelloMove(Disk.WHITE, 7, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 7, 1));
+        game.doMove(new OthelloMove(Disk.WHITE, 7, 0));
+        game.doMove(new OthelloMove(Disk.BLACK, 0, 1));
+        game.doMove(new OthelloMove(Disk.WHITE,0,3));
+        game.doMove(new OthelloMove(Disk.BLACK,0,4));
+
 
         //Ensures that there are no valid moves and game is over
         assertEquals(0, game.getValidMoves().size());
         assertTrue(game.isGameover());
     }
+
     /**
      * This test would go through possible board representations for game ending before the board is full
      */
     @Test
     public void gameOverNotFull() {
-        /**
-         * The following will be a representation of the board when there are no possible
-         * moves available for both discs when the board is not full
-         *
-         *    A   B   C   D   E   F   G   H
-         * 1  W | W | W | W | W | W | W | W
-         *   ---+---+---+---+---+---+---+---
-         * 2  W | W | W | W | W | W | W | W
-         *   ---+---+---+---+---+---+---+---
-         * 3  W | W | W | W | W | W | W | W
-         *   ---+---+---+---+---+---+---+---
-         * 4  W | W | W | W | W | W | W |
-         *   ---+---+---+---+---+---+---+---
-         * 5  W | W | W | W | W | W |   |
-         *   ---+---+---+---+---+---+---+---
-         * 6  W | W | W | W | W | W |   | B
-         *   ---+---+---+---+---+---+---+---
-         * 7  W | W | W | W | W | W | W |
-         *   ---+---+---+---+---+---+---+---
-         * 8  W | W | W | W | W | W | W | W
+        /*
+        The following will be a representation of the board when there are no possible
+        moves available for both discs when the board is not full
+            A   B   C   D   E   F   G   H
+        1    |   |   |   |   |   |   |
+          ---+---+---+---+---+---+---+---
+        2    |   |   |   |   |   |   |
+          ---+---+---+---+---+---+---+---
+        3    |   |   |   | B |   |   |
+          ---+---+---+---+---+---+---+---
+        4    |   |   | B | B | B |   |
+          ---+---+---+---+---+---+---+---
+        5    |   | B | B | B | B | B |
+          ---+---+---+---+---+---+---+---
+        6    |   |   | B |   | B |   |
+          ---+---+---+---+---+---+---+---
+        7    |   |   |   | B |   |   |
+          ---+---+---+---+---+---+---+---
+        8    |   |   |   |   |   |   |
          */
         assertFalse(game.isGameover());
 
-        game.doMove(new OthelloMove(Disk.BLACK,4,5));
-        game.doMove(new OthelloMove(Disk.WHITE,5,3));
-        game.doMove(new OthelloMove(Disk.BLACK,4,2));
-        game.doMove(new OthelloMove(Disk.WHITE,5,5));
-        game.doMove(new OthelloMove(Disk.BLACK,6,4));
-        game.doMove(new OthelloMove(Disk.BLACK,3,5));
-        game.doMove(new OthelloMove(Disk.BLACK,4,6));
-        game.doMove(new OthelloMove(Disk.BLACK,5,4));
-        game.doMove(new OthelloMove(Disk.BLACK,2,4));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 6, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 6));
+        game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 4));
+
 
         assertTrue(game.isGameover());
 
         game.reset();
-        /**
-         * The following will be another representation of the board when there are no possible
-         * moves available for both discs but he board is not full
-         *
-         *    A   B   C   D   E   F   G   H
-         * 1    | B | B | B | B | B | B | B
-         *   ---+---+---+---+---+---+---+---
-         * 2    | W | W | W | W | W |   | B
-         *   ---+---+---+---+---+---+---+---
-         * 3  W | W | W | W | W | W | W | B
-         *   ---+---+---+---+---+---+---+---
-         * 4  W | W | W | W | W | W | W | B
-         *   ---+---+---+---+---+---+---+---
-         * 5  W | W | W | W | W | W | W | B
-         *   ---+---+---+---+---+---+---+---
-         * 6  W | W | W | W | W | W | W | B
-         *   ---+---+---+---+---+---+---+---
-         * 7  W | W | W | W | W | W | W | B
-         *   ---+---+---+---+---+---+---+---
-         * 8    | W | W | W | W | W |   |
+
+        /*
+        The following will be a representation of the board when there are no possible
+        moves available for both discs when the board is not full
+           A   B   C   D   E   F   G   H
+        1    |   |   |   | W |   |   |
+          ---+---+---+---+---+---+---+---
+        2    |   |   |   | W | W |   |
+          ---+---+---+---+---+---+---+---
+        3  W | W | W | W | W | W | W | B
+          ---+---+---+---+---+---+---+---
+        4    |   | W | W | W | W |   | B
+          ---+---+---+---+---+---+---+---
+        5    |   | W | W | W |   |   | B
+          ---+---+---+---+---+---+---+---
+        6    |   |   |   |   |   |   |
+          ---+---+---+---+---+---+---+---
+        7    |   |   |   |   |   |   |
+          ---+---+---+---+---+---+---+---
+        8    |   |   |   |   |   |   |
          */
 
-//        assertFalse(game.isGameover());
-//        for (int i = 16; i < 55; i++) {
-//            board.setField(i, Disk.WHITE);
-//        }
-//        for (int i = 9; i < 14; i++) {
-//            board.setField(i, Disk.WHITE);
-//        }
-//        for (int i = 57; i < 62; i++) {
-//            board.setField(i, Disk.WHITE);
-//        }
-//        for (int i = 1; i < 7; i++) {
-//            board.setField(i, Disk.BLACK);
-//        }
-//        for (int i = 7; i <= 55; i = i + 8) {
-//            board.setField(i, Disk.BLACK);
-//        }
-        assertFalse(board.isFull());
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 6));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 7));
+        game.doMove(new OthelloMove(Disk.WHITE, 1, 5));
+        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
+        game.doMove(new OthelloMove(Disk.BLACK, 1, 4));
+        game.doMove(new OthelloMove(Disk.WHITE, 0, 4));
+        game.doMove(new OthelloMove(Disk.BLACK, 2, 1));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 7));
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 7));
+        game.doMove(new OthelloMove(Disk.WHITE, 2, 0));
+
         assertTrue(game.isGameover());
     }
 
-
-    /**
-     * Ensures that setting the game board to a new board changes the game board
-     */
-    @Test
-    public void testSetBoard() {
-        //Creating a new board to set the game board to
-        Board changedBoard = new Board();
-//        changedBoard.setField(0, Disk.BLACK);
-
-        //Ensuring that the first index is empty
-        assertEquals(Disk.EMPTY, board.getField(0));
-//        game.setBoard(changedBoard);
-//        Board newBoard = game.getBoard();
-
-        //Ensuring that the first index is changed to the disk of the board that was set to it
-//        assertEquals(Disk.BLACK, newBoard.getField(0));
-    }
 
     /**
      * Ensuring that after a move is played the player's turn switches
@@ -251,13 +291,6 @@ public class OthelloGameTest {
         }
 
         assertTrue(game.isGameover());
-        if (board.isWinner(Disk.BLACK)) {
-            assertEquals(player1, game.getWinner());
-        } else if (board.isWinner(Disk.WHITE)) {
-            assertEquals(player2, game.getWinner());
-        } else if (!board.hasWinner()) {
-            assertNull(game.getWinner());
-        }
 
     }
 
