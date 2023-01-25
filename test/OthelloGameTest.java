@@ -343,20 +343,21 @@ public class OthelloGameTest {
         AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         game.setPlayer1(player1);
         game.setPlayer2(player2);
-
-        //Allows both players to make moves while the game is not over
-        Move move;
-        //Get the disk of the current turn
-        Disk disk = game.getCurrentDisk();
-        while (!game.isGameover()) {
-            game.doMove(player1.determineMove(game));
-            game.doMove(player2.determineMove(game));
-            //Since 2 turns happen in each loop, the disk color will be flipped 2 times,
-            //therefore stays the same
-            assertEquals(disk, game.getCurrentDisk());
+        for (int i = 0; i < 10000; i++) {
+            //Allows both players to make moves while the game is not over
+            //Get the disk of the current turn
+            Disk disk = game.getCurrentDisk();
+            while (!game.isGameover()) {
+                game.doMove(player1.determineMove(game));
+                game.doMove(player2.determineMove(game));
+                //Since 2 turns happen in each loop, the disk color will be flipped 2 times,
+                //therefore stays the same
+                assertEquals(disk, game.getCurrentDisk());
+            }
+            assertTrue(game.getWinner() == player1 || game.getWinner() == player2 || game.getWinner() == null);
+            assertTrue(game.isGameover());
+            game.reset();
         }
-
-        assertTrue(game.isGameover());
 
     }
 
