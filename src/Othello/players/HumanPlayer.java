@@ -37,7 +37,9 @@ public class HumanPlayer extends AbstractPlayer {
                 int row = split[1].charAt(0) - 65;
                 int col = split[1].charAt(1);
                 Move move = new OthelloMove(disk, row, col);
-                if (game.isValidMove(move)) {
+                if (row == 8 && col == 0) {
+                    return null;
+                } else if (game.isValidMove(move)) {
                     return move;
                 }
                 out.write("Illegal move");
