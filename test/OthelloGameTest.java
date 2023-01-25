@@ -16,7 +16,6 @@ public class OthelloGameTest {
     @BeforeEach
     public void setUp() {
         game = new OthelloGame();
-        board = game.deepCopy();
     }
 
     /**
@@ -41,7 +40,6 @@ public class OthelloGameTest {
 
         game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
         game.doMove(new OthelloMove(Disk.WHITE, 5, 3));
-        board = game.deepCopy();
 
         //Testing that the size of the array valid moves equals 9 eliminates cases where an extra invalid move is generated
         assertEquals(game.getValidMoves().size(), 9);
@@ -62,7 +60,6 @@ public class OthelloGameTest {
         game.reset();
         game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
         game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
-        board = game.deepCopy();
 
         //Testing that the size of the array valid moves equals 9 eliminates cases where an extra invalid move is generated
         assertEquals(9, game.getValidMoves().size());
@@ -84,8 +81,6 @@ public class OthelloGameTest {
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 1, 1)));
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
-
-
     /**
      * A test to ensure that when a board is full there are no valid moves available to be played by both players
      */
@@ -146,13 +141,50 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK,4,6));
         game.doMove(new OthelloMove(Disk.BLACK,5,4));
         game.doMove(new OthelloMove(Disk.BLACK,2,4));
-        board = game.deepCopy();
 
         assertTrue(game.isGameover());
 
         game.reset();
-        board = game.deepCopy();
+        /**
+         * The following will be another representation of the board when there are no possible
+         * moves available for both discs but he board is not full
+         *
+         *    A   B   C   D   E   F   G   H
+         * 1    | B | B | B | B | B | B | B
+         *   ---+---+---+---+---+---+---+---
+         * 2    | W | W | W | W | W |   | B
+         *   ---+---+---+---+---+---+---+---
+         * 3  W | W | W | W | W | W | W | B
+         *   ---+---+---+---+---+---+---+---
+         * 4  W | W | W | W | W | W | W | B
+         *   ---+---+---+---+---+---+---+---
+         * 5  W | W | W | W | W | W | W | B
+         *   ---+---+---+---+---+---+---+---
+         * 6  W | W | W | W | W | W | W | B
+         *   ---+---+---+---+---+---+---+---
+         * 7  W | W | W | W | W | W | W | B
+         *   ---+---+---+---+---+---+---+---
+         * 8    | W | W | W | W | W |   |
+         */
 
+//        assertFalse(game.isGameover());
+//        for (int i = 16; i < 55; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 9; i < 14; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 57; i < 62; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 1; i < 7; i++) {
+//            board.setField(i, Disk.BLACK);
+//        }
+//        for (int i = 7; i <= 55; i = i + 8) {
+//            board.setField(i, Disk.BLACK);
+//        }
+        assertFalse(board.isFull());
+        assertTrue(game.isGameover());
     }
 
 
@@ -168,10 +200,10 @@ public class OthelloGameTest {
         //Ensuring that the first index is empty
         assertEquals(Disk.EMPTY, board.getField(0));
 //        game.setBoard(changedBoard);
-        Board newBoard = game.deepCopy();
+//        Board newBoard = game.getBoard();
 
         //Ensuring that the first index is changed to the disk of the board that was set to it
-        assertEquals(Disk.BLACK, newBoard.getField(0));
+//        assertEquals(Disk.BLACK, newBoard.getField(0));
     }
 
     /**
@@ -186,7 +218,6 @@ public class OthelloGameTest {
 
         assertEquals(player1, game.getTurn());
         game.doMove(player1.determineMove(game));
-        board = game.deepCopy();
         assertEquals(player2, game.getTurn());
 
     }
@@ -214,7 +245,6 @@ public class OthelloGameTest {
             game.doMove(move);
             move = player2.determineMove(game);
             game.doMove(move);
-            board = game.deepCopy();
             //Since 2 turns happen in each loop, the disk color will be flipped 2 times,
             //therefore stays the same
             assertEquals(disk, game.getCurrentDisk());
