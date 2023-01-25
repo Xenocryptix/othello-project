@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class NaiveStrategy implements Strategy {
     private static final String NAME = "NAIVE";
-    private final Random RANDOM = new Random();
+    private final Random rand = new Random();
 
     /**
      * Get the name of the strategy being used.
@@ -37,9 +37,8 @@ public class NaiveStrategy implements Strategy {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         List<Move> validMoves = ((OthelloGame) game).getValidMoves(disk);
         if (validMoves.isEmpty()) {
-            ((OthelloGame) game).nextTurn();
             return null;
         }
-        return validMoves.get(RANDOM.nextInt(validMoves.size()));
+        return validMoves.get(rand.nextInt(validMoves.size()));
     }
 }
