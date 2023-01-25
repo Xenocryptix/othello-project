@@ -90,7 +90,6 @@ public class OthelloGameTest {
 
     /**
      * A test to ensure that the game is able to handle passing move
-     *
      */
     @Test
     public void testPassingMove() throws FileNotFoundException {
@@ -156,8 +155,6 @@ public class OthelloGameTest {
 
     /**
      * This test would go through possible board representations for game ending before the board is full
-     *
-     * @throws FileNotFoundException if the file is not found, an exception is thrown
      */
     @Test
     public void gameOverNotFull() {
@@ -296,8 +293,8 @@ public class OthelloGameTest {
     /**
      * A full game is player between two computer players that play a random valid move.
      * The test ensures that while the game is not over that player 1 and player 2 both play
-     * moves until both of them do not have any valid moves remaining and checks the winner
-     * at the end if there's a winner
+     * moves until both of them do not have any valid moves remaining and ensures that there's
+     * a winner at the end.
      */
     @Test
     public void fullRandomGame() {
