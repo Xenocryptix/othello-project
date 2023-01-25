@@ -282,6 +282,42 @@ public class Board {
         fields[row][col] = disk;
     }
 
+    public void flipMove(Move move) {
+        int row = ((OthelloMove) move).getRow();
+        int col = ((OthelloMove) move).getCol();
+        Disk disk = ((OthelloMove) move).getDisk();
+        //First place the disk in the coordinate
+        setField(row, col, disk);
+        for (int[] dir: dxy) {
+            //We iterate in 8 direction, looking for flippable lines
+            int dRow = row + dir[0];
+            int dCol = col + dir[1];
+            int count = 0;
+            while (isField(dRow, dCol)) {
+                //Continue to iterate in that direction while the tile is of opposite color
+                if (getField(dRow, dCol).equals(disk.other())) {
+                    //Continue to move in that direction while counting the tiles that traversed
+                    dRow += dir[0];
+                    dCol += dir[1];
+                    count++;
+                } else {
+                    //Once we encountered another tile or empty tile, break out immediately
+                    break;
+                }
+            }
+            //We backtrack to the first tile, flipping all the disks in the middle
+            if (isField(dRow, dCol) && getField(dRow, dCol).equals(disk)) {
+                dRow -= dir[0];
+                dCol -= dir[1];
+                for (int i = 0; i < count; i++) {
+                    flip(dRow, dCol);
+                    dRow -= dir[0];
+                    dCol -= dir[1];
+                }
+            }
+        }
+    }
+
     /**
      * Empties all fields of this board excepts the disks in the middle.
      */

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static Othello.model.Board.dxy;
+
 /**
  * A class representing and othello game which implements and interface Game. The class handles
  * the full implementation of the game. It creates a new board for the game and adds two players
@@ -299,42 +301,11 @@ public class OthelloGame implements Game {
             therefore only switch turn without placing anything
          */
         if (move != null) {
-            //Getting the coordinates and the disk color from the move object
             int row = ((OthelloMove) move).getRow();
             int col = ((OthelloMove) move).getCol();
             Disk disk = ((OthelloMove) move).getDisk();
-            //If the move is valid, we execute the move
             if (isValidMove(move)) {
-                //First place the disk in the coordinate
-                board.setField(row, col, disk);
-                //We iterate in 8 direction, looking for flippable lines
-                for (int[] dir : dxy) {
-                    int dRow = row + dir[0];
-                    int dCol = col + dir[1];
-                    int count = 0;
-                    //Continue to iterate in that direction while the tile is of opposite color
-                    while (board.isField(dRow, dCol)) {
-                        if (board.getField(dRow, dCol).equals(disk.other())) {
-                            //Continue to move in that direction while counting the tiles that traversed
-                            dRow += dir[0];
-                            dCol += dir[1];
-                            count++;
-                        } else {
-                            //Once we encountered another tile or empty tile, break out immediately
-                            break;
-                        }
-                    }
-                    //We backtrack to the first tile, flipping all the disks in the middle
-                    if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
-                        dRow -= dir[0];
-                        dCol -= dir[1];
-                        for (int i = 0; i < count; i++) {
-                            board.flip(dRow, dCol);
-                            dRow -= dir[0];
-                            dCol -= dir[1];
-                        }
-                    }
-                }
+                board.flipMove(move);
             }
         }
         validMoves = getValidMoves();
@@ -351,31 +322,6 @@ public class OthelloGame implements Game {
         return board + "\nIt's " + getTurn() + " turn\n";
     }
 
-    /**
-     * Return the board object
-     *
-     * @return board that is used in the game
-     */
-    /*@
-        ensures (\forall int i; i >= 0 && i <= 63; \result.getField(i) == board.getField(i));
-        pure
-    */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * Sets the current board to a new board using a board object
-     *
-     * @param newBoard The new board as an object to change the current board
-     */
-    /*@
-        ensures (\forall int i; i >= 0 && i <= 63; newBoard.getField(i) == board.getField(i));
-    */
-    public void setBoard(Board newBoard) {
-        this.board = newBoard;
-        getValidMoves();
-    }
 
     /**
      * Resets the current board to the initial board by initialising the board
@@ -384,5 +330,9 @@ public class OthelloGame implements Game {
     public void reset() {
         board.reset();
         getValidMoves();
+    }
+
+    public Board deepCopy() {
+        return board.deepCopy();
     }
 }
