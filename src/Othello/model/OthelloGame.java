@@ -294,45 +294,51 @@ public class OthelloGame implements Game {
     */
     @Override
     public void doMove(Move move) {
-        //Getting the coordinates and the disk color from the move object
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        Disk disk = ((OthelloMove) move).getDisk();
-        //If the move is valid, we execute the move
-        if (isValidMove(move)) {
-            //First place the disk in the coordinate
-            board.setField(row, col, disk);
-            //We iterate in 8 direction, looking for flippable lines
-            for (int[] dir : dxy) {
-                int dRow = row + dir[0];
-                int dCol = col + dir[1];
-                int count = 0;
-                //Continue to iterate in that direction while the tile is of opposite color
-                while (board.isField(dRow, dCol)) {
-                    if (board.getField(dRow, dCol).equals(disk.other())) {
-                        //Continue to move in that direction while counting the tiles that traversed
-                        dRow += dir[0];
-                        dCol += dir[1];
-                        count++;
-                    } else {
-                        //Once we encountered another tile or empty tile, break out immediately
-                        break;
+        /*
+            If the move is null, it's considered a passing move,
+            therefore only switch turn without placing anything
+         */
+        if (move != null) {
+            //Getting the coordinates and the disk color from the move object
+            int row = ((OthelloMove) move).getRow();
+            int col = ((OthelloMove) move).getCol();
+            Disk disk = ((OthelloMove) move).getDisk();
+            //If the move is valid, we execute the move
+            if (isValidMove(move)) {
+                //First place the disk in the coordinate
+                board.setField(row, col, disk);
+                //We iterate in 8 direction, looking for flippable lines
+                for (int[] dir : dxy) {
+                    int dRow = row + dir[0];
+                    int dCol = col + dir[1];
+                    int count = 0;
+                    //Continue to iterate in that direction while the tile is of opposite color
+                    while (board.isField(dRow, dCol)) {
+                        if (board.getField(dRow, dCol).equals(disk.other())) {
+                            //Continue to move in that direction while counting the tiles that traversed
+                            dRow += dir[0];
+                            dCol += dir[1];
+                            count++;
+                        } else {
+                            //Once we encountered another tile or empty tile, break out immediately
+                            break;
+                        }
                     }
-                }
-                //We backtrack to the first tile, flipping all the disks in the middle
-                if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
-                    dRow -= dir[0];
-                    dCol -= dir[1];
-                    for (int i = 0; i < count; i++) {
-                        board.flip(dRow, dCol);
+                    //We backtrack to the first tile, flipping all the disks in the middle
+                    if (board.isField(dRow, dCol) && board.getField(dRow, dCol).equals(disk)) {
                         dRow -= dir[0];
                         dCol -= dir[1];
+                        for (int i = 0; i < count; i++) {
+                            board.flip(dRow, dCol);
+                            dRow -= dir[0];
+                            dCol -= dir[1];
+                        }
                     }
                 }
             }
-            validMoves = getValidMoves();
-            nextTurn();
         }
+        validMoves = getValidMoves();
+        nextTurn();
     }
 
     /**
