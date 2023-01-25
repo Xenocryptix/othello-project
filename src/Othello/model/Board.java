@@ -19,6 +19,11 @@ public class Board {
     public static final int DIM = 8;
     private static final String LINE = "  ═════╬═════╬═════╬═════╬═════╬═════╬═════╬═════";
     private /*@ spec_public */ Disk[][] fields;
+    //Predefined directional array
+    public static final int[][] dxy = {
+            {0, 1}, {1, 0}, {0, -1}, {-1, 0},
+            {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
+    };
 
     /**
      * Creates an empty board.
@@ -262,7 +267,7 @@ public class Board {
         requires isField(row, col);
         ensures getField(row, col) == disk;
     */
-    protected void setField(int row, int col, Disk disk) {
+    public void setField(int row, int col, Disk disk) {
         fields[row][col] = disk;
     }
 
@@ -276,7 +281,7 @@ public class Board {
         requires isField(i);
         ensures getField(i) == disk;
     */
-    protected void setField(int i, Disk disk) {
+    public void setField(int i, Disk disk) {
         int row = getRow(i);
         int col = getColumn(i);
         fields[row][col] = disk;
@@ -325,7 +330,7 @@ public class Board {
         ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
         ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
     */
-    protected void reset() {
+    public void reset() {
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
                 fields[i][j] = Disk.EMPTY;
@@ -347,7 +352,7 @@ public class Board {
         ensures getField(i) == \old(getField(i)).other();
         ensures countDisk(getField(i)) == \old(countDisk(getField(i)))+1;
     */
-    protected void flip(int i) {
+    public void flip(int i) {
         int row = getRow(i);
         int col = getColumn(i);
         if (!isEmptyField(row, col)) {
@@ -367,7 +372,7 @@ public class Board {
         ensures getField(row,col) == \old(getField(row,col)).other();
         ensures countDisk(getField(row,col)) == \old(countDisk(getField(row,col)))+1;
     */
-    protected void flip(int row, int col) {
+    public void flip(int row, int col) {
         if (!isEmptyField(row, col)) {
             Disk disk = getField(row, col);
             setField(row, col, disk.other());

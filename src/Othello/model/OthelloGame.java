@@ -22,11 +22,7 @@ public class OthelloGame implements Game {
      public invariant !isGameover() ==> getTurn() != null;
     */
 
-    //Predefined directional array
-    private final int[][] dxy = {
-            {0, 1}, {1, 0}, {0, -1}, {-1, 0},
-            {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
-    };
+
     private final List<Move> validBlack = new ArrayList<>(); //Valid move for black
     private final List<Move> validWhite = new ArrayList<>(); //Valid move for white
     private Board board;
