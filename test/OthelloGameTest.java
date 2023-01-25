@@ -119,6 +119,71 @@ public class OthelloGameTest {
         }
 
     }
+    /**
+     * Ensures that when two players play and the board ends in a draw state
+     * that the get winner returns that there's a draw, i.e. null
+     *
+     * @throws FileNotFoundException if the file is not found, an exception is thrown
+     */
+    @Test
+    public void testDraw() throws FileNotFoundException {
+        assertFalse(game.isGameover());
+        assertTrue(game.getValidMoves().size() > 0);
+
+        BufferedReader reader = new BufferedReader(new FileReader("test/Draw"));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                if (!line.equals("passed")) {
+                    String[] split = line.split(",");
+                    int row = Integer.parseInt(split[1]);
+                    int col = Integer.parseInt(split[2]);
+                    Disk disk;
+                    if (split[0].equals("BLACK")) {
+                        disk = Disk.BLACK;
+                    } else {
+                        disk = Disk.WHITE;
+                    }
+                    game.doMove(new OthelloMove(disk, row, col));
+                }
+            }
+            //Ensures that the game is over
+            assertTrue(game.isGameover());
+            assertNull(game.getWinner());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    /**
+     * Ensuring that after a move is played the player's turn switches
+     */
+    @Test
+    public void testGetTurn() {
+        AbstractPlayer player1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
+
+        assertEquals(player1, game.getTurn());
+        game.doMove(player1.determineMove(game));
+        assertEquals(player2, game.getTurn());
+
+    }
+    /**
+     * A test case to check deepCopy()
+     * The deep copy board should be independent to the game state, meaning that doing any move
+     * in the game should not affect the copy created before moving.
+     */
+    @Test
+    public void testDeepCopy() {
+        Board board1 = game.deepCopy();
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
+        Board board2 = game.deepCopy();
+        assertNotEquals(board1, board2);
+    }
 
     /**
      * A test to ensure that when a board is full there are no valid moves available to be played by both players
@@ -236,59 +301,6 @@ public class OthelloGameTest {
         assertTrue(game.isGameover());
     }
 
-    /**
-     * Ensures that when two players play and the board ends in a draw state
-     * that the get winner returns that there's a draw, i.e. null
-     *
-     * @throws FileNotFoundException if the file is not found, an exception is thrown
-     */
-    @Test
-    public void testDraw() throws FileNotFoundException {
-        assertFalse(game.isGameover());
-        assertTrue(game.getValidMoves().size() > 0);
-
-        BufferedReader reader = new BufferedReader(new FileReader("test/Draw"));
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                if (!line.equals("passed")) {
-                    String[] split = line.split(",");
-                    int row = Integer.parseInt(split[1]);
-                    int col = Integer.parseInt(split[2]);
-                    Disk disk;
-                    if (split[0].equals("BLACK")) {
-                        disk = Disk.BLACK;
-                    } else {
-                        disk = Disk.WHITE;
-                    }
-                    game.doMove(new OthelloMove(disk, row, col));
-                }
-            }
-            //Ensures that the game is over
-            assertTrue(game.isGameover());
-            assertNull(game.getWinner());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    /**
-     * Ensuring that after a move is played the player's turn switches
-     */
-    @Test
-    public void testGetTurn() {
-        AbstractPlayer player1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-        AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-        game.setPlayer1(player1);
-        game.setPlayer2(player2);
-
-        assertEquals(player1, game.getTurn());
-        game.doMove(player1.determineMove(game));
-        assertEquals(player2, game.getTurn());
-
-    }
 
     /**
      * A full game is player between two computer players that play a random valid move.
@@ -314,22 +326,9 @@ public class OthelloGameTest {
                 //therefore stays the same
                 assertEquals(disk, game.getCurrentDisk());
             }
-            assertTrue(game.getWinner() == player1 || game.getWinner() == player2 || game.getWinner() == null);
             assertTrue(game.isGameover());
+            assertTrue(game.getWinner() == player1 || game.getWinner() == player2 || game.getWinner() == null);
             game.reset();
         }
-    }
-
-    /**
-     * A test case to check deepCopy()
-     * The deep copy board should be independent to the game state, meaning that doing any move
-     * in the game should not affect the copy created before moving.
-     */
-    @Test
-    public void testDeepCopy() {
-        Board board1 = game.deepCopy();
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
-        Board board2 = game.deepCopy();
-        assertNotEquals(board1, board2);
     }
 }
