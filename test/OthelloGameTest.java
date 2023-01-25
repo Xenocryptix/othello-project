@@ -86,6 +86,10 @@ public class OthelloGameTest {
         assertFalse(game.isValidMove(new OthelloMove(Disk.WHITE, 5, 5)));
     }
 
+    /**
+     * A test to ensure that the game is able to handle passing move, meaning that attempting
+     *
+     */
     @Test
     public void testPassingMove() throws FileNotFoundException {
         assertFalse(game.isGameover());
