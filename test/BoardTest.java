@@ -140,7 +140,7 @@ public class BoardTest {
      * Test if flipping in the two directions horizontally to the right works correctly
      */
     @Test
-    public void testFlipHorizontalRight() {
+    public void testFlipMoveHorizontalRight() {
         assertEquals(Disk.WHITE, board.getField(4, 4));
         board.flipMove(new OthelloMove(Disk.BLACK, 4, 5));
         assertEquals(Disk.BLACK, board.getField(4, 4));
@@ -150,7 +150,7 @@ public class BoardTest {
      * Test if flipping in the two directions horizontally to the left works correctly
      */
     @Test
-    public void testFlipHorizontalLeft() {
+    public void testFlipMoveHorizontalLeft() {
         assertEquals(Disk.WHITE, board.getField(3, 3));
         board.flipMove(new OthelloMove(Disk.BLACK, 3, 2));
         assertEquals(Disk.BLACK, board.getField(3, 3));
@@ -161,7 +161,7 @@ public class BoardTest {
      */
 
     @Test
-    public void testFlipVerticalUp() {
+    public void testFlipMoveVerticalUp() {
         assertEquals(Disk.WHITE, board.getField(3, 3));
         board.flipMove(new OthelloMove(Disk.BLACK, 2, 3));
         assertEquals(Disk.BLACK, board.getField(3, 3));
@@ -172,7 +172,7 @@ public class BoardTest {
      */
 
     @Test
-    public void testFlipVerticalDown() {
+    public void testFlipMoveVerticalDown() {
         assertEquals(Disk.WHITE, board.getField(4, 4));
         board.flipMove(new OthelloMove(Disk.BLACK, 5, 4));
         assertEquals(Disk.BLACK, board.getField(4, 4));
@@ -183,7 +183,7 @@ public class BoardTest {
      */
 
     @Test
-    public void testFlipDiagonalNorth() {
+    public void testFlipMoveDiagonalNorth() {
         //Test flip diagonal NE direction
         board.flipMove(new OthelloMove(Disk.BLACK, 5, 4));
         board.flipMove(new OthelloMove(Disk.WHITE, 3, 5));
@@ -205,7 +205,7 @@ public class BoardTest {
      * Test if flipping works correctly in the south direction
      */
     @Test
-    public void testFlipDiagonalSouth() {
+    public void testFlipMoveDiagonalSouth() {
         //Test flip diagonal SW direction
         board.flipMove(new OthelloMove(Disk.BLACK, 2, 3));
         board.flipMove(new OthelloMove(Disk.WHITE, 4, 2));

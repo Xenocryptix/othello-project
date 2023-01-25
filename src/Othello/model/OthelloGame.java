@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static Othello.model.Board.dxy;
+import static Othello.model.Board.DIRECTION_X_AND_Y;
 
 /**
  * A class representing and othello game which implements and interface Game. The class handles
@@ -25,7 +25,7 @@ public class OthelloGame implements Game {
 
     private final List<Move> validBlack = new ArrayList<>(); //Valid move for black
     private final List<Move> validWhite = new ArrayList<>(); //Valid move for white
-    private Board board;
+    private final Board board;
     private Player player1;
     private Player player2;
     private List<Move> validMoves = new ArrayList<>(); //Valid move array list
@@ -182,7 +182,7 @@ public class OthelloGame implements Game {
     //@ requires board.isField(row, col);
     public void checkDirection(int row, int col, Disk disk) {
         //Traverse from 8 direction from a specified tile
-        for (int[] dir : dxy) {
+        for (int[] dir : DIRECTION_X_AND_Y) {
             int nRow = row + dir[0];
             int nCol = col + dir[1];
             int count = 0;
