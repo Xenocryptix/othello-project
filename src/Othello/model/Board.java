@@ -20,7 +20,7 @@ public class Board {
     private static final String LINE = "  ---+---+---+---+---+---+---+---";
     private /*@ spec_public */ Disk[][] fields;
     //Predefined directional array
-    public static final int[][] dxy = {
+    protected static final int[][] DIRECTION_X_AND_Y = {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
@@ -304,7 +304,7 @@ public class Board {
         Disk disk = ((OthelloMove) move).getDisk();
         //First place the disk in the coordinate
         setField(row, col, disk);
-        for (int[] dir: dxy) {
+        for (int[] dir: DIRECTION_X_AND_Y) {
             //We iterate in 8 direction, looking for flippable lines
             int dRow = row + dir[0];
             int dCol = col + dir[1];
