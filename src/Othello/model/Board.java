@@ -411,7 +411,7 @@ public class Board {
                 }
                 row += "  " + sym + "  ";
                 if (j < DIM - 1) {
-                    row = row + "║";
+                    row = row + "|";
                 }
             }
             s = s + row;
