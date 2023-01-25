@@ -9,7 +9,7 @@ import Othello.players.ai.NaiveStrategy;
 import Othello.players.PlayerFactory;
 import Othello.players.Player;
 
-public class test {
+public class TestUI {
     public static void main(String[] args) {
         Game game = new OthelloGame();
         Player p1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
