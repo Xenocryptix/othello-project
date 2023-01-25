@@ -124,6 +124,7 @@ public class OthelloGame implements Game {
      * @return The player that won the game, or null if no player is the winner
      */
     /*@
+        requires isGameover() == true;
         ensures board.countDisk(Disk.BLACK) >  board.countDisk(Disk.WHITE) ==> \result == player1;
         ensures board.countDisk(Disk.WHITE) >  board.countDisk(Disk.BLACK) ==> \result == player2;
         ensures board.countDisk(Disk.WHITE) == board.countDisk(Disk.BLACK) ==> \result == null;
