@@ -1,8 +1,6 @@
 package Othello.players;
 
-import Othello.players.Factory;
-import Othello.players.HumanPlayer;
-import Othello.players.Strategy;
+import Othello.players.ai.Strategy;
 import Othello.players.ai.ComputerPlayer;
 
 import java.io.Reader;

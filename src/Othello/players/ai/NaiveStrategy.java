@@ -4,7 +4,6 @@ import Othello.model.Disk;
 import Othello.model.Game;
 import Othello.model.Move;
 import Othello.model.OthelloGame;
-import Othello.players.Strategy;
 
 import java.util.List;
 import java.util.Random;

@@ -1,7 +1,5 @@
 package Othello.model;
 
-import Othello.model.Disk;
-import Othello.model.Move;
 
 /**
  * Class that is responsible for representing an othello move, it stores the row, column and the disk of the move

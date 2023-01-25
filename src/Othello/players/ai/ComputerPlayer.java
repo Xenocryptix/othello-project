@@ -1,9 +1,8 @@
 package Othello.players.ai;
 
-import Othello.players.AbstractPlayer;
 import Othello.model.Game;
 import Othello.model.Move;
-import Othello.players.Strategy;
+import Othello.players.AbstractPlayer;
 
 /**
  * Class that represents a computer player in the game
@@ -11,6 +10,12 @@ import Othello.players.Strategy;
 public class ComputerPlayer extends AbstractPlayer {
     private Strategy strategy;
 
+    /**
+     * Creates a new instance of the computer player and calls the super class first with the name
+     * of the strategy uses
+     *
+     * @param strategy The strategy to be used for the computer player
+     */
     public ComputerPlayer(Strategy strategy) {
         super(strategy.getName());
         this.strategy = strategy;
@@ -22,6 +27,7 @@ public class ComputerPlayer extends AbstractPlayer {
      * @param game the current game
      * @return the player's choice
      */
+    //@ requires game != null;
     @Override
     public Move determineMove(Game game) {
         return strategy.determineMove(game);
