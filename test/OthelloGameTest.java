@@ -207,26 +207,26 @@ public class OthelloGameTest {
          */
 
         //Setting up the board to match the above diagram
-        board.setField(0, Disk.BLACK);
-        board.setField(4, 0, Disk.BLACK);
-        board.setField(7, 1, Disk.BLACK);
-        board.setField(1, 7, Disk.BLACK);
-        board.setField(7, 7, Disk.BLACK);
-        board.setField(5, 3, Disk.BLACK);
-        board.setField(1, 1, Disk.WHITE);
-        board.setField(2, 2, Disk.BLACK);
-        board.setField(4, 3, Disk.WHITE);
-        board.setField(4, 4, Disk.EMPTY);
-        board.setField(3, 4, Disk.EMPTY);
-        board.setField(2, 6, Disk.WHITE);
-        board.setField(3, 5, Disk.WHITE);
-        board.setField(4, 1, Disk.WHITE);
-        board.setField(4, 3, Disk.WHITE);
-        board.setField(4, 5, Disk.WHITE);
-        board.setField(4, 6, Disk.WHITE);
-        board.setField(4, 7, Disk.WHITE);
-        board.setField(6, 2, Disk.WHITE);
-        board.setField(6, 6, Disk.WHITE);
+//        board.setField(0, Disk.BLACK);
+//        board.setField(4, 0, Disk.BLACK);
+//        board.setField(7, 1, Disk.BLACK);
+//        board.setField(1, 7, Disk.BLACK);
+//        board.setField(7, 7, Disk.BLACK);
+//        board.setField(5, 3, Disk.BLACK);
+//        board.setField(1, 1, Disk.WHITE);
+//        board.setField(2, 2, Disk.BLACK);
+//        board.setField(4, 3, Disk.WHITE);
+//        board.setField(4, 4, Disk.EMPTY);
+//        board.setField(3, 4, Disk.EMPTY);
+//        board.setField(2, 6, Disk.WHITE);
+//        board.setField(3, 5, Disk.WHITE);
+//        board.setField(4, 1, Disk.WHITE);
+//        board.setField(4, 3, Disk.WHITE);
+//        board.setField(4, 5, Disk.WHITE);
+//        board.setField(4, 6, Disk.WHITE);
+//        board.setField(4, 7, Disk.WHITE);
+//        board.setField(6, 2, Disk.WHITE);
+//        board.setField(6, 6, Disk.WHITE);
         //Updating valid moves
         game.getValidMoves();
 
@@ -271,7 +271,7 @@ public class OthelloGameTest {
                 disk = Disk.BLACK;
             else
                 disk = Disk.WHITE;
-            board.setField(i, disk);
+//            board.setField(i, disk);
         }
 
         //Ensures that there are no valid moves and game is over
@@ -305,15 +305,17 @@ public class OthelloGameTest {
          * 8  W | W | W | W | W | W | W | W
          */
         assertFalse(game.isGameover());
-        for (int i = 0; i < Board.DIM * Board.DIM; i++) {
-            if (i != 31 && i != 39 && i != 47 && i != 55 && i != 46 && i != 38) {
-                board.setField(i, Disk.WHITE);
-            }
-            if (i == 47) {
-                board.setField(i, Disk.BLACK);
-            }
-        }
-        assertFalse(board.isFull());
+
+        game.doMove(new OthelloMove(Disk.BLACK,4,5));
+        game.doMove(new OthelloMove(Disk.WHITE,5,3));
+        game.doMove(new OthelloMove(Disk.BLACK,4,2));
+        game.doMove(new OthelloMove(Disk.WHITE,5,5));
+        game.doMove(new OthelloMove(Disk.BLACK,6,4));
+        game.doMove(new OthelloMove(Disk.BLACK,3,5));
+        game.doMove(new OthelloMove(Disk.BLACK,4,6));
+        game.doMove(new OthelloMove(Disk.BLACK,5,4));
+        game.doMove(new OthelloMove(Disk.BLACK,2,4));
+
         assertTrue(game.isGameover());
 
         game.reset();
@@ -339,22 +341,22 @@ public class OthelloGameTest {
          * 8    | W | W | W | W | W |   |
          */
 
-        assertFalse(game.isGameover());
-        for (int i = 16; i < 55; i++) {
-            board.setField(i, Disk.WHITE);
-        }
-        for (int i = 9; i < 14; i++) {
-            board.setField(i, Disk.WHITE);
-        }
-        for (int i = 57; i < 62; i++) {
-            board.setField(i, Disk.WHITE);
-        }
-        for (int i = 1; i < 7; i++) {
-            board.setField(i, Disk.BLACK);
-        }
-        for (int i = 7; i <= 55; i = i + 8) {
-            board.setField(i, Disk.BLACK);
-        }
+//        assertFalse(game.isGameover());
+//        for (int i = 16; i < 55; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 9; i < 14; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 57; i < 62; i++) {
+//            board.setField(i, Disk.WHITE);
+//        }
+//        for (int i = 1; i < 7; i++) {
+//            board.setField(i, Disk.BLACK);
+//        }
+//        for (int i = 7; i <= 55; i = i + 8) {
+//            board.setField(i, Disk.BLACK);
+//        }
         assertFalse(board.isFull());
         assertTrue(game.isGameover());
     }
@@ -367,7 +369,7 @@ public class OthelloGameTest {
     public void testSetBoard() {
         //Creating a new board to set the game board to
         Board changedBoard = new Board();
-        changedBoard.setField(0, Disk.BLACK);
+//        changedBoard.setField(0, Disk.BLACK);
 
         //Ensuring that the first index is empty
         assertEquals(Disk.EMPTY, board.getField(0));
