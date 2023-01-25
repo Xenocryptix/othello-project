@@ -87,7 +87,7 @@ public class OthelloGameTest {
     }
 
     /**
-     * A test to ensure that the game is able to handle passing move, meaning that attempting
+     * A test to ensure that the game is able to handle passing move
      *
      */
     @Test
