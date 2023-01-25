@@ -287,6 +287,17 @@ public class Board {
         fields[row][col] = disk;
     }
 
+    /**
+     * Performing the gives move, unless this move is not a valid move which is done by going through
+     * the tiles that are between the valid move given and another disk of the same color and switching
+     * the other tiles between them to the color of the given move.
+     *
+     * @param move The move to play
+     */
+    /*@
+        requires isField(((OthelloMove) move).getRow(), ((OthelloMove) move).getCol());
+        requires ((OthelloMove) move).getDisk() == Disk.BLACK || ((OthelloMove) move).getDisk() == Disk.WHITE;
+    */
     public void flipMove(Move move) {
         int row = ((OthelloMove) move).getRow();
         int col = ((OthelloMove) move).getCol();
@@ -392,9 +403,9 @@ public class Board {
             String sym;
             for (int j = 0; j < DIM; j++) {
                 if (getField(i, j).equals(Disk.BLACK)) {
-                    sym = "█";
+                    sym = "⬤";
                 } else if (getField(i, j).equals(Disk.WHITE)) {
-                    sym = "░";
+                    sym = "◯";
                 } else {
                     sym = " ";
                 }
