@@ -18,10 +18,18 @@ public class TestUI {
         game.setPlayer2(p2);
         while (!game.isGameover()) {
             Move move = p1.determineMove(game);
-            System.out.println("Disk."+((OthelloMove) move).getDisk() + "," + ((OthelloMove) move).getCol() + "," + ((OthelloMove) move).getRow());
+            if (move != null) {
+                System.out.println("Disk." + ((OthelloMove) move).getDisk() + "," + ((OthelloMove) move).getCol() + "," + ((OthelloMove) move).getRow());
+            } else {
+                System.out.println("Passed");
+            }
             game.doMove(move);
             move = p2.determineMove(game);
-            System.out.println("Disk."+((OthelloMove) move).getDisk() + "," + ((OthelloMove) move).getCol() + "," + ((OthelloMove) move).getRow());
+            if (move != null) {
+                System.out.println("Disk."+((OthelloMove) move).getDisk() + "," + ((OthelloMove) move).getCol() + "," + ((OthelloMove) move).getRow());
+            } else {
+                System.out.println("Passed");
+            }
             game.doMove(move);
         }
         System.out.println(game.toString());
