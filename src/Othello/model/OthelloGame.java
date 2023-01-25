@@ -23,12 +23,12 @@ public class OthelloGame implements Game {
     */
 
 
-    private final List<Move> validBlack = new ArrayList<>(); //Valid move for black
-    private final List<Move> validWhite = new ArrayList<>(); //Valid move for white
+    private final List<Move> validBlack ; //Valid move for black disk
+    private final List<Move> validWhite; //Valid move for white disk
     private final Board board;
     private Player player1;
     private Player player2;
-    private List<Move> validMoves = new ArrayList<>(); //Valid move array list
+    private List<Move> validMoves; //Valid move array list for both disks
     private Disk current;
 
     /**
@@ -45,6 +45,9 @@ public class OthelloGame implements Game {
         this.player1 = null;
         this.player2 = null;
         current = Disk.BLACK;
+        validBlack = new ArrayList<>();
+        validWhite =  new ArrayList<>();
+        validMoves = new ArrayList<>();
         getValidMoves();
     }
 

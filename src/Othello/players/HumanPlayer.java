@@ -8,7 +8,6 @@ import java.util.List;
 
 /**
  * Class representing a human player of the game that extends an abstract class called AbstractPlayer.
- * //TODO
  */
 public class HumanPlayer extends AbstractPlayer {
     private final PrintWriter out;

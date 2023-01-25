@@ -397,7 +397,6 @@ public class Board {
      */
     @Override
     public String toString() {
-        //TODO
         String s = "   A   B   C   D   E   F   G   H\n";
         for (int i = 0; i < DIM; i++) {
             String row = Integer.toString(i+1) + " ";
