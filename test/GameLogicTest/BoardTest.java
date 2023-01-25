@@ -1,3 +1,5 @@
+package GameLogicTest;
+
 import Othello.model.Board;
 import Othello.model.Disk;
 import Othello.model.OthelloMove;
