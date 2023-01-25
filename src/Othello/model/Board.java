@@ -403,9 +403,9 @@ public class Board {
             String sym;
             for (int j = 0; j < DIM; j++) {
                 if (getField(i, j).equals(Disk.BLACK)) {
-                    sym = "⬤";
+                    sym = "⚫";
                 } else if (getField(i, j).equals(Disk.WHITE)) {
-                    sym = "◯";
+                    sym = "⚪";
                 } else {
                     sym = " ";
                 }
