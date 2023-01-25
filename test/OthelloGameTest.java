@@ -1,9 +1,11 @@
-import Othello.model.*;
+import Othello.model.Board;
+import Othello.model.Disk;
+import Othello.model.OthelloGame;
+import Othello.model.OthelloMove;
 import Othello.players.AbstractPlayer;
 import Othello.players.PlayerFactory;
 import Othello.players.ai.NaiveStrategy;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -121,6 +123,8 @@ public class OthelloGameTest {
 
     /**
      * A test to ensure that when a board is full there are no valid moves available to be played by both players
+     *
+     * @throws FileNotFoundException if the file is not found, an exception is thrown
      */
     @Test
     public void testGameOverFull() throws FileNotFoundException {
@@ -152,6 +156,8 @@ public class OthelloGameTest {
 
     /**
      * This test would go through possible board representations for game ending before the board is full
+     *
+     * @throws FileNotFoundException if the file is not found, an exception is thrown
      */
     @Test
     public void gameOverNotFull() {
@@ -232,8 +238,15 @@ public class OthelloGameTest {
 
         assertTrue(game.isGameover());
     }
+
+    /**
+     * Ensures that when two players play and the board ends in a draw state
+     * that the get winner returns that there's a draw, i.e. null
+     *
+     * @throws FileNotFoundException if the file is not found, an exception is thrown
+     */
     @Test
-    public void testGetWinner() throws FileNotFoundException {
+    public void testDraw() throws FileNotFoundException {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
