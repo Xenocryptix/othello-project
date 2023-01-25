@@ -189,11 +189,9 @@ public class Board {
         pure
     */
     public boolean isFull() {
-        for (int i = 0; i < DIM; i++) {
-            for (int j = 0; j < DIM; j++) {
-                if (fields[i][j].equals(Disk.EMPTY)) {
-                    return false;
-                }
+        for (int index = 0; index < DIM * DIM; index++) {
+            if (getField(index).equals(Disk.EMPTY)) {
+                return false;
             }
         }
         return true;
@@ -212,15 +210,14 @@ public class Board {
     */
     public int countDisk(Disk disk) {
         int count = 0;
-        for (int row = 0; row < DIM; row++) {
-            for (int col = 0; col < DIM; col++) {
-                if (fields[row][col].equals(disk)) {
-                    count++;
-                }
+        for (int index = 0; index < DIM * DIM; index++) {
+            if (getField(index).equals(disk)) {
+                count++;
             }
         }
         return count;
     }
+
 
     /**
      * Checks if a disk has won. A disk wins if it has more
@@ -343,6 +340,7 @@ public class Board {
 
     /**
      * Return the board as a viewable string to print out in the UI
+     *
      * @return s The string containing the board for UI
      */
     @Override

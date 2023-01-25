@@ -278,40 +278,6 @@ public class OthelloGameTest {
         assertEquals(0, game.getValidMoves().size());
         assertTrue(game.isGameover());
     }
-
-    /**
-     * Ensures that setting the game board to a new board changes the game board
-     */
-    @Test
-    public void testSetBoard() {
-        //Creating a new board to set the game board to
-        Board changedBoard = new Board();
-        changedBoard.setField(0, Disk.BLACK);
-
-        //Ensuring that the first index is empty
-        assertEquals(Disk.EMPTY, board.getField(0));
-        game.setBoard(changedBoard);
-        Board newBoard = game.getBoard();
-
-        //Ensuring that the first index is changed to the disk of the board that was set to it
-        assertEquals(Disk.BLACK, newBoard.getField(0));
-    }
-
-    /**
-     * Ensuring that after a move is played the player's turn switches
-     */
-    @Test
-    public void testGetTurn() {
-        AbstractPlayer player1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-        AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-        game.setPlayer1(player1);
-        game.setPlayer2(player2);
-
-        assertEquals(player1, game.getTurn());
-        game.doMove(player1.determineMove(game));
-        assertEquals(player2, game.getTurn());
-
-    }
     /**
      * This test would go through possible board representations for game ending before the board is full
      */
@@ -393,6 +359,41 @@ public class OthelloGameTest {
         assertTrue(game.isGameover());
     }
 
+
+    /**
+     * Ensures that setting the game board to a new board changes the game board
+     */
+    @Test
+    public void testSetBoard() {
+        //Creating a new board to set the game board to
+        Board changedBoard = new Board();
+        changedBoard.setField(0, Disk.BLACK);
+
+        //Ensuring that the first index is empty
+        assertEquals(Disk.EMPTY, board.getField(0));
+        game.setBoard(changedBoard);
+        Board newBoard = game.getBoard();
+
+        //Ensuring that the first index is changed to the disk of the board that was set to it
+        assertEquals(Disk.BLACK, newBoard.getField(0));
+    }
+
+    /**
+     * Ensuring that after a move is played the player's turn switches
+     */
+    @Test
+    public void testGetTurn() {
+        AbstractPlayer player1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        AbstractPlayer player2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
+
+        assertEquals(player1, game.getTurn());
+        game.doMove(player1.determineMove(game));
+        assertEquals(player2, game.getTurn());
+
+    }
+
     /**
      * A full game is player between two computer players that play a random valid move.
      * The test ensures that while the game is not over that player 1 and player 2 both play
@@ -412,10 +413,8 @@ public class OthelloGameTest {
         //Get the disk of the current turn
         Disk disk = game.getCurrentDisk();
         while (!game.isGameover()) {
-//            System.out.println("P1 moving");
             move = player1.determineMove(game);
             game.doMove(move);
-//            System.out.println("P2 moving");
             move = player2.determineMove(game);
             game.doMove(move);
             //Since 2 turns happen in each loop, the disk color will be flipped 2 times,
