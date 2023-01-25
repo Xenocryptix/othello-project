@@ -306,15 +306,15 @@ public class Board {
         setField(row, col, disk);
         for (int[] dir: DIRECTION_X_AND_Y) {
             //We iterate in 8 direction, looking for flippable lines
-            int dRow = row + dir[0];
-            int dCol = col + dir[1];
+            int directionRow = row + dir[0];
+            int directionColumn = col + dir[1];
             int count = 0;
-            while (isField(dRow, dCol)) {
+            while (isField(directionRow, directionColumn)) {
                 //Continue to iterate in that direction while the tile is of opposite color
-                if (getField(dRow, dCol).equals(disk.other())) {
+                if (getField(directionRow, directionColumn).equals(disk.other())) {
                     //Continue to move in that direction while counting the tiles that traversed
-                    dRow += dir[0];
-                    dCol += dir[1];
+                    directionRow += dir[0];
+                    directionColumn += dir[1];
                     count++;
                 } else {
                     //Once we encountered another tile or empty tile, break out immediately
@@ -322,13 +322,13 @@ public class Board {
                 }
             }
             //We backtrack to the first tile, flipping all the disks in the middle
-            if (isField(dRow, dCol) && getField(dRow, dCol).equals(disk)) {
-                dRow -= dir[0];
-                dCol -= dir[1];
+            if (isField(directionRow, directionColumn) && getField(directionRow, directionColumn).equals(disk)) {
+                directionRow -= dir[0];
+                directionColumn -= dir[1];
                 for (int i = 0; i < count; i++) {
-                    flip(dRow, dCol);
-                    dRow -= dir[0];
-                    dCol -= dir[1];
+                    flip(directionRow, directionColumn);
+                    directionRow -= dir[0];
+                    directionColumn -= dir[1];
                 }
             }
         }
