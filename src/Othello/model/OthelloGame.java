@@ -298,15 +298,15 @@ public class OthelloGame implements Game {
             therefore only switch turn without placing anything
          */
         if (move != null) {
-            if (!((OthelloMove) move).getDisk().equals(getCurrentDisk())) {
-                return;
-            }
             if (isValidMove(move)) {
                 board.flipMove(move);
             }
         }
         validMoves = getValidMoves();
         nextTurn();
+        if (getValidMoves(current).isEmpty()) {
+            nextTurn();
+        }
     }
 
     /**
