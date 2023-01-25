@@ -238,7 +238,7 @@ public class OthelloGameTest {
         /*
         The following will be a representation of the board when there are no possible
         moves available for both discs when the board is not full
-            A   B   C   D   E   F   G   H
+           A   B   C   D   E   F   G   H
         1    |   |   |   |   |   |   |
           ---+---+---+---+---+---+---+---
         2    |   |   |   |   |   |   |
@@ -249,7 +249,7 @@ public class OthelloGameTest {
           ---+---+---+---+---+---+---+---
         5    |   | B | B | B | B | B |
           ---+---+---+---+---+---+---+---
-        6    |   |   | B |   | B |   |
+        6    |   |   | B | B | B |   |
           ---+---+---+---+---+---+---+---
         7    |   |   |   | B |   |   |
           ---+---+---+---+---+---+---+---
@@ -262,9 +262,9 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.BLACK, 4, 2));
         game.doMove(new OthelloMove(Disk.WHITE, 5, 5));
         game.doMove(new OthelloMove(Disk.BLACK, 6, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 3, 5));
+        game.doMove(new OthelloMove(Disk.WHITE, 3, 5));
         game.doMove(new OthelloMove(Disk.BLACK, 4, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 4));
+        game.doMove(new OthelloMove(Disk.WHITE, 5, 4));
         game.doMove(new OthelloMove(Disk.BLACK, 2, 4));
 
 
