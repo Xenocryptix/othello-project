@@ -318,7 +318,18 @@ public class OthelloGameTest {
             assertTrue(game.isGameover());
             game.reset();
         }
-
     }
 
+    /**
+     * A test case to check deepCopy()
+     * The deep copy board should be independent to the game state, meaning that doing any move
+     * in the game should not affect the copy created before moving.
+     */
+    @Test
+    public void testDeepCopy() {
+        Board board1 = game.deepCopy();
+        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
+        Board board2 = game.deepCopy();
+        assertNotEquals(board1, board2);
+    }
 }
