@@ -345,7 +345,7 @@ public class Board {
      */
     @Override
     public String toString() {
-        String s = "   A   B   C   D   E   F   G   H\n";
+        String s = "    A     B     C     D     E     F     G     H\n";
         for (int i = 0; i < DIM; i++) {
             String row = i + 1 + " ";
             String sym;
