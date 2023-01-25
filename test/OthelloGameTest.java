@@ -91,7 +91,7 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        BufferedReader reader = new BufferedReader(new FileReader("test/passingmoves"));
+        BufferedReader reader = new BufferedReader(new FileReader("test/PassingMoves"));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -123,7 +123,7 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        BufferedReader reader = new BufferedReader(new FileReader("test/fulltest"));
+        BufferedReader reader = new BufferedReader(new FileReader("test/FullBoardMoves"));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -227,6 +227,36 @@ public class OthelloGameTest {
         game.doMove(new OthelloMove(Disk.WHITE, 2, 0));
 
         assertTrue(game.isGameover());
+    }
+    @Test
+    public void testGetWinner() throws FileNotFoundException {
+        assertFalse(game.isGameover());
+        assertTrue(game.getValidMoves().size() > 0);
+
+        BufferedReader reader = new BufferedReader(new FileReader("test/Draw"));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                if (!line.equals("passed")) {
+                    String[] split = line.split(",");
+                    int row = Integer.parseInt(split[1]);
+                    int col = Integer.parseInt(split[2]);
+                    Disk disk;
+                    if (split[0].equals("BLACK")) {
+                        disk = Disk.BLACK;
+                    } else {
+                        disk = Disk.WHITE;
+                    }
+                    game.doMove(new OthelloMove(disk, row, col));
+                }
+            }
+            //Ensures that the game is over
+            assertTrue(game.isGameover());
+            assertNull(game.getWinner());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
