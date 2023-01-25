@@ -17,7 +17,7 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
-    private static final String LINE = "  ———+———+———+———+———+———+———+———";
+    private static final String LINE = "  ═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══";
     private /*@ spec_public */ Disk[][] fields;
 
     /**
@@ -361,7 +361,7 @@ public class Board {
                 }
                 row += " " + sym + " ";
                 if (j < DIM - 1) {
-                    row = row + "|";
+                    row = row + "║";
                 }
             }
             s = s + row;
