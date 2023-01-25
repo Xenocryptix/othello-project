@@ -15,7 +15,7 @@ public class TestUI {
         ComputerPlayer p1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         ComputerPlayer p2 = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
         game.setPlayer1(p1);
-        game.setPlayer1(p2);
+        game.setPlayer2(p2);
         while (!game.isGameover()) {
             game.doMove(p1.determineMove(game));
             System.out.println(game.toString());
