@@ -13,7 +13,7 @@ public class TestUI {
     public static void main(String[] args) {
         OthelloGame game = new OthelloGame();
         ComputerPlayer p1 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-        ComputerPlayer p2 = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
+        ComputerPlayer p2 = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
         game.setPlayer1(p1);
         game.setPlayer2(p2);
         while (!game.isGameover()) {

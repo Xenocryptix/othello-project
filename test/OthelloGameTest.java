@@ -87,70 +87,31 @@ public class OthelloGameTest {
     }
 
     @Test
-    public void testPassingMove() {
-        game.doMove(new OthelloMove(Disk.BLACK, 2, 3));
-        game.doMove(new OthelloMove(Disk.WHITE, 2, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 3, 2));
-        game.doMove(new OthelloMove(Disk.WHITE, 2, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 1, 1));
-        game.doMove(new OthelloMove(Disk.WHITE, 0, 0));
-        game.doMove(new OthelloMove(Disk.BLACK, 1, 4));
-        game.doMove(new OthelloMove(Disk.WHITE, 4, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 2, 1));
-        game.doMove(new OthelloMove(Disk.WHITE, 2, 0));
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 1));
-        game.doMove(new OthelloMove(Disk.WHITE, 1, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 2));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 6, 3));
-        game.doMove(new OthelloMove(Disk.WHITE, 0, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 1));
-        game.doMove(new OthelloMove(Disk.BLACK, 6, 0));
-        game.doMove(new OthelloMove(Disk.WHITE, 4, 0));
-        game.doMove(new OthelloMove(Disk.BLACK, 3, 0));
-        game.doMove(new OthelloMove(Disk.WHITE, 7, 0));
-        game.doMove(new OthelloMove(Disk.BLACK, 0, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 4, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 0, 1));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 4, 7));
-        game.doMove(new OthelloMove(Disk.WHITE, 5, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 0, 3));
-        game.doMove(new OthelloMove(Disk.WHITE, 1, 3));
-        game.doMove(new OthelloMove(Disk.BLACK, 1, 0));
-        game.doMove(new OthelloMove(Disk.WHITE, 0, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 2, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 0, 6));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 5, 0));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 1, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 3, 5));
-        game.doMove(new OthelloMove(Disk.BLACK, 3, 6));
-        game.doMove(new OthelloMove(Disk.WHITE, 2, 7));
-        game.doMove(new OthelloMove(Disk.BLACK, 7, 5));
-        game.doMove(new OthelloMove(Disk.WHITE, 5, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 7, 7));
-        game.doMove(new OthelloMove(Disk.WHITE, 3, 1));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 7));
-        game.doMove(new OthelloMove(Disk.WHITE, 7, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 1, 6));
-        game.doMove(new OthelloMove(Disk.WHITE, 2, 6));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 3));
-        game.doMove(new OthelloMove(Disk.WHITE, 7, 4));
-        game.doMove(new OthelloMove(Disk.BLACK, 3, 7));
-        game.doMove(new OthelloMove(Disk.WHITE, 6, 7));
-        game.doMove(new OthelloMove(Disk.BLACK, 5, 1));
-        //PASSING
-        assertNull(game.getValidMoves(Disk.WHITE));
-        game.doMove(new OthelloMove(Disk.BLACK, 7, 1));
-        game.doMove(new OthelloMove(Disk.WHITE, 7, 2));
-        game.doMove(new OthelloMove(Disk.BLACK, 0, 7));
-        game.doMove(new OthelloMove(Disk.WHITE, 1, 7));
-        game.doMove(new OthelloMove(Disk.BLACK, 7, 3));
-        //PASSED
+    public void testPassingMove() throws FileNotFoundException {
+        assertFalse(game.isGameover());
+        assertTrue(game.getValidMoves().size() > 0);
+
+        BufferedReader reader = new BufferedReader(new FileReader("test/passingmoves"));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] split = line.split(",");
+                int row = Integer.parseInt(split[1]);
+                int col = Integer.parseInt(split[2]);
+                Disk disk;
+                if (split[0].equals("BLACK")) {
+                    disk = Disk.BLACK;
+                } else {
+                    disk = Disk.WHITE;
+                }
+                game.doMove(new OthelloMove(disk, row, col));
+            }
+            //Ensures that there are no valid moves and game is over
+            assertEquals(0, game.getValidMoves().size());
+            assertTrue(game.isGameover());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
