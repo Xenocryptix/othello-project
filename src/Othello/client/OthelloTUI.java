@@ -7,15 +7,15 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class OthelloTUI {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String serverAddress, username, command;
         boolean connected;
         int port;
-        Scanner input = new Scanner(System.in);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter a server address: ");
-        serverAddress = input.nextLine();
+        serverAddress = input.readLine();
         System.out.print("Enter port number: ");
-        port = input.nextInt();
+        port = Integer.parseInt(input.readLine());
         if (port < 0 || port > 65536) {
             throw new NumberFormatException();
         }
@@ -34,15 +34,15 @@ public class OthelloTUI {
             System.out.println(br.readLine());
 
             System.out.print("Enter username: ");
-            username = input.nextLine();
-            System.out.println(br.readLine());
+            username = input.readLine();
+
 
             client.sendLogin(username);
 
-
+            System.out.println(br.readLine());
 
             System.out.println("Enter command: ");
-            command = input.nextLine();
+            command = input.readLine();
 
             //TODO: HELP MENU
 
@@ -59,7 +59,7 @@ public class OthelloTUI {
                     //TODO: command
 
                 }
-                command = input.nextLine();
+                command = input.readLine();
             }
             client.close();
         } catch (UnknownHostException e) {
