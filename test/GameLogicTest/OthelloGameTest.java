@@ -100,7 +100,7 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        BufferedReader reader = new BufferedReader(new FileReader("test/PassingMoves"));
+        BufferedReader reader = new BufferedReader(new FileReader("test/GameLogicTest/PassingMoves"));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -134,7 +134,7 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        BufferedReader reader = new BufferedReader(new FileReader("test/Draw"));
+        BufferedReader reader = new BufferedReader(new FileReader("test/GameLogicTest/Draw"));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -199,7 +199,7 @@ public class OthelloGameTest {
         assertFalse(game.isGameover());
         assertTrue(game.getValidMoves().size() > 0);
 
-        BufferedReader reader = new BufferedReader(new FileReader("test/FullBoardMoves"));
+        BufferedReader reader = new BufferedReader(new FileReader("test/GameLogicTest/FullBoardMoves"));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
