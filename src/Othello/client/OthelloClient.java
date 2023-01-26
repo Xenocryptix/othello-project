@@ -41,7 +41,7 @@ public class OthelloClient implements Client, Runnable {
     public boolean setPlayer(String player) {
         switch (player) {
             case "Human":
-                this.player = new PlayerFactory().makeHumanPlayer(username, reader, writer);
+                this.player = new PlayerFactory().makeHumanPlayer(username);
                 break;
             case "Naive":
                 this.player = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
@@ -192,15 +192,14 @@ public class OthelloClient implements Client, Runnable {
                 String[] splitted = command.split(Protocol.SEPARATOR);
                 switch (splitted[0]) {
                     case "NEWGAME":
-                        //TODO reader writer
                         game = new OthelloGame();
                         inGame = true;
                         if (splitted[1].equals(username)) {
-                            opponent = new PlayerFactory().makeHumanPlayer(splitted[2], reader, writer);
+                            opponent = new PlayerFactory().makeHumanPlayer(splitted[2]);
                             game.setPlayer1(player);
                             game.setPlayer2(opponent);
                         } else {
-                            opponent = new PlayerFactory().makeHumanPlayer(splitted[1], reader, writer);
+                            opponent = new PlayerFactory().makeHumanPlayer(splitted[1]);
                             game.setPlayer1(opponent);
                             game.setPlayer2(player);
                         }
