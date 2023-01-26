@@ -232,6 +232,9 @@ public class OthelloClient implements Client, Runnable {
                     case "HELLO":
                         printWriter.println("Successfully connected to the server");
                         break;
+                    case "LOGIN":
+                        printWriter.println("Logged in successfully. Have fun playing!");
+                        break;
                     case "MOVE":
                         Disk currentDisk = game.getCurrentDisk();
                         int row = Integer.parseInt(splitted[1]) / Board.DIM;
