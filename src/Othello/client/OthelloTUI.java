@@ -30,21 +30,11 @@ public class OthelloTUI {
             if (!connected) {
                 throw new SocketException();
             }
-            var pw1 = client.getPipedWriter();
-            PipedReader pr = new PipedReader(pw1);
-            BufferedReader br = new BufferedReader(pr);
 
             client.sendHello("desc");
-            System.out.println(br.readLine());
-
             System.out.print("Enter username: ");
             username = input.readLine();
-
-
             client.sendLogin(username);
-
-            System.out.println(br.readLine());
-
             System.out.println("Enter command: ");
             command = input.readLine();
 
@@ -55,12 +45,10 @@ public class OthelloTUI {
                 switch (command) {
                     case "queue":
                         client.queue();
-                        System.out.println(br.readLine());
                         //TODO: WAIT
                         break;
                     case "list":
                         client.sendList();
-                        System.out.println(br.readLine());
                         break;
                     //TODO: command
                 }

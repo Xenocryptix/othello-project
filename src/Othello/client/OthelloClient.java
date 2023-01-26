@@ -68,6 +68,7 @@ public class OthelloClient implements Client, Runnable {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             new Thread(this).start();
+            new Thread(new OutputHandling(this)).start();
             return true;
         } catch (IOException e) {
             System.out.println("Failed to connect");
@@ -88,7 +89,12 @@ public class OthelloClient implements Client, Runnable {
             e.printStackTrace();
         }
     }
-
+    /**
+     *
+     */
+    public boolean closed() {
+        return client.isClosed();
+    }
     /**
      * @param index
      */

@@ -5,16 +5,18 @@ import java.net.*;
 
 public class OutputHandling implements Runnable {
 
-    Socket client;
+    OthelloClient client;
     private final BufferedReader reader;
-    public OutputHandling(Socket socket) throws IOException {
-        this.client = socket;
-        reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    public OutputHandling(OthelloClient client) throws IOException {
+        this.client = client;
+        var pw1 = client.getPipedWriter();
+        PipedReader pr = new PipedReader(pw1);
+        reader = new BufferedReader(pr);
     }
     @Override
     public void run() {
         try {
-            while (!client.isClosed()) {
+            while (!client.closed()) {
                 System.out.println(reader.readLine());
             }
         } catch (SocketException e) {
