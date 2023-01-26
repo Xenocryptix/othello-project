@@ -1,7 +1,6 @@
 package Othello.Server;
 
 import Othello.client.ClientHandler;
-import Othello.client.OthelloGameThread;
 
 import java.io.IOException;
 import java.net.ServerSocket;

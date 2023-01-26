@@ -1,5 +1,7 @@
-package Othello.client;
+package Othello.Server;
 
+
+import Othello.client.ClientHandler;
 
 import java.util.ArrayList;
 import java.util.List;
