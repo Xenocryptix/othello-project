@@ -8,19 +8,23 @@ import java.util.*;
 
 public class OthelloTUI {
     public static void main(String[] args) throws IOException {
-        String serverAddress, username, command;
+        String serverAddress;
+        String username;
+        String command;
         boolean connected;
         int port;
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
         System.out.print("Enter a server address: ");
         serverAddress = input.readLine();
+
         System.out.print("Enter port number: ");
         port = Integer.parseInt(input.readLine());
         if (port < 0 || port > 65536) {
             throw new NumberFormatException();
         }
-        OthelloClient client = new OthelloClient();
 
+        OthelloClient client = new OthelloClient();
         try {
             connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
