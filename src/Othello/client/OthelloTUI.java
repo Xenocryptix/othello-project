@@ -20,29 +20,26 @@ public class OthelloTUI {
             throw new NumberFormatException();
         }
         OthelloClient client = new OthelloClient();
-        PipedReader inputStream;
-        try {
-            inputStream = new PipedReader(client.getPipedWriter());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         try {
             connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
                 throw new SocketException();
             }
+            var pw1 = client.getPipedWriter();
+            PipedReader pr = new PipedReader(pw1);
+            BufferedReader br = new BufferedReader(pr);
+
             client.sendHello("desc");
-            new Thread(client).start();
-            System.out.println(inputStream.read());
+            System.out.println(br.readLine());
 
             System.out.print("Enter username: ");
             username = input.nextLine();
+            System.out.println(br.readLine());
 
             client.sendLogin(username);
 
-            String logged = String.valueOf(inputStream.read());
-            System.out.println(inputStream.read());
+
 
             System.out.println("Enter command: ");
             command = input.nextLine();

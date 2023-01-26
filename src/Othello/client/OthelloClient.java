@@ -23,10 +23,15 @@ public class OthelloClient implements Client, Runnable {
     private AbstractPlayer opponent;
     private boolean inGame = false;
     private boolean inQueue = false;
-    private PipedWriter outputStream = new PipedWriter();
+    private PrintWriter printWriter;
+    private PipedWriter pipedWriter = new PipedWriter();
+
+    public OthelloClient() {
+        printWriter = new PrintWriter(pipedWriter, true);
+    }
 
     public PipedWriter getPipedWriter() {
-        return outputStream;
+        return pipedWriter;
     }
 
     public boolean getStatus() {
@@ -62,6 +67,7 @@ public class OthelloClient implements Client, Runnable {
             client = new Socket(address, port);
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+            new Thread(this).start();
             return true;
         } catch (IOException e) {
             System.out.println("Failed to connect");
@@ -202,45 +208,39 @@ public class OthelloClient implements Client, Runnable {
                     case "GAMEOVER":
                         switch (splitted[1]) {
                             case "DISCONNECT":
-                                outputStream.write(splitted[2] + " disconnected");
+                                printWriter.println(splitted[2] + " disconnected");
                                 break;
                             case "DRAW":
-                                outputStream.write("You have both drawn!");
+                                printWriter.println("You have both drawn!");
                                 break;
                             case "VICTORY":
-                                outputStream.write(splitted[2] + " won!");
+                                printWriter.println(splitted[2] + " won!");
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + splitted[1]);
                         }
-                        outputStream.flush();
                         break;
                     case "LIST":
-                        outputStream.write("Current players:\n");
+                        printWriter.println("Current players:\n");
                         for (int i = 1; i < splitted.length; i++) {
-                            outputStream.write(splitted[i] + "\n");
-                            outputStream.flush();
+                            printWriter.println(splitted[i] + "\n");
                         }
                         break;
                     case "ALREDYLOGGEDIN":
-                        outputStream.write("User already logged in");
-                        outputStream.flush();
+                        printWriter.println("User already logged in");
                         break;
                     case "HELLO":
-                        outputStream.write("Successfully connected to the server");
-                        outputStream.flush();
+                        printWriter.println("Successfully connected to the server");
                         break;
                     case "MOVE":
                         Disk currentDisk = game.getCurrentDisk();
                         int row = Integer.parseInt(splitted[1]) / Board.DIM;
                         int col = Integer.parseInt(splitted[1]) % Board.DIM;
                         game.doMove(new OthelloMove(currentDisk, row, col));
-                        outputStream.write(game.toString());
-                        outputStream.flush();
+                        printWriter.println(game.toString());
                         break;
                     default:
-                        outputStream.write("Invalid command");
-                        outputStream.flush();
+                        printWriter.println("Invalid command");
                         break;
                 }
             }
