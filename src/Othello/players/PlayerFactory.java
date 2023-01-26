@@ -18,14 +18,12 @@ public class PlayerFactory implements Factory {
      * Make a new human player
      *
      * @param name   name The name of the human player
-     * @param reader The reader stream of the socket
-     * @param writer The writer stream of the socket
      * @return The human player object
      */
-    //@ requires name != null && reader != null && writer != null;
+    //@ requires name != null;
     @Override
-    public HumanPlayer makeHumanPlayer(String name, Reader reader, Writer writer) {
-        return new HumanPlayer(name, reader, writer);
+    public HumanPlayer makeHumanPlayer(String name) {
+        return new HumanPlayer(name);
     }
 
     /**

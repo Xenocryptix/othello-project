@@ -51,13 +51,14 @@ public class OthelloTUI {
                 switch (command) {
                     case "queue":
                         client.queue();
+                        System.out.println(br.readLine());
                         //TODO: WAIT
                         break;
                     case "list":
                         client.sendList();
+                        System.out.println(br.readLine());
                         break;
                     //TODO: command
-
                 }
                 command = input.readLine();
             }

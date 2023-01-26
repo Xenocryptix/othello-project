@@ -15,12 +15,10 @@ public interface Factory {
      * Make a new human player
      *
      * @param name   name
-     * @param reader reader stream
-     * @param writer writer stream
      * @return human player object
      */
-    //@ requires name != null && reader != null && writer != null;
-    HumanPlayer makeHumanPlayer(String name, Reader reader, Writer writer);
+    //@ requires name != null;
+    HumanPlayer makeHumanPlayer(String name);
 
     /**
      * Make a new computer player with specified strategy

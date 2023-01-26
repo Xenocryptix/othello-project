@@ -3,50 +3,40 @@ package Othello.players;
 import Othello.Server.Protocol;
 import Othello.model.*;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Class representing a human player of the game that extends an abstract class called AbstractPlayer.
  */
 public class HumanPlayer extends AbstractPlayer {
-    private final PrintWriter out;
-    private final BufferedReader in;
     private List<Move> allowedMoves = new ArrayList<>();
 
-    public HumanPlayer(String name, Reader reader, Writer writer) {
+    public HumanPlayer(String name) {
         super(name);
-        out = new PrintWriter(writer, true);
-        in = new BufferedReader(reader);
     }
 
     public Move determineMove(Game game) {
+        Scanner input = new Scanner(System.in);
+        String line;
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         allowedMoves.clear();
         allowedMoves = ((OthelloGame) game).getValidMoves(disk);
-
-        try {
-            while (true) {
-                String line = in.readLine();
-                String[] split = line.split("~");
-                if (!line.contains(Protocol.MOVE) || split.length < 2) {
-                    out.write("Invalid format");
-                    continue;
-                }
-                int row = split[1].charAt(0) - 65;
-                int col = split[1].charAt(1);
-                Move move = new OthelloMove(disk, row, col);
-                if (row == 8 && col == 0) {
-                    return null;
-                } else if (game.isValidMove(move)) {
-                    return move;
-                }
-                out.write("Illegal move");
+        if (allowedMoves.isEmpty()) {
+            while (!(line = input.nextLine()).equals("pass")) {
+                System.out.println("Check the board! Do you have a valid move?");
             }
-        } catch (IOException e) {
-            out.write("Invalid format");
+            return null;
         }
-        return null;
+        while (true) {
+            line = input.nextLine();
+            int row = line.charAt(0) - 65;
+            int col = line.charAt(1);
+            Move move = new OthelloMove(disk, row, col);
+            if (game.isValidMove(move)) {
+                return move;
+            }
+        }
     }
 }
