@@ -226,9 +226,9 @@ public class OthelloClient implements Client, Runnable {
                         }
                         break;
                     case "LIST":
-                        printWriter.println("Current players:\n");
+                        printWriter.println("Current players:");
                         for (int i = 1; i < splitted.length; i++) {
-                            printWriter.println(splitted[i] + "\n");
+                            printWriter.println(splitted[i]);
                         }
                         break;
                     case "ALREDYLOGGEDIN":
