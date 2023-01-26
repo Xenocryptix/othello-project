@@ -1,5 +1,6 @@
 package Othello.players;
 
+import Othello.Server.Protocol;
 import Othello.model.*;
 
 import java.io.*;
@@ -29,7 +30,7 @@ public class HumanPlayer extends AbstractPlayer {
             while (true) {
                 String line = in.readLine();
                 String[] split = line.split("~");
-                if (!line.contains("MOVE~") || split.length < 2) {
+                if (!line.contains(Protocol.MOVE) || split.length < 2) {
                     out.write("Invalid format");
                     continue;
                 }

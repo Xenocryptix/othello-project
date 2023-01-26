@@ -22,7 +22,7 @@ public class OthelloTUI {
         OthelloClient client = new OthelloClient();
         PipedReader inputStream;
         try {
-            inputStream = new PipedReader(client.getOutputStream());
+            inputStream = new PipedReader(client.getPipedWriter());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,7 +33,7 @@ public class OthelloTUI {
                 throw new SocketException();
             }
             client.sendHello("desc");
-
+            new Thread(client).start();
             System.out.println(inputStream.read());
 
             System.out.print("Enter username: ");
@@ -46,6 +46,7 @@ public class OthelloTUI {
 
             System.out.println("Enter command: ");
             command = input.nextLine();
+
             //TODO: HELP MENU
 
 
@@ -63,8 +64,6 @@ public class OthelloTUI {
                 }
                 command = input.nextLine();
             }
-
-
             client.close();
         } catch (UnknownHostException e) {
             System.out.println("Unknown host");

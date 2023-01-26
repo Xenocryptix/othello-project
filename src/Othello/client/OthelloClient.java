@@ -6,7 +6,6 @@ import Othello.model.Disk;
 import Othello.model.OthelloGame;
 import Othello.model.OthelloMove;
 import Othello.players.AbstractPlayer;
-import Othello.players.HumanPlayer;
 import Othello.players.PlayerFactory;
 import Othello.players.ai.GreedyStrategy;
 import Othello.players.ai.NaiveStrategy;
@@ -26,7 +25,7 @@ public class OthelloClient implements Client, Runnable {
     private boolean inQueue = false;
     private PipedWriter outputStream = new PipedWriter();
 
-    public PipedWriter getOutputStream() {
+    public PipedWriter getPipedWriter() {
         return outputStream;
     }
 
