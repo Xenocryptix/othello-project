@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class HumanPlayer extends AbstractPlayer {
     private List<Move> allowedMoves = new ArrayList<>();
 
+
     public HumanPlayer(String name) {
         super(name);
     }

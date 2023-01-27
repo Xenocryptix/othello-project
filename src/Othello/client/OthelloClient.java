@@ -1,10 +1,7 @@
 package Othello.client;
 
 import Othello.Server.Protocol;
-import Othello.model.Board;
-import Othello.model.Disk;
-import Othello.model.OthelloGame;
-import Othello.model.OthelloMove;
+import Othello.model.*;
 import Othello.players.AbstractPlayer;
 import Othello.players.PlayerFactory;
 import Othello.players.ai.GreedyStrategy;
@@ -13,6 +10,7 @@ import Othello.players.ai.NaiveStrategy;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.List;
 
 public class OthelloClient extends ClientListener implements Client, Runnable {
     private Socket client;
@@ -22,6 +20,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     private String username;
     private AbstractPlayer player;
     private AbstractPlayer opponent;
+    private boolean inQueue = false;
     private boolean inGame = false;
     private Listener listener;
 
@@ -98,10 +97,26 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     @Override
     public boolean sendMove(int index) {
         try {
-            writer.write(Protocol.move(index));
-            writer.newLine();
-            writer.flush();
-            return true;
+            Disk currentDisk = game.getCurrentDisk();
+            int row = index / Board.DIM;
+            int col = index % Board.DIM;
+            if (index == 64) {
+                if (game.getValidMoves().isEmpty()) {
+                    writer.write(Protocol.move(index));
+                    return true;
+                } else {
+                    listener.printMessage("You still have move left");
+                    return false;
+                }
+            }
+            if (game.isValidMove(new OthelloMove(currentDisk, row, col))) {
+                writer.write(Protocol.move(index));
+                writer.newLine();
+                writer.flush();
+                return true;
+            }
+            listener.printMessage("Invalid move");
+            return false;
         } catch (IOException e) {
             System.out.println("Error occurred while sending messages");
             close();
@@ -180,7 +195,11 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.write(Protocol.queue());
             writer.newLine();
             writer.flush();
-            //TODO: change inQueue
+            if (inQueue) {
+                listener.printMessage("You've joined the queue");
+            } else {
+                listener.printMessage("You've left the queue");
+            }
         } catch (IOException e) {
             System.out.println("Error occurred while sending messages");
             close();
@@ -221,6 +240,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                             default:
                                 throw new IllegalStateException("Unexpected value: " + splitted[1]);
                         }
+                        inGame = false;
                         break;
                     case "LIST":
                         printMessage("Current players:");

@@ -36,17 +36,40 @@ public class OthelloTUI {
             System.out.print("Enter username: ");
             username = input.readLine();
             client.sendLogin(username);
-            System.out.println("Enter command: ");
-            command = input.readLine();
 
-            while (!Objects.equals(command, "quit")) {
+
+            while (!(command = input.readLine()).equals("quit")) {
+                if (client.getStatus()) {
+                    System.out.println("Enter a move/command: ");
+                } else {
+                    System.out.println("Enter a command: ");
+                }
                 switch (command) {
                     case "queue":
-                        client.queue();
+                        if (!client.getStatus()) {
+                            client.queue();
+                        } else {
+                            System.out.println("You can't use this command in game!");
+                        }
                         break;
                     case "list":
                         client.sendList();
                         break;
+                    default:
+                        if (client.getStatus()) {
+                            if (command.equals("PASS")) {
+                                client.sendMove(64);
+                            } else {
+                                int index = Integer.parseInt(command);
+                                //TODO: change input format
+                                while (!client.sendMove(index)) {
+                                    index = Integer.parseInt(command);
+                                    client.sendMove(index);
+                                }
+                            }
+                        } else {
+                            System.out.println("Invalid command");
+                        }
                 }
                 command = input.readLine();
             }
