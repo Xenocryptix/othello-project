@@ -11,9 +11,10 @@ import Othello.players.ai.GreedyStrategy;
 import Othello.players.ai.NaiveStrategy;
 
 import java.io.*;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.Socket;
 
-public class OthelloClient implements Client, Runnable {
+public class OthelloClient extends ClientListener implements Client, Runnable {
     private Socket client;
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -22,16 +23,10 @@ public class OthelloClient implements Client, Runnable {
     private AbstractPlayer player;
     private AbstractPlayer opponent;
     private boolean inGame = false;
-    private boolean inQueue = false;
-    private PrintWriter printWriter;
-    private PipedWriter pipedWriter = new PipedWriter();
+    private Listener listener;
 
-    public OthelloClient() {
-        printWriter = new PrintWriter(pipedWriter, true);
-    }
-
-    public PipedWriter getPipedWriter() {
-        return pipedWriter;
+    public OthelloClient(Listener listener) {
+        this.listener = listener;
     }
 
     public boolean getStatus() {
@@ -54,6 +49,7 @@ public class OthelloClient implements Client, Runnable {
         }
         return true;
     }
+
     /**
      * Connect to server using the address and port number
      *
@@ -68,7 +64,6 @@ public class OthelloClient implements Client, Runnable {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             new Thread(this).start();
-            new Thread(new OutputHandling(this)).start();
             return true;
         } catch (IOException e) {
             System.out.println("Failed to connect");
@@ -89,12 +84,14 @@ public class OthelloClient implements Client, Runnable {
             e.printStackTrace();
         }
     }
+
     /**
      *
      */
     public boolean closed() {
         return client.isClosed();
     }
+
     /**
      * @param index
      */
@@ -213,42 +210,42 @@ public class OthelloClient implements Client, Runnable {
                     case "GAMEOVER":
                         switch (splitted[1]) {
                             case "DISCONNECT":
-                                printWriter.println(splitted[2] + " disconnected");
+                                printMessage(splitted[2] + " disconnected");
                                 break;
                             case "DRAW":
-                                printWriter.println("You have both drawn!");
+                                printMessage("You have both drawn !");
                                 break;
                             case "VICTORY":
-                                printWriter.println(splitted[2] + " won!");
+                                printMessage(splitted[2] + " won!");
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + splitted[1]);
                         }
                         break;
                     case "LIST":
-                        printWriter.println("Current players:");
+                        printMessage("Current players:");
                         for (int i = 1; i < splitted.length; i++) {
-                            printWriter.println(splitted[i]);
+                            printMessage(splitted[i]);
                         }
                         break;
                     case "ALREDYLOGGEDIN":
-                        printWriter.println("User already logged in");
+                        printMessage("User already logged in");
                         break;
                     case "HELLO":
-                        printWriter.println("Successfully connected to the server");
+                        printMessage("Successfully connected to the server");
                         break;
                     case "LOGIN":
-                        printWriter.println("Logged in successfully. Have fun playing!");
+                        printMessage("Logged in successfully. Have fun playing!");
                         break;
                     case "MOVE":
                         Disk currentDisk = game.getCurrentDisk();
                         int row = Integer.parseInt(splitted[1]) / Board.DIM;
                         int col = Integer.parseInt(splitted[1]) % Board.DIM;
                         game.doMove(new OthelloMove(currentDisk, row, col));
-                        printWriter.println(game.toString());
+                        printMessage(game.toString());
                         break;
                     default:
-                        printWriter.println("Invalid command");
+                        printMessage("Invalid command");
                         break;
                 }
             }

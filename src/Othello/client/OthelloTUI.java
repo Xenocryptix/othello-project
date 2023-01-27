@@ -1,10 +1,12 @@
 package Othello.client;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Objects;
 
 public class OthelloTUI {
     public static void main(String[] args) throws IOException {
@@ -23,14 +25,13 @@ public class OthelloTUI {
         if (port < 0 || port > 65536) {
             throw new NumberFormatException();
         }
-
-        OthelloClient client = new OthelloClient();
+        Listener clientListener = new ClientListener();
+        OthelloClient client = new OthelloClient(clientListener);
         try {
             connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
                 throw new SocketException();
             }
-
             client.sendHello("desc");
             System.out.print("Enter username: ");
             username = input.readLine();
@@ -38,30 +39,29 @@ public class OthelloTUI {
             System.out.println("Enter command: ");
             command = input.readLine();
 
-            //TODO: HELP MENU
-
-
             while (!Objects.equals(command, "quit")) {
                 switch (command) {
                     case "queue":
                         client.queue();
-                        //TODO: WAIT
                         break;
                     case "list":
                         client.sendList();
                         break;
-                    //TODO: command
                 }
                 command = input.readLine();
             }
             client.close();
-        } catch (UnknownHostException e) {
+
+        } catch (
+                UnknownHostException e) {
             System.out.println("Unknown host");
-        } catch (SocketException e) {
+        } catch (
+                SocketException e) {
             System.out.println("Socket not started");
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
+
