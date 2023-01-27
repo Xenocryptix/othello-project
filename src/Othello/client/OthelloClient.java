@@ -268,6 +268,8 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             printMessage("It's your turn!");
             if (game.getTurn() instanceof HumanPlayer) {
                 waitingMove = true;
+            } else {
+                player.determineMove(game);
             }
         } else {
             printMessage("Waiting for opponent...");
