@@ -263,12 +263,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         }
     }
 
-    private void move(String[] splitted) {
-        Disk currentDisk = game.getCurrentDisk();
-        int row = Integer.parseInt(splitted[1]) / Board.DIM;
-        int col = Integer.parseInt(splitted[1]) % Board.DIM;
-        game.doMove(new OthelloMove(currentDisk, row, col));
-        printMessage(game.toString());
+    private void checkTurn() {
         if (game.getTurn().equals(player)) {
             printMessage("It's your turn!");
             if (game.getTurn() instanceof HumanPlayer) {
@@ -278,6 +273,15 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             printMessage("Waiting for opponent...");
             waitingMove = false;
         }
+    }
+
+    private void move(String[] splitted) {
+        Disk currentDisk = game.getCurrentDisk();
+        int row = Integer.parseInt(splitted[1]) / Board.DIM;
+        int col = Integer.parseInt(splitted[1]) % Board.DIM;
+        game.doMove(new OthelloMove(currentDisk, row, col));
+        printMessage(game.toString());
+        checkTurn();
     }
 
     private void list(String[] splitted) {
@@ -316,5 +320,6 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             game.setPlayer2(player);
         }
         listener.printMessage(game.toString());
+        checkTurn();
     }
 }

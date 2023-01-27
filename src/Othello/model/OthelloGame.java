@@ -316,7 +316,7 @@ public class OthelloGame implements Game {
      * @return The board with the player's turn
      */
     public String toString() {
-        return board + "\nIt's " + getTurn() + " turn\n";
+        return board.toString();
     }
 
 
