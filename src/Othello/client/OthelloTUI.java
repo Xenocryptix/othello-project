@@ -65,11 +65,10 @@ public class OthelloTUI {
                             if (command.equals("PASS")) {
                                 client.sendMove(64);
                             } else {
-                                int col = command.charAt(0) - 65;
-                                int row = command.charAt(1) - 1;
+                                int col = (command).toUpperCase().charAt(0) - 65;
+                                int row = Integer.parseInt(String.valueOf(command.charAt(1))) - 1;
                                 int index = row * Board.DIM + col;
                                 if (!client.sendMove(index)) {
-                                    index = Integer.parseInt(command);
                                     client.sendMove(index);
                                 }
                             }
