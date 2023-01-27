@@ -38,13 +38,14 @@ public class OthelloTUI {
             client.sendLogin(username);
 
 
+
             while (!(command = input.readLine()).equals("quit")) {
                 if (client.getStatus()) {
                     System.out.println("Enter a move/command: ");
                 } else {
                     System.out.println("Enter a command: ");
                 }
-                switch (command) {
+                switch (command.toLowerCase()) {
                     case "queue":
                         if (!client.getStatus()) {
                             System.out.println("Choose wisely: Human, Naive, Greedy");
@@ -74,7 +75,6 @@ public class OthelloTUI {
                             System.out.println("Invalid command");
                         }
                 }
-                command = input.readLine();
             }
             client.close();
 
