@@ -1,5 +1,8 @@
 package Othello.client;
 
+import Othello.model.Board;
+import Othello.players.HumanPlayer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -58,12 +61,13 @@ public class OthelloTUI {
                         client.sendList();
                         break;
                     default:
-                        if (client.getStatus()) {
+                        if (client.getStatus() && client.getPlayer() instanceof HumanPlayer) {
                             if (command.equals("PASS")) {
                                 client.sendMove(64);
                             } else {
-                                int index = Integer.parseInt(command);
-                                //TODO: change input format
+                                int row = command.charAt(0) - 65;
+                                int col = command.charAt(1);
+                                int index = row * Board.DIM + col;
                                 if (!client.sendMove(index)) {
                                     index = Integer.parseInt(command);
                                     client.sendMove(index);

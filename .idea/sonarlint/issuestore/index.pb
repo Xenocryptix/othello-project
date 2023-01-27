@@ -9,6 +9,4 @@ O
 T
 $src/Othello/players/ai/Strategy.java,a\7\a70673559c4c01dfea7cbb987b544d79a2419f04
 Z
-*src/Othello/players/ai/ComputerPlayer.java,b\0\b0057cd5117bdaaadfcc81f1754d77ad80cf085f
-Z
 *src/Othello/players/ai/GreedyStrategy.java,1\0\10000b6dd034c48bcaf2955296ce26f750c4bf73
