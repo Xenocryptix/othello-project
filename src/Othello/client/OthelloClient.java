@@ -238,10 +238,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                         gameOver(splitted);
                         break;
                     case "LIST":
-                        printMessage("Current players:");
-                        for (int i = 1; i < splitted.length; i++) {
-                            printMessage(splitted[i]);
-                        }
+                        list(splitted);
                         break;
                     case "ALREDYLOGGEDIN":
                         printMessage("User already logged in");
@@ -263,5 +260,56 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void move(String[] splitted) {
+        Disk currentDisk = game.getCurrentDisk();
+        int row = Integer.parseInt(splitted[1]) / Board.DIM;
+        int col = Integer.parseInt(splitted[1]) % Board.DIM;
+        game.doMove(new OthelloMove(currentDisk, row, col));
+        printMessage(game.toString());
+        if (game.getTurn().equals(player)) {
+            printMessage("It's your turn!");
+            waitingMove = true;
+        } else {
+            printMessage("Waiting for opponent...");
+        }
+    }
+
+    private void list(String[] splitted) {
+        printMessage("Current players:");
+        for (int i = 1; i < splitted.length; i++) {
+            printMessage(splitted[i]);
+        }
+    }
+
+    private void gameOver(String[] splitted) {
+        switch (splitted[1]) {
+            case "DISCONNECT":
+                printMessage(splitted[2] + " disconnected");
+                break;
+            case "DRAW":
+                printMessage("You have both drawn !");
+                break;
+            case "VICTORY":
+                printMessage(splitted[2] + " won!");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + splitted[1]);
+        }
+    }
+
+    private void newgame(String[] splitted) {
+        game = new OthelloGame();
+        if (splitted[1].equals(username)) {
+            opponent = new PlayerFactory().makeHumanPlayer(splitted[2]);
+            game.setPlayer1(player);
+            game.setPlayer2(opponent);
+        } else {
+            opponent = new PlayerFactory().makeHumanPlayer(splitted[1]);
+            game.setPlayer1(opponent);
+            game.setPlayer2(player);
+        }
+        listener.printMessage(game.toString());
     }
 }
