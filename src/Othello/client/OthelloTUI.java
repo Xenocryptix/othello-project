@@ -47,6 +47,9 @@ public class OthelloTUI {
                 switch (command) {
                     case "queue":
                         if (!client.getStatus()) {
+                            System.out.println("Choose wisely: Human, Naive, Greedy");
+                            String character = input.readLine();
+                            client.setPlayer(character);
                             client.queue();
                         } else {
                             System.out.println("You can't use this command in game!");
