@@ -10,7 +10,6 @@ import Othello.players.ai.NaiveStrategy;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.List;
 
 public class OthelloClient extends ClientListener implements Client, Runnable {
     private Socket client;
@@ -23,6 +22,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     private boolean inQueue = false;
     private boolean inGame = false;
     private Listener listener;
+    private boolean computerPlayer = false;
 
     public OthelloClient(Listener listener) {
         this.listener = listener;
@@ -39,9 +39,11 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                 break;
             case "naive":
                 this.player = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
+                computerPlayer = true;
                 break;
             case "greedy":
                 this.player = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
+                computerPlayer = true;
                 break;
             default:
                 return false;
@@ -91,6 +93,23 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         return client.isClosed();
     }
 
+    public void sendMoveComputerPlayer() {
+        while (!game.isGameover()) {
+            Move move = player.determineMove(game);
+            if (game.isValidMove(move)) {
+                try {
+                    int index = Integer.parseInt(Protocol.move(((OthelloMove) move).getCol() * Board.DIM) + ((OthelloMove) move).getCol());
+                    game.doMove(move);
+                    writer.write(index);
+                    writer.newLine();
+                    writer.flush();
+                }catch (IOException e) {
+                    e.getCause();
+                }
+            }
+        }
+    }
+
     /**
      * @param index
      */
@@ -109,12 +128,14 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                     return false;
                 }
             }
+
             if (game.isValidMove(new OthelloMove(currentDisk, row, col))) {
                 writer.write(Protocol.move(index));
                 writer.newLine();
                 writer.flush();
                 return true;
             }
+
             listener.printMessage("Invalid move");
             return false;
         } catch (IOException e) {
@@ -195,6 +216,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.write(Protocol.queue());
             writer.newLine();
             writer.flush();
+            inQueue = true;
             if (inQueue) {
                 listener.printMessage("You've joined the queue");
             } else {
@@ -225,6 +247,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                             game.setPlayer1(opponent);
                             game.setPlayer2(player);
                         }
+                        listener.printMessage(game.toString());
                         break;
                     case "GAMEOVER":
                         switch (splitted[1]) {
@@ -265,7 +288,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                         printMessage(game.toString());
                         break;
                     default:
-                        printMessage("Invalid command");
+                        printMessage("Invalid command !!");
                         break;
                 }
             }
