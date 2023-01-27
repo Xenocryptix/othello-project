@@ -66,7 +66,7 @@ public class OthelloTUI {
                             } else {
                                 int index = Integer.parseInt(command);
                                 //TODO: change input format
-                                while (!client.sendMove(index)) {
+                                if (!client.sendMove(index)) {
                                     index = Integer.parseInt(command);
                                     client.sendMove(index);
                                 }
@@ -84,8 +84,7 @@ public class OthelloTUI {
         } catch (
                 SocketException e) {
             System.out.println("Socket not started");
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
