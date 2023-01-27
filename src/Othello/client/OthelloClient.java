@@ -1,7 +1,10 @@
 package Othello.client;
 
 import Othello.Server.Protocol;
-import Othello.model.*;
+import Othello.model.Disk;
+import Othello.model.Move;
+import Othello.model.OthelloGame;
+import Othello.model.OthelloMove;
 import Othello.players.AbstractPlayer;
 import Othello.players.HumanPlayer;
 import Othello.players.PlayerFactory;
@@ -11,6 +14,8 @@ import Othello.players.ai.NaiveStrategy;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import static Othello.model.Board.DIM;
 
 public class OthelloClient extends ClientListener implements Client, Runnable {
     private Socket client;
@@ -99,18 +104,18 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     }
 
     public void sendMoveComputerPlayer() {
-        while (!game.isGameover()) {
-            Move move = player.determineMove(game);
-            if (game.isValidMove(move)) {
-                try {
-                    int index = Integer.parseInt(Protocol.move(((OthelloMove) move).getCol() * Board.DIM) + ((OthelloMove) move).getCol());
-                    game.doMove(move);
-                    writer.write(index);
-                    writer.newLine();
-                    writer.flush();
-                } catch (IOException e) {
-                    e.getCause();
-                }
+        Move move = player.determineMove(game);
+        if (game.isValidMove(move)) {
+            try {
+                int row = ((OthelloMove) move).getCol();
+                int col = ((OthelloMove) move).getRow();
+                int index = row * DIM + col;
+                game.doMove(move);
+                writer.write(Protocol.move(index));
+                writer.newLine();
+                writer.flush();
+            } catch (IOException e) {
+                e.getCause();
             }
         }
     }
@@ -122,8 +127,8 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     public boolean sendMove(int index) {
         try {
             Disk currentDisk = game.getCurrentDisk();
-            int row = index / Board.DIM;
-            int col = index % Board.DIM;
+            int row = index / DIM;
+            int col = index % DIM;
             if ((index == 64 && game.getValidMoves().isEmpty()) || game.isValidMove(new OthelloMove(currentDisk, row, col))) {
                 writer.write(Protocol.move(index));
                 writer.newLine();
@@ -282,8 +287,8 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
 
     private void move(String[] splitted) {
         Disk currentDisk = game.getCurrentDisk();
-        int row = Integer.parseInt(splitted[1]) / Board.DIM;
-        int col = Integer.parseInt(splitted[1]) % Board.DIM;
+        int row = Integer.parseInt(splitted[1]) / DIM;
+        int col = Integer.parseInt(splitted[1]) % DIM;
         game.doMove(new OthelloMove(currentDisk, row, col));
         printMessage(game.toString());
         checkTurn();

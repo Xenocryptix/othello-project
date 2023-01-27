@@ -82,8 +82,7 @@ public class OthelloTUI {
         } catch (
                 UnknownHostException e) {
             System.out.println("Unknown host");
-        } catch (
-                SocketException e) {
+        } catch (SocketException e) {
             System.out.println("Socket not started");
         } catch (IOException e) {
             throw new RuntimeException(e);
