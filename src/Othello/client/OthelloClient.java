@@ -210,6 +210,9 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     @Override
     public void queue() {
         try {
+            if (player == null) {
+                return;
+            }
             writer.write(Protocol.queue());
             writer.newLine();
             writer.flush();
@@ -269,7 +272,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             if (game.getTurn() instanceof HumanPlayer) {
                 waitingMove = true;
             } else {
-                player.determineMove(game);
+                sendMoveComputerPlayer();
             }
         } else {
             printMessage("Waiting for opponent...");
