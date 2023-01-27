@@ -32,8 +32,8 @@ public class HumanPlayer extends AbstractPlayer {
         }
         while (true) {
             line = input.nextLine();
-            int row = line.charAt(0) - 65;
-            int col = line.charAt(1);
+            int col = line.charAt(0) - 65;
+            int row = line.charAt(1) - 1;
             Move move = new OthelloMove(disk, row, col);
             if (game.isValidMove(move)) {
                 return move;

@@ -3,6 +3,7 @@ package Othello.client;
 import Othello.Server.Protocol;
 import Othello.model.*;
 import Othello.players.AbstractPlayer;
+import Othello.players.HumanPlayer;
 import Othello.players.PlayerFactory;
 import Othello.players.ai.GreedyStrategy;
 import Othello.players.ai.NaiveStrategy;
@@ -20,6 +21,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     private AbstractPlayer player;
     private AbstractPlayer opponent;
     private boolean waitingMove = false;
+    private boolean inQueue = false;
     private Listener listener;
     private boolean computerPlayer = false;
 
@@ -126,7 +128,6 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                 writer.write(Protocol.move(index));
                 writer.newLine();
                 writer.flush();
-                waitingMove = false;
                 return true;
             } else if (index == 64) {
                 listener.printMessage("You still have moves left");
@@ -212,12 +213,12 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.write(Protocol.queue());
             writer.newLine();
             writer.flush();
-            //TODO: fix queue
-//            if (inQueue) {
-//                listener.printMessage("You've joined the queue");
-//            } else {
-//                listener.printMessage("You've left the queue");
-//            }
+            inQueue = !inQueue;
+            if (inQueue) {
+                listener.printMessage("Finding match...");
+            } else {
+                listener.printMessage("Left the queue");
+            }
         } catch (IOException e) {
             System.out.println("Error occurred while sending messages");
             close();
@@ -270,9 +271,12 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         printMessage(game.toString());
         if (game.getTurn().equals(player)) {
             printMessage("It's your turn!");
-            waitingMove = true;
+            if (game.getTurn() instanceof HumanPlayer) {
+                waitingMove = true;
+            }
         } else {
             printMessage("Waiting for opponent...");
+            waitingMove = false;
         }
     }
 
@@ -300,6 +304,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     }
 
     private void newgame(String[] splitted) {
+        inQueue = false;
         game = new OthelloGame();
         if (splitted[1].equals(username)) {
             opponent = new PlayerFactory().makeHumanPlayer(splitted[2]);
