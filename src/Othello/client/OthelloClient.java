@@ -28,7 +28,6 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     private boolean waitingMove = false;
     private boolean inQueue = false;
     private Listener listener;
-    private boolean computerPlayer = false;
 
     public OthelloClient(Listener listener) {
         this.listener = listener;
@@ -49,11 +48,9 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                 break;
             case "naive":
                 this.player = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
-                computerPlayer = true;
                 break;
             case "greedy":
                 this.player = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
-                computerPlayer = true;
                 break;
             default:
                 return false;
@@ -105,19 +102,10 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
 
     public void sendMoveComputerPlayer() {
         Move move = player.determineMove(game);
-        if (game.isValidMove(move)) {
-            try {
-                int row = ((OthelloMove) move).getCol();
-                int col = ((OthelloMove) move).getRow();
-                int index = row * DIM + col;
-                game.doMove(move);
-                writer.write(Protocol.move(index));
-                writer.newLine();
-                writer.flush();
-            } catch (IOException e) {
-                e.getCause();
-            }
-        }
+        int row = ((OthelloMove) move).getRow();
+        int col = ((OthelloMove) move).getCol();
+        int index = row * DIM + col;
+        sendMove(index);
     }
 
     /**
@@ -272,16 +260,17 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     }
 
     private void checkTurn() {
-        if (game.getTurn().equals(player)) {
+        if (game.getTurn().equals(opponent)) {
+            waitingMove = false;
+            printMessage("Waiting for opponent..." + opponent.getName());
+        } else {
             printMessage("It's your turn!");
             if (game.getTurn() instanceof HumanPlayer) {
                 waitingMove = true;
             } else {
+                waitingMove = true;
                 sendMoveComputerPlayer();
             }
-        } else {
-            printMessage("Waiting for opponent...");
-            waitingMove = false;
         }
     }
 
@@ -291,6 +280,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         int col = Integer.parseInt(splitted[1]) % DIM;
         game.doMove(new OthelloMove(currentDisk, row, col));
         printMessage(game.toString());
+        waitingMove = false;
         checkTurn();
     }
 
