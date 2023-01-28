@@ -1,23 +1,22 @@
-package Othello.players;
+package othello.players;
 
-import Othello.players.ai.Strategy;
-import Othello.players.ai.ComputerPlayer;
-
-import java.io.Reader;
-import java.io.Writer;
+import othello.players.ai.ComputerPlayer;
+import othello.players.ai.Strategy;
 
 /**
  * A player factory used to make human players and computer players.
  */
 public class PlayerFactory implements Factory {
     /**
-     * Creates a new instance of PlayerFactory
+     * Creates a new instance of PlayerFactory.
      */
-    public PlayerFactory(){}
+    public PlayerFactory() {
+    }
+
     /**
-     * Make a new human player
+     * Make a new human player.
      *
-     * @param name   name The name of the human player
+     * @param name name The name of the human player
      * @return The human player object
      */
     //@ requires name != null;
@@ -27,7 +26,7 @@ public class PlayerFactory implements Factory {
     }
 
     /**
-     * Make a new computer player with specified strategy
+     * Make a new computer player with specified strategy.
      *
      * @param strategy The strategy to be used
      * @return The computer player object

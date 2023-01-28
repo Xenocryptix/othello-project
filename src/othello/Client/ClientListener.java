@@ -1,4 +1,4 @@
-package Othello.client;
+package othello.Client;
 
 public class ClientListener implements Listener {
     public ClientListener() {

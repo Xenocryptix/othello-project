@@ -1,6 +1,4 @@
-package Othello.client;
-
-import Othello.Server.Protocol;
+package othello.Client;
 
 public interface ChatListener {
 //    @Override

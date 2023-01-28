@@ -1,10 +1,7 @@
-package Othello.players;
+package othello.players;
 
-import Othello.players.ai.ComputerPlayer;
-import Othello.players.ai.Strategy;
-
-import java.io.Reader;
-import java.io.Writer;
+import othello.players.ai.ComputerPlayer;
+import othello.players.ai.Strategy;
 
 /**
  * Interface factory for creating players.
@@ -12,7 +9,7 @@ import java.io.Writer;
 
 public interface Factory {
     /**
-     * Make a new human player
+     * Make a new human player.
      *
      * @param name   name
      * @return human player object
@@ -21,7 +18,7 @@ public interface Factory {
     HumanPlayer makeHumanPlayer(String name);
 
     /**
-     * Make a new computer player with specified strategy
+     * Make a new computer player with specified strategy.
      *
      * @param strategy strategy
      * @return computer player object

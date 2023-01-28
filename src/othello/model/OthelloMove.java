@@ -1,8 +1,9 @@
-package Othello.model;
+package othello.model;
 
 
 /**
- * Class that is responsible for representing an othello move, it stores the row, column and the disk of the move
+ * Class that is responsible for representing an othello move,
+ * it stores the row, column and the disk of the move.
  */
 public class OthelloMove implements Move {
     private final int row;

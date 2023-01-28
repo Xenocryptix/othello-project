@@ -1,17 +1,20 @@
-package Othello.model;
+package othello.model;
 
 import java.util.Arrays;
 
 /**
- * Represents a board for an othello game. The board is initialised with the middle being white and black
- * The class can be used to set fields on the board and flip an already set field. It also checks for winners
+ * Represents a board for an othello game. The board is initialised with
+ * the middle being white and black. The class can be used to set
+ * fields on the board and flip an already set field. It also checks for winners
  * inside the board and can reset it. Lastly, it has a toString for the presentation of the board.
  */
 public class Board {
     /*@
         public invariant ((\forall int row; row >= 0 && row < DIM;
                           (\forall int col; col >= 0 && col < DIM;
-                           fields[row][col] == Disk.WHITE || fields[row][col] == Disk.BLACK || fields[row][col] == Disk.EMPTY)));
+                           fields[row][col] == Disk.WHITE ||
+                           fields[row][col] == Disk.BLACK ||
+                           fields[row][col] == Disk.EMPTY)));
     */
     /**
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
@@ -20,7 +23,7 @@ public class Board {
     private static final String LINE = "  ---+---+---+---+---+---+---+---";
     private /*@ spec_public */ Disk[][] fields;
     /**
-     * Predefined directional array
+     * Predefined directional array.
      */
     protected static final int[][] DIRECTION_X_AND_Y = {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
@@ -31,8 +34,14 @@ public class Board {
      * Creates an empty board with the middle tiles being initialised.
      */
     /*@
-        ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
-        ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+        ensures (\forall int i; i >= 0 && i < DIM;
+        (\forall int j; j >= 0 && j<= DIM;
+        i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+
+        ensures fields[3][3] == Disk.WHITE &&
+        fields[3][4] == Disk.BLACK &&
+        fields[4][3] == Disk.BLACK &&
+        fields[4][4] == Disk.WHITE;
     */
     public Board() {
         fields = new Disk[DIM][DIM];
@@ -54,7 +63,9 @@ public class Board {
      */
     /*@
         ensures \result != this;
-        ensures (\forall int i; (i >= 0 && i < DIM); ((\forall int j; j < DIM && j >= 0; \result.fields[i][j] == this.fields[i][j]))) ;
+        ensures (\forall int i; (i >= 0 && i < DIM);
+        ((\forall int j; j < DIM && j >= 0;
+        \result.fields[i][j] == this.fields[i][j]))) ;
     */
     public Board deepCopy() {
         Disk[][] copy = Arrays.copyOf(fields, fields.length);
@@ -126,8 +137,9 @@ public class Board {
         pure
     */
     public Disk getField(int row, int col) {
-        if (!isField(row, col))
+        if (!isField(row, col)) {
             return null;
+        }
         return fields[row][col];
     }
 
@@ -199,7 +211,9 @@ public class Board {
      * @return true if all fields are occupied
      */
     /*@
-        ensures (\forall int i; i >= 0 && i < DIM; (\forall int j;j >= 0 && j < DIM ;fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
+        ensures (\forall int i; i >= 0 && i < DIM;
+        (\forall int j;j >= 0 && j < DIM ;
+        fields[i][j] == Disk.WHITE || fields[i][j] == Disk.BLACK ));
         pure
     */
     public boolean isFull() {
@@ -297,15 +311,17 @@ public class Board {
     }
 
     /**
-     * Performing the gives move, unless this move is not a valid move which is done by going through
-     * the tiles that are between the valid move given and another disk of the same color and switching
-     * the other tiles between them to the color of the given move.
+     * Performing the gives move, unless this move is not a valid move which
+     * is done by going through the tiles that are between the valid move given
+     * and another disk of the same color and switching the other tiles
+     * between them to the color of the given move.
      *
      * @param move The move to play
      */
     /*@
         requires isField(((OthelloMove) move).getRow(), ((OthelloMove) move).getCol());
-        requires ((OthelloMove) move).getDisk() == Disk.BLACK || ((OthelloMove) move).getDisk() == Disk.WHITE;
+        requires ((OthelloMove) move).getDisk() == Disk.BLACK ||
+        ((OthelloMove) move).getDisk() == Disk.WHITE;
     */
     public void flipMove(Move move) {
         int row = ((OthelloMove) move).getRow();
@@ -331,7 +347,8 @@ public class Board {
                 }
             }
             //We backtrack to the first tile, flipping all the disks in the middle
-            if (isField(directionRow, directionColumn) && getField(directionRow, directionColumn).equals(disk)) {
+            if (isField(directionRow, directionColumn) &&
+                    getField(directionRow, directionColumn).equals(disk)) {
                 directionRow -= dir[0];
                 directionColumn -= dir[1];
                 for (int i = 0; i < count; i++) {
@@ -347,8 +364,13 @@ public class Board {
      * Empties all fields of this board excepts the disks in the middle.
      */
     /*@
-        ensures (\forall int i; i >= 0 && i < DIM; (\forall int j; j >= 0 && j<= DIM; i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
-        ensures fields[3][3] == Disk.WHITE && fields[3][4] == Disk.BLACK && fields[4][3] == Disk.BLACK && fields[4][4] == Disk.WHITE;
+        ensures (\forall int i; i >= 0 && i < DIM;
+        (\forall int j; j >= 0 && j<= DIM;
+         i != 3 && j != 3 && i != 4 && j != 4 ==> fields[i][j] == Disk.EMPTY));
+        ensures fields[3][3] == Disk.WHITE &&
+        fields[3][4] == Disk.BLACK &&
+        fields[4][3] == Disk.BLACK &&
+        fields[4][4] == Disk.WHITE;
     */
     public void reset() {
         for (int i = 0; i < DIM; i++) {
@@ -400,7 +422,7 @@ public class Board {
     }
 
     /**
-     * Return the board as a viewable string to print out in the UI
+     * Return the board as a viewable string to print out in the UI.
      *
      * @return s The string containing the board for UI
      */

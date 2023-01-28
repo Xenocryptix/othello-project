@@ -1,7 +1,7 @@
-package Othello.client;
+package othello.Client;
 
-import Othello.model.Board;
-import Othello.players.HumanPlayer;
+import othello.model.Board;
+import othello.players.HumanPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,7 +51,10 @@ public class OthelloTUI {
                         if (!client.getStatus()) {
                             System.out.println("Choose wisely: Human, Naive, Greedy");
                             String character = input.readLine();
-                            client.setPlayer(character);
+                            if (!client.setPlayer(character)) {
+                                System.out.println("Please enter a valid option: " +
+                                        "Human, Naive, Greedy");
+                            }
                             client.queue();
                         } else {
                             System.out.println("You can't use this command in game!");
@@ -65,7 +68,7 @@ public class OthelloTUI {
                             if (command.equals("PASS")) {
                                 client.sendMove(64);
                             } else {
-                                int col = (command).toUpperCase().charAt(0) - 65;
+                                int col = command.toUpperCase().charAt(0) - 65;
                                 int row = Integer.parseInt(String.valueOf(command.charAt(1))) - 1;
                                 int index = row * Board.DIM + col;
                                 if (!client.sendMove(index)) {
@@ -79,8 +82,7 @@ public class OthelloTUI {
             }
             client.close();
 
-        } catch (
-                UnknownHostException e) {
+        } catch (UnknownHostException e) {
             System.out.println("Unknown host");
         } catch (SocketException e) {
             System.out.println("Socket not started");

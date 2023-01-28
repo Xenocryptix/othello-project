@@ -1,19 +1,19 @@
-package Othello.players.ai;
+package othello.players.ai;
 
-import Othello.model.Disk;
-import Othello.model.Game;
-import Othello.model.Move;
-import Othello.model.OthelloGame;
+import othello.model.Disk;
+import othello.model.Game;
+import othello.model.Move;
+import othello.model.OthelloGame;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * A naive strategy for the othello game which picks a move randomly from the valid moves
+ * A naive strategy for the othello game which picks a move randomly from the valid moves.
  */
 public class NaiveStrategy implements Strategy {
     /**
-     * Creates a new instance of NaiveStrategy
+     * Creates a new instance of NaiveStrategy.
      */
     public NaiveStrategy() {
 

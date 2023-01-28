@@ -1,6 +1,6 @@
-package Othello.model;
+package othello.model;
 
-import Othello.players.Player;
+import othello.players.Player;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface Game {
     boolean isGameover();
 
     /**
-     * Query whose turn it is
+     * Query whose turn it is.
      *
      * @return the player whose turn it is
      */
@@ -35,7 +35,7 @@ public interface Game {
     Player getWinner();
 
     /**
-     * Check if a move is a valid move
+     * Check if a move is a valid move.
      *
      * @param move the move to check
      * @return true if the move is a valid move
@@ -45,7 +45,7 @@ public interface Game {
     boolean isValidMove(Move move);
 
     /**
-     * Return all moves that are valid in the current state of the game
+     * Return all moves that are valid in the current state of the game.
      *
      * @return the list of currently valid moves
      */

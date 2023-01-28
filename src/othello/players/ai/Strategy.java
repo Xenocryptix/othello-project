@@ -1,10 +1,10 @@
-package Othello.players.ai;
+package othello.players.ai;
 
-import Othello.model.Game;
-import Othello.model.Move;
+import othello.model.Game;
+import othello.model.Move;
 
 /**
- * A strategy to be used by the computer player
+ * A strategy to be used by the computer player.
  */
 public interface Strategy {
     /**

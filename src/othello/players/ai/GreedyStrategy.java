@@ -1,21 +1,20 @@
-package Othello.players.ai;
+package othello.players.ai;
 
-import Othello.model.*;
+import othello.model.*;
 
 import java.util.List;
 
 /**
- * Represents a greedy strategy that picks the move that flips the most disks
+ * Represents a greedy strategy that picks the move that flips the most disks.
  */
 public class GreedyStrategy implements Strategy {
     /**
-     * Creates a new instance of GreedyStrategy
+     * Creates a new instance of GreedyStrategy.
      */
-    public GreedyStrategy(){}
     private static final String NAME = "GREEDY";
 
     /**
-     * Return the name of the strategy
+     * Return the name of the strategy.
      *
      * @return name
      */
@@ -26,7 +25,7 @@ public class GreedyStrategy implements Strategy {
     }
 
     /**
-     * Return the move that flips the most disks
+     * Return the move that flips the most disks.
      *
      * @param game The game for which the move should be returned
      * @return move The move with the highest number of flips
@@ -38,8 +37,9 @@ public class GreedyStrategy implements Strategy {
         Disk disk = ((OthelloGame) game).getCurrentDisk();
         List<Move> movesForDisk;
         movesForDisk = ((OthelloGame) game).getValidMoves(disk);
-        if (movesForDisk.isEmpty())
+        if (movesForDisk.isEmpty()) {
             return null;
+        }
         Move highestMove = movesForDisk.get(0);
         int highestFlips = 0;
 

@@ -1,7 +1,7 @@
-package Othello.players;
+package othello.players;
 
-import Othello.model.Game;
-import Othello.model.Move;
+import othello.model.Game;
+import othello.model.Move;
 
 /**
  * An abstract class representing a player of the game.
@@ -42,7 +42,7 @@ public abstract class AbstractPlayer implements Player {
     public abstract Move determineMove(Game game);
 
     /**
-     * Returns a representation of a player, i.e., their name
+     * Returns a representation of a player, i.e., their name.
      *
      * @return the String representation of this object
      */

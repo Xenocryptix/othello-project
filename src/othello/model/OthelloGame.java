@@ -1,18 +1,20 @@
-package Othello.model;
+package othello.model;
 
-import Othello.players.Player;
+import othello.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static Othello.model.Board.DIRECTION_X_AND_Y;
+import static othello.model.Board.DIRECTION_X_AND_Y;
 
 /**
- * A class representing and othello game which implements and interface Game. The class handles
- * the full implementation of the game. It creates a new board for the game and adds two players
- * to the game. It also generates all valid moves for a game and has a method which allows making a move
- * for the game which flips all the tiles in the middle of the two disks. IT shows the state of the game
+ * A class representing and othello game which implements and
+ * interface Game. The class handles the full implementation
+ * of the game. It creates a new board for the game and
+ * adds two players to the game. It also generates all valid
+ * moves for a game and has a method which allows making a move for the
+ * game which flips all the tiles in the middle of the two disks. IT shows the state of the game
  * using a method and the board can be reset through OthelloGame and even set to a new array
  */
 public class OthelloGame implements Game {
@@ -23,7 +25,7 @@ public class OthelloGame implements Game {
     */
 
 
-    private final List<Move> validBlack ; //Valid move for black disk
+    private final List<Move> validBlack; //Valid move for black disk
     private final List<Move> validWhite; //Valid move for white disk
     private final Board board;
     private Player player1;
@@ -46,7 +48,7 @@ public class OthelloGame implements Game {
         this.player2 = null;
         current = Disk.BLACK;
         validBlack = new ArrayList<>();
-        validWhite =  new ArrayList<>();
+        validWhite = new ArrayList<>();
         validMoves = new ArrayList<>();
         getValidMoves();
     }
@@ -94,7 +96,7 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Returns the disk that has the current turn
+     * Returns the disk that has the current turn.
      *
      * @return Current disk
      */
@@ -104,7 +106,7 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Query whose turn it is
+     * Query whose turn it is.
      *
      * @return The player whose turn it is
      */
@@ -174,8 +176,9 @@ public class OthelloGame implements Game {
 
     /**
      * Checks all 8 directions of a disc to find a move that could be valid.
-     * The check looks for lines in all 8 direction, seeing if there's a full and uninterrupted line of opposite
-     * color with an empty tile as the endpoint. This endpoint would be a possible coordinate to place in the
+     * The check looks for lines in all 8 direction, seeing if there's a full
+     * and uninterrupted line of opposite color with an empty tile as the endpoint.
+     * This endpoint would be a possible coordinate to place in the
      * tile with the same color as the starting point
      *
      * @param row  The row of the move to check valid moves for
@@ -191,25 +194,31 @@ public class OthelloGame implements Game {
             int count = 0;
             //Iterate in the chosen direction
             while (board.isField(nRow, nCol)) {
-                if (board.getField(nRow, nCol).equals(disk))
-                    //If a tile with the same color as the starting point is encountered, break immediately
+                //If a tile with the same color as the starting point is
+                // encountered, break immediately
+                if (board.getField(nRow, nCol).equals(disk)) {
                     break;
+                }
                 if (board.getField(nRow, nCol).equals(Disk.EMPTY)) {
                     /*
                         If a tile is empty, there could be 2 possible cases:
-                        There's nothing in between the starting point and the empty tile, in this case we would simply break
-                        There's at least one tile with different color in between, in this case the tile position would be a valid move
-                        After both of these, we just break and move to the next direction
-                        We check if the number of tiles in between by counting
+                        There's nothing in between the starting point and the empty tile,
+                        in this case we would simply break. There's at least one tile with
+                        different color in between, in this case the tile position
+                        would be a valid move. After both of these, we just
+                        break and move to the next direction We check if the number
+                        of tiles in between by counting
                      */
-                    if (board.getField(nRow - dir[0], nCol - dir[1]).equals(disk.other()) && count > 0) {
+                    if (board.getField(nRow - dir[0],
+                            nCol - dir[1]).equals(disk.other()) && count > 0) {
                         Move move = new OthelloMove(disk, nRow, nCol);
                         if (!isValidMove(move)) {
                             validMoves.add(move);
-                            if (disk.equals(Disk.WHITE))
+                            if (disk.equals(Disk.WHITE)) {
                                 validWhite.add(move);
-                            else
+                            } else {
                                 validBlack.add(move);
+                            }
                         }
                     }
                     break;
@@ -226,15 +235,17 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * For this method, we look for possible moves by going from each occupied tile, in all 8 direction
-     * If we managed to find a straight line of opposite color after the selected tile with the endpoint being
+     * For this method, we look for possible moves by going from
+     * each occupied tile, in all 8 direction. If we managed to
+     * find a straight line of opposite color after the selected tile with the endpoint being
      * an empty tile, that tile will be a possible move
      * For example: B W W W, then position [4] would be a possible move
      *
      * @return the list of currently valid moves
      */
     /*@
-        ensures (\forall int i; i > 0 && i < validMoves.size(); !validMoves.get(i - 1).equals(validMoves.get(i)));
+        ensures (\forall int i; i > 0 && i < validMoves.size();
+        !validMoves.get(i - 1).equals(validMoves.get(i)));
         pure;
     */
     @Override
@@ -267,14 +278,15 @@ public class OthelloGame implements Game {
     */
     public List<Move> getValidMoves(Disk disk) {
         getValidMoves();
-        if (disk.equals(Disk.BLACK))
+        if (disk.equals(Disk.BLACK)) {
             return validBlack;
-        else
+        } else {
             return validWhite;
+        }
     }
 
     /**
-     * Change turn to the opposite color
+     * Change turn to the opposite color.
      */
     //@ensures current == \old(current.other());
     public void nextTurn() {
@@ -282,8 +294,9 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Performing the gives move, unless this move is not a valid move which is done by going through
-     * the tiles that are between the valid move given and another disk of the same color and switching
+     * Performing the gives move, unless this move is not a valid move
+     * which is done by going through the tiles that are between the
+     * valid move given and another disk of the same color and switching
      * the other tiles between them to the color of the given move.
      *
      * @param move The move to play
@@ -311,7 +324,7 @@ public class OthelloGame implements Game {
 
     /**
      * Return the current state of the board as a string
-     * with a description of whose turn it is to play
+     * with a description of whose turn it is to play.
      *
      * @return The board with the player's turn
      */
@@ -321,7 +334,7 @@ public class OthelloGame implements Game {
 
 
     /**
-     * Resets the current board to the initial board by initialising the board
+     * Resets the current board to the initial board by initialising the board.
      */
     //@ ensures validMoves != \old(validMoves);
     public void reset() {
@@ -331,7 +344,7 @@ public class OthelloGame implements Game {
     }
 
     /**
-     * Creates a deep copy of the current game status
+     * Creates a deep copy of the current game status.
      *
      * @return a new board of the current game status
      */

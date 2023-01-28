@@ -1,10 +1,10 @@
-package Othello.client;
+package othello.Client;
 
 import java.net.InetAddress;
 
 public interface Client {
     /**
-     * Connect to server using the address and port number
+     * Connect to server using the address and port number.
      *
      * @param address host address
      * @param port    port number
@@ -13,12 +13,12 @@ public interface Client {
     boolean connect(InetAddress address, int port);
 
     /**
-     * Close connection to a server
+     * Close connection to a server.
      */
     void close();
 
     /**
-     * Send a move to the server
+     * Send a move to the server.
      *
      * @param index index of the move
      * @return true if success, otherwise false
@@ -26,7 +26,7 @@ public interface Client {
     boolean sendMove(int index);
 
     /**
-     * Send hello command to the server
+     * Send hello command to the server.
      *
      * @param desc description
      * @return true if success, otherwise false
@@ -34,7 +34,7 @@ public interface Client {
     boolean sendHello(String desc);
 
     /**
-     * Send the login details to the server
+     * Send the login details to the server.
      *
      * @param username the username
      * @return true if success, otherwise false
@@ -42,14 +42,14 @@ public interface Client {
     boolean sendLogin(String username);
 
     /**
-     * Sends a request to the server to send back the list of clients connected
+     * Sends a request to the server to send back the list of clients connected.
      *
      * @return true if success, otherwise false
      */
     boolean sendList();
 
     /**
-     * Sends a request to the server to join the queue
+     * Sends a request to the server to join the queue.
      *
      * @return true if success, otherwise false
      */

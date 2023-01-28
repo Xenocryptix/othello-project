@@ -1,14 +1,14 @@
-package Othello.players;
+package othello.players;
 
-import Othello.Server.Protocol;
-import Othello.model.*;
+import othello.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Class representing a human player of the game that extends an abstract class called AbstractPlayer.
+ * Class representing a human player of the game that
+ * extends an abstract class called AbstractPlayer.
  */
 public class HumanPlayer extends AbstractPlayer {
     private List<Move> allowedMoves = new ArrayList<>();

@@ -1,6 +1,5 @@
-package Othello.Server;
+package othello.Server;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class Protocol {
@@ -17,7 +16,7 @@ public final class Protocol {
     public static final String CLIENT = "Client";
 
     /**
-     * Build a new protocol description which is responsible for the handshake
+     * Build a new protocol description which is responsible for the handshake.
      *
      * @return the protocol description for handshake
      */
@@ -26,7 +25,7 @@ public final class Protocol {
     }
 
     /**
-     * Build a new protocol message which is resposible for logging in
+     * Build a new protocol message which is responsible for logging in.
      *
      * @param username The username of the client
      * @return the protocol message
@@ -36,7 +35,7 @@ public final class Protocol {
     }
 
     /**
-     * Sent by the server to a login request by a client when this username is already logged in
+     * Sent by the server to a login request by a client when this username is already logged in.
      *
      * @return the keyword alreadyloggedin
      */
@@ -45,7 +44,7 @@ public final class Protocol {
     }
 
     /**
-     * Sent bu the server to the client in respond to a LIST request.
+     * Sent by the server to the client in respond to a LIST request.
      * Formulates message including all usernames connectes to the server
      *
      * @param usernames All names of clients connected to server
@@ -64,7 +63,7 @@ public final class Protocol {
     }
 
     /**
-     * Sent by the client to the server to be added to the game queue
+     * Sent by the client to the server to be added to the game queue.
      *
      * @return the keyword queue
      */
@@ -73,7 +72,7 @@ public final class Protocol {
     }
 
     /**
-     * Builds a protocol message for starting a new game from the names of two players
+     * Builds a protocol message for starting a new game from the names of two players.
      *
      * @param player1 the name of the first player to play
      * @param player2 the name of the second player to play
@@ -84,7 +83,7 @@ public final class Protocol {
     }
 
     /**
-     * Builds a protocol message for making a move by the client
+     * Builds a protocol message for making a move by the client.
      *
      * @param move the index of the move
      * @return the protocol message for making a move
@@ -95,9 +94,10 @@ public final class Protocol {
     }
 
     /**
-     * Builds a protocol message when a game is over for the server to be sent to the client
+     * Builds a protocol message when a game is over for the server to be sent to the client.
      *
-     * @param state the state of the game accompanied by username if there was a victory or a disconnection
+     * @param state the state of the game accompanied by username
+     *              if there was a victory or a disconnection
      * @return the protocol message when a game is over
      */
     public static String gameover(String[] state) {
