@@ -102,10 +102,14 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
 
     public void sendMoveComputerPlayer() {
         Move move = player.determineMove(game);
-        int row = ((OthelloMove) move).getRow();
-        int col = ((OthelloMove) move).getCol();
-        int index = row * DIM + col;
-        sendMove(index);
+        if (move == null) {
+            sendMove(64);
+        } else {
+            int row = ((OthelloMove) move).getRow();
+            int col = ((OthelloMove) move).getCol();
+            int index = row * DIM + col;
+            sendMove(index);
+        }
     }
 
     /**
@@ -233,6 +237,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                         break;
                     case "GAMEOVER":
                         gameOver(splitted);
+                        printMessage("");
                         break;
                     case "LIST":
                         list(splitted);
