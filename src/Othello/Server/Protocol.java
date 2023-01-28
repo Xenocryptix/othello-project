@@ -1,5 +1,8 @@
 package Othello.Server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class Protocol {
     public static final String ERROR = "ERROR";
     public static final String HELLO = "HELLO";
@@ -46,16 +49,16 @@ public final class Protocol {
      * Formulates message including all usernames connectes to the server
      *
      * @param usernames All names of clients connected to server
-     * @return Protocol message containing all usernames int he server
+     * @return Protocol message containing all usernames in the server
      */
-    public static String list(String[] usernames) {
+    public static String list(List<String> usernames) {
         String list = LIST + SEPARATOR;
-        if (usernames.length > 1) {
+        if (usernames.size() > 1) {
             for (String currentUsername : usernames) {
                 list = list + currentUsername + SEPARATOR;
             }
         } else {
-            list = list + usernames[0];
+            list = list + usernames.get(0);
         }
         return list;
     }

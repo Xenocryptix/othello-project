@@ -8,5 +8,3 @@ O
 src/Othello/players/Player.java,f\4\f453912fd1632ce0f3d9b580a2021fdcd0937010
 T
 $src/Othello/players/ai/Strategy.java,a\7\a70673559c4c01dfea7cbb987b544d79a2419f04
-Z
-*src/Othello/players/ai/GreedyStrategy.java,1\0\10000b6dd034c48bcaf2955296ce26f750c4bf73

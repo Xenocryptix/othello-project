@@ -4,22 +4,24 @@ package Othello.Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class OthelloServer implements Server, Runnable {
     private final ArrayList<ClientHandler> clients;
-    private final Queue<ClientHandler> playersQueue;
+    private final Map<ClientHandler, String> players;
+    private final List<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
     private ServerSocket serverSocket;
+    private List<String> usernames;
 
     public OthelloServer(int port) {
         this.port = port;
-        clients = new ArrayList<ClientHandler>();
-        playersQueue = new PriorityQueue<>();
+        clients = new ArrayList<>();
+        playersQueue = new ArrayList<>();
         serverThread = new Thread(this);
+        usernames = new ArrayList<>();
+        players = new HashMap<>();
     }
 
     /**
@@ -81,6 +83,28 @@ public class OthelloServer implements Server, Runnable {
         playersQueue.add(handler);
     }
 
+    public void startGame() {
+        if (playersQueue.size() >= 2) {
+            ClientHandler p1 = playersQueue.remove(0);
+            ClientHandler p2 = playersQueue.remove(1);
+            String name1 = p1.getUsername();
+            String name2 = p2.getUsername();
+            p1.recieveNewGame(Protocol.newGame(name1,name2));
+            p2.recieveNewGame(Protocol.newGame(name1,name2));
+            p1.notifyAll();
+            p2.notifyAll();
+            OthelloGameThread game = new OthelloGameThread(p1, p2);
+            new Thread(game).start();
+        }
+    }
+
+    public List<String> getUsernames() {
+        return new ArrayList<>(players.values());
+    }
+
+    public void addUsername(String s, ClientHandler handler) {
+        players.put(handler, s);
+    }
 
     @Override
     public void run() {
@@ -88,17 +112,16 @@ public class OthelloServer implements Server, Runnable {
             while (isAccepting()) {
                 Socket client = serverSocket.accept();
                 ClientHandler handler = new ClientHandler(client, this);
-                addClient(handler);
                 new Thread(handler).start();
-                if (playersQueue.size() >= 2) {
-                    OthelloGameThread game = new OthelloGameThread(playersQueue.remove(), playersQueue.remove());
-                    new Thread(game).start();
-                }
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-
+    public static void main(String[] args) {
+        OthelloServer s = new OthelloServer(2222);
+        s.start();
+    }
 }
