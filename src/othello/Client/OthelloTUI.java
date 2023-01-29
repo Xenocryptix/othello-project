@@ -14,13 +14,16 @@ import java.net.UnknownHostException;
 public class OthelloTUI {
     private static String serverAddress;
     private static int port;
+    private static final String GREEN = "\033[0;32m";
+    public static final String RESET = "\033[0m";
 
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
         try {
             tui.run();
         } catch (IOException e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+            ;
         }
     }
 
@@ -42,6 +45,8 @@ public class OthelloTUI {
 
             login(input, client);
 
+            help();
+
             System.out.println("Enter a command: ");
             String command;
             while (!(command = input.readLine()).equals("quit")) {
@@ -54,6 +59,9 @@ public class OthelloTUI {
                         break;
                     case "hint":
                         client.hint();
+                        break;
+                    case "help":
+                        help();
                         break;
                     default:
                         sendMove(command, client);
@@ -126,5 +134,15 @@ public class OthelloTUI {
             }
         }
     }
+
+    private static void help() {
+        System.out.print(
+                GREEN + "Commands:\n" +
+                GREEN + "queue" + " ................. join/leave the queue \n" +
+                GREEN + "list" + "  ................. get a list of all players\n" +
+                GREEN + "hint" + "  ................. a move that can be played\n" +
+                GREEN + "help" + " .................. help (this menu)\n" + RESET );
+    }
 }
+
 
