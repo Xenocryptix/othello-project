@@ -40,28 +40,11 @@ public class OthelloTUI {
             username = input.readLine();
             client.sendLogin(username);
 
-
+            System.out.println("Enter a command: ");
             while (!(command = input.readLine()).equals("quit")) {
-                if (client.getStatus()) {
-                    System.out.println("Enter a move/command: ");
-                } else {
-                    System.out.println("Enter a command: ");
-                }
                 switch (command.toLowerCase()) {
                     case "queue":
-                        if (!client.getStatus()) {
-                            if (!client.isInQueue()) {
-                                System.out.println("Choose wisely: Human, Naive, Greedy");
-                                String character = input.readLine();
-                                if (!client.setPlayer(character)) {
-                                    System.out.println("Please enter a valid option: " +
-                                            "Human, Naive, Greedy");
-                                }
-                                client.queue();
-                            } else {
-                                System.out.println("You can't use this command in game!");
-                            }
-                        }
+                        queue(input, client);
                         break;
                     case "list":
                         client.sendList();
@@ -70,30 +53,55 @@ public class OthelloTUI {
                         client.hint();
                         break;
                     default:
-                        if (client.getStatus() && client.getPlayer() instanceof HumanPlayer) {
-                            if (command.equalsIgnoreCase("pass")) {
-                                client.sendMove(64);
-                            } else {
-                                int col = command.toUpperCase().charAt(0) - 65;
-                                int row = Integer.parseInt(String.valueOf(command.charAt(1))) - 1;
-                                int index = row * Board.DIM + col;
-                                if (!client.sendMove(index)) {
-                                    client.sendMove(index);
-                                }
-                            }
-                        } else {
-                            System.out.println("Invalid command");
-                        }
+                        sendMove(command, client);
+                }
+                if (client.inGame()) {
+                    System.out.println("Enter a move/command: ");
                 }
             }
             client.close();
 
         } catch (UnknownHostException e) {
-            System.out.println("Unknown host");
-        } catch (SocketException e) {
-            System.out.println("Socket not started");
+            System.out.println("You've entered an unknown host. Enter a valid one: ");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("You lost connection abruptly. Please fix your connection");
+        }
+    }
+
+    private static void sendMove(String command, OthelloClient client) {
+        if (client.inGame() && client.getPlayer() instanceof HumanPlayer) {
+            if (command.equalsIgnoreCase("pass")) {
+                client.sendMove(64);
+            } else {
+                int col = command.toUpperCase().charAt(0) - 65;
+                int row = Integer.parseInt(String.valueOf(command.charAt(1))) - 1;
+                int index = row * Board.DIM + col;
+                if (!client.sendMove(index)) {
+                    System.out.println("Please enter a valid move. If you want help enter: hint ");
+                    client.sendMove(index);
+                }
+            }
+        } else {
+            System.out.println("Invalid command");
+        }
+    }
+
+    private static void queue(BufferedReader input, OthelloClient client) throws IOException {
+        if (!client.inGame()) {
+            if (!client.isInQueue()) {
+                System.out.println("Choose wisely: Human, Naive, Greedy");
+                String character = input.readLine();
+                while (!client.setPlayer(character)) {
+                    System.out.println("Please enter a valid option: " +
+                            "Human, Naive, Greedy");
+                    character = input.readLine();
+                }
+                client.queue();
+                System.out.println("Finding match, hold tight...");
+            } else {
+                client.queue();
+                System.out.println("You've left the queue!");
+            }
         }
     }
 }
