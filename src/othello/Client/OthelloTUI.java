@@ -12,36 +12,38 @@ import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
 public class OthelloTUI {
-    public static void main(String[] args) throws IOException {
-        String serverAddress;
-        String username;
-        String command;
-        boolean connected;
-        int port;
+    private static String serverAddress;
+    private static int port;
+
+    public static void main(String[] args) {
+        OthelloTUI tui = new OthelloTUI();
+        try {
+            tui.run();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());;
+        }
+    }
+
+
+    public void run() throws IOException {
+
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        System.out.print("Enter a server address: ");
-        serverAddress = input.readLine();
-
-        System.out.print("Enter port number: ");
-        port = Integer.parseInt(input.readLine());
-        if (port < 0 || port > 65536) {
-            throw new PortUnreachableException("Port number entered is invalid");
-        }
+        initiate(input);
 
         Listener clientListener = new ClientListener();
         OthelloClient client = new OthelloClient(clientListener);
         try {
-            connected = client.connect(InetAddress.getByName(serverAddress), port);
+            boolean connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
                 throw new UnestablishedConnection("No connection was established");
             }
             client.sendHello("desc");
-            System.out.print("Enter username: ");
-            username = input.readLine();
-            client.sendLogin(username);
+
+            login(input, client);
 
             System.out.println("Enter a command: ");
+            String command;
             while (!(command = input.readLine()).equals("quit")) {
                 switch (command.toLowerCase()) {
                     case "queue":
@@ -71,6 +73,23 @@ public class OthelloTUI {
         }
     }
 
+    private static void initiate(BufferedReader input) throws IOException {
+        System.out.print("Enter a server address: ");
+        serverAddress = input.readLine();
+
+        System.out.print("Enter port number: ");
+        port = Integer.parseInt(input.readLine());
+        if (port < 0 || port > 65536) {
+            throw new PortUnreachableException("Port number entered is invalid");
+        }
+    }
+
+    private static void login(BufferedReader input, OthelloClient client) throws IOException {
+        System.out.print("Enter username: ");
+        String username = input.readLine();
+        client.sendLogin(username); //TODO: ALREADYLOGGEDIN
+    }
+
     private static void sendMove(String command, OthelloClient client) {
         if (client.inGame() && client.getPlayer() instanceof HumanPlayer) {
             if (command.equalsIgnoreCase("pass")) {
@@ -92,11 +111,11 @@ public class OthelloTUI {
     private static void queue(BufferedReader input, OthelloClient client) throws IOException {
         if (!client.inGame()) {
             if (!client.isInQueue()) {
-                System.out.println("Choose wisely: Human, Naive, Greedy");
+                System.out.println("Choose wisely: Human (H), Naive (N), Greedy (G)");
                 String character = input.readLine();
                 while (!client.setPlayer(character)) {
                     System.out.println("Please enter a valid option: " +
-                            "Human, Naive, Greedy");
+                            "Human (H), Naive (N), Greedy (N)");
                     character = input.readLine();
                 }
                 client.queue();

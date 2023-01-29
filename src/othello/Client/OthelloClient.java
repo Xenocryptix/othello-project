@@ -86,13 +86,13 @@ public class OthelloClient implements Client, Runnable {
 
     public boolean setPlayer(String player) {
         switch (player.toLowerCase()) {
-            case "human":
+            case "h":
                 this.player = new PlayerFactory().makeHumanPlayer(username);
                 break;
-            case "naive":
+            case "n":
                 this.player = new PlayerFactory().makeComputerPlayer(new NaiveStrategy());
                 break;
-            case "greedy":
+            case "g":
                 this.player = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
                 break;
             default:
