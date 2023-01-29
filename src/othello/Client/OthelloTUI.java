@@ -1,5 +1,6 @@
 package othello.Client;
 
+import othello.exceptions.UnestablishedConnection;
 import othello.model.Board;
 import othello.players.HumanPlayer;
 
@@ -7,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
 public class OthelloTUI {
@@ -25,7 +26,7 @@ public class OthelloTUI {
         System.out.print("Enter port number: ");
         port = Integer.parseInt(input.readLine());
         if (port < 0 || port > 65536) {
-            throw new NumberFormatException();
+            throw new PortUnreachableException("Port number entered is invalid");
         }
 
         Listener clientListener = new ClientListener();
@@ -33,7 +34,7 @@ public class OthelloTUI {
         try {
             connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
-                throw new SocketException();
+                throw new UnestablishedConnection("No connection was established");
             }
             client.sendHello("desc");
             System.out.print("Enter username: ");
@@ -62,7 +63,9 @@ public class OthelloTUI {
             client.close();
 
         } catch (UnknownHostException e) {
-            System.out.println("You've entered an unknown host. Enter a valid one: ");
+            System.out.println("You've entered an unknown host. Enter a valid one");
+        } catch (UnestablishedConnection | PortUnreachableException e) {
+            System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println("You lost connection abruptly. Please fix your connection");
         }

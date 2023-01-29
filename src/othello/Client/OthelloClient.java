@@ -25,7 +25,8 @@ import static othello.model.Board.DIM;
  * user from the TUI, perform appropriate checks, and then send the user input according to
  * the protocol to the server
  */
-public class OthelloClient extends ClientListener implements Client, Runnable {
+public class OthelloClient implements Client, Runnable {
+    private final ClientListener clientListener = new ClientListener();
     private Socket client;
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -150,10 +151,8 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                 Disk currentDisk = game.getCurrentDisk();
                 int row = index / DIM;
                 int col = index % DIM;
-                System.out.println(game.getCurrentDisk());
                 if (index == 64 && game.getValidMoves(game.getCurrentDisk()).isEmpty() ||
                         game.isValidMove(new OthelloMove(currentDisk, row, col))) {
-                    System.out.println("here 2");
                     writer.write(Protocol.move(index));
                     writer.newLine();
                     writer.flush();
@@ -164,7 +163,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             }
             return false;
         } catch (IOException e) {
-            printMessage("Error occurred while sending messages");
+            clientListener.printMessage("Error occurred while sending messages");
             close();
             return false;
         }
@@ -177,7 +176,6 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         Move move = player.determineMove(game);
         if (move == null) {
             sendMove(64);
-            System.out.println("here1");
         } else {
             int row = ((OthelloMove) move).getRow();
             int col = ((OthelloMove) move).getCol();
@@ -201,7 +199,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            printMessage("Error occurred while sending messages");
+            clientListener.printMessage("Error occurred while sending messages");
             close();
             return false;
         }
@@ -222,7 +220,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            printMessage("Error occurred while sending messages");
+            clientListener.printMessage("Error occurred while sending messages");
             close();
             return false;
         }
@@ -241,7 +239,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            printMessage("Error occurred while sending messages");
+            clientListener.printMessage("Error occurred while sending messages");
             close();
             return false;
         }
@@ -261,7 +259,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             writer.flush();
             inQueue = !inQueue;
         } catch (IOException e) {
-            printMessage("Error occurred while sending messages");
+            clientListener.printMessage("Error occurred while sending messages");
             close();
         }
     }
@@ -283,19 +281,19 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                         list(splitted);
                         break;
                     case ALREADYLOGGEDIN:
-                        printMessage("User already logged in");
+                        clientListener.printMessage("User already logged in");
                         break;
                     case HELLO:
-                        printMessage("Successfully connected to the server");
+                        clientListener.printMessage("Successfully connected to the server");
                         break;
                     case LOGIN:
-                        printMessage("Logged in successfully. Have fun playing!");
+                        clientListener.printMessage("Logged in successfully. Have fun playing!");
                         break;
                     case MOVE:
                         move(splitted);
                         break;
                     default:
-                        printMessage("Please input a valid command");
+                        clientListener.printMessage("Please input a valid command");
                         break;
                 }
             }
@@ -311,12 +309,12 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
      */
     private void checkTurn() {
         if (game.getTurn().equals(opponent)) {
-            printMessage("Waiting for " + opponent.getName() + " to play a move...");
+            clientListener.printMessage("Waiting for " + opponent.getName() + " to play a move...");
         } else {
             if (game.getTurn() instanceof HumanPlayer) {
-                printMessage("It's your turn!");
+                clientListener.printMessage("It's your turn!");
             } else {
-                printMessage("The AI is thinking...");
+                clientListener.printMessage("The AI is thinking...");
                 sendMoveComputerPlayer();
             }
         }
@@ -331,13 +329,15 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     private void move(String[] splitted) {
         int index = Integer.parseInt(splitted[1]);
         if (index == 64) {
-            game.doMove(null);
+            clientListener.printMessage(game.getTurn() + " has skipped");
+            game.nextTurn();
+        } else {
+            Disk currentDisk = game.getCurrentDisk();
+            int row = index / DIM;
+            int col = index % DIM;
+            game.doMove(new OthelloMove(currentDisk, row, col));
+            clientListener.printMessage(game.toString());
         }
-        Disk currentDisk = game.getCurrentDisk();
-        int row = index / DIM;
-        int col = index % DIM;
-        game.doMove(new OthelloMove(currentDisk, row, col));
-        printMessage(game.toString());
         checkTurn();
     }
 
@@ -348,9 +348,9 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
      * @param splitted The list of the players in the server
      */
     private void list(String[] splitted) {
-        printMessage("Current players:");
+        clientListener.printMessage("Current players:");
         for (int i = 1; i < splitted.length; i++) {
-            printMessage(splitted[i]);
+            clientListener.printMessage(splitted[i]);
         }
     }
 
@@ -363,16 +363,16 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         inGame = false;
         switch (splitted[1]) {
             case "DISCONNECT":
-                printMessage("Opponent " + splitted[2] + " lost connection");
+                clientListener.printMessage("Opponent " + splitted[2] + " lost connection");
                 break;
             case "DRAW":
-                printMessage("You have both drawn!");
+                clientListener.printMessage("You have both drawn!");
                 break;
             case "VICTORY":
                 if (splitted[2].equals(username)) {
-                    printMessage("Congrats, you won!");
+                    clientListener.printMessage("Congrats, you won!");
                 } else {
-                    printMessage("Bummer, " + opponent.getName() + " won");
+                    clientListener.printMessage("Bummer, " + opponent.getName() + " won");
                 }
                 break;
             default:
@@ -411,11 +411,11 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
             Move move = aiHelper.determineMove(game);
             if (move == null) {
-                printMessage("No moves available");
+                clientListener.printMessage("No moves available");
             } else {
                 int row = ((OthelloMove) move).getRow() + 1;
                 char col = (char) (((OthelloMove) move).getCol() + 65);
-                printMessage("You could play a move at: " + col + row);
+                clientListener.printMessage("You could play a move at: " + col + row);
             }
         }
     }

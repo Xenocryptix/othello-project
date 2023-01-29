@@ -352,4 +352,5 @@ public class OthelloGame implements Game {
     public Board deepCopy() {
         return board.deepCopy();
     }
+
 }
