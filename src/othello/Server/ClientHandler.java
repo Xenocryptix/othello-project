@@ -1,15 +1,17 @@
-package Othello.Server;
+package othello.Server;
 
 import java.io.*;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
     private final Socket client;
     private final OthelloServer server;
     private final BufferedReader reader;
     private final PrintWriter writer;
+    public static final Object LOCK = new Object();
     private String username;
     private String newGame;
+    private int currentIndex;
     public static final Object QUEUED = new Object();
 
     public ClientHandler(Socket client, OthelloServer othelloServer) {
@@ -26,8 +28,27 @@ public class ClientHandler implements Runnable{
     public String getUsername() {
         return username;
     }
+
     public void recieveNewGame(String newGame) {
         this.newGame = newGame;
+    }
+
+    public void close() {
+        try {
+            client.close();
+            writer.close();
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Close error");
+        }
+    }
+
+    public void setMove(int index) {
+        currentIndex = index;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
     }
 
     @Override
@@ -54,10 +75,12 @@ public class ClientHandler implements Runnable{
                         break;
                     case "QUEUE":
                         server.addToQueue(this);
-                        server.startGame();
-                        synchronized (this) {
+                        synchronized (LOCK) {
                             try {
-                                this.wait();
+                                while (server.getInQueue() < 2) {
+                                    LOCK.wait();
+                                }
+                                server.startGame();
                                 writer.println(newGame);
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
@@ -65,7 +88,12 @@ public class ClientHandler implements Runnable{
                         }
                         break;
                     case "MOVE":
-
+                        if (Integer.parseInt(splitted[1]) < 0 ||
+                                Integer.parseInt(splitted[1]) > 64) {
+                            close();
+                        }
+                        setMove(Integer.parseInt(splitted[1]));
+                        writer.println(Protocol.move(getCurrentIndex()));
                 }
             }
         } catch (IOException e) {

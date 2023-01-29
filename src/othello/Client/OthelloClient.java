@@ -58,12 +58,21 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     }
 
     /**
-     * Reurns the current player associated with the client.
+     * Returns the current player associated with the client.
      *
      * @return the current player
      */
     public AbstractPlayer getPlayer() {
         return player;
+    }
+
+    /**
+     * Query if the user in the queue or not.
+     *
+     * @return true if yes, else false
+     */
+    public boolean isInQueue() {
+        return inQueue;
     }
 
     /**
@@ -73,6 +82,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
      * @param player the input by the user to select what kind of player he wants to be
      * @return true, if option chosen by the user is available, otherwise false
      */
+
     public boolean setPlayer(String player) {
         switch (player.toLowerCase()) {
             case "human":
@@ -135,19 +145,21 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
     @Override
     public boolean sendMove(int index) {
         try {
-            Disk currentDisk = game.getCurrentDisk();
-            int row = index / DIM;
-            int col = index % DIM;
-            if (index == 64 && game.getValidMoves().isEmpty() ||
-                    game.isValidMove(new OthelloMove(currentDisk, row, col))) {
-                writer.write(Protocol.move(index));
-                writer.newLine();
-                writer.flush();
-                return true;
-            } else if (index == 64) {
-                listener.printMessage("You still have moves left");
-            } else {
-                listener.printMessage("Illegal move! Please input another move: ");
+            if (!game.isGameover()) {
+                Disk currentDisk = game.getCurrentDisk();
+                int row = index / DIM;
+                int col = index % DIM;
+                if (index == 64 && game.getValidMoves().isEmpty() ||
+                        game.isValidMove(new OthelloMove(currentDisk, row, col))) {
+                    writer.write(Protocol.move(index));
+                    writer.newLine();
+                    writer.flush();
+                    return true;
+                } else if (index == 64 && !game.getValidMoves().isEmpty()) {
+                    listener.printMessage("You still have moves left");
+                } else {
+                    listener.printMessage("Illegal move! Please input another move: ");
+                }
             }
             return false;
         } catch (IOException e) {
@@ -265,11 +277,10 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
                 String[] splitted = command.split(Protocol.SEPARATOR);
                 switch (splitted[0]) {
                     case NEWGAME:
-                        newgame(splitted);
+                        newGame(splitted);
                         break;
                     case GAMEOVER:
                         gameOver(splitted);
-                        printMessage("");
                         break;
                     case LIST:
                         list(splitted);
@@ -306,10 +317,11 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
             waitingMove = false;
             printMessage("Waiting for " + opponent.getName() + " to play a move...");
         } else {
-            printMessage("It's your turn!");
             if (game.getTurn() instanceof HumanPlayer) {
+                printMessage("It's your turn!");
                 waitingMove = true;
             } else {
+                printMessage("The AI is thinking...");
                 waitingMove = true;
                 sendMoveComputerPlayer();
             }
@@ -323,10 +335,15 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
      * @param splitted The array including the move to be performed
      */
     private void move(String[] splitted) {
+        int index = Integer.parseInt(splitted[1]);
         Disk currentDisk = game.getCurrentDisk();
-        int row = Integer.parseInt(splitted[1]) / DIM;
-        int col = Integer.parseInt(splitted[1]) % DIM;
-        game.doMove(new OthelloMove(currentDisk, row, col));
+        if (index == 64) {
+            System.out.println("here");
+        } else {
+            int row = index / DIM;
+            int col = index % DIM;
+            game.doMove(new OthelloMove(currentDisk, row, col));
+        }
         printMessage(game.toString());
         waitingMove = false;
         checkTurn();
@@ -375,7 +392,7 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
      *
      * @param splitted The list containing the names of the players in the new game
      */
-    private void newgame(String[] splitted) {
+    private void newGame(String[] splitted) {
         inQueue = false;
         game = new OthelloGame();
         if (splitted[1].equals(username)) {
@@ -389,5 +406,15 @@ public class OthelloClient extends ClientListener implements Client, Runnable {
         }
         listener.printMessage(game.toString());
         checkTurn();
+    }
+
+    public void hint() {
+        if (player instanceof HumanPlayer) {
+            AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
+            Move move = aiHelper.determineMove(game);
+            int row = ((OthelloMove) move).getRow() + 1;
+            char col = (char) (((OthelloMove) move).getCol() + 65);
+            printMessage("You could player a move at: " + col + row);
+        }
     }
 }

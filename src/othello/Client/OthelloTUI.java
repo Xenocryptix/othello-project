@@ -27,6 +27,7 @@ public class OthelloTUI {
         if (port < 0 || port > 65536) {
             throw new NumberFormatException();
         }
+
         Listener clientListener = new ClientListener();
         OthelloClient client = new OthelloClient(clientListener);
         try {
@@ -49,23 +50,28 @@ public class OthelloTUI {
                 switch (command.toLowerCase()) {
                     case "queue":
                         if (!client.getStatus()) {
-                            System.out.println("Choose wisely: Human, Naive, Greedy");
-                            String character = input.readLine();
-                            if (!client.setPlayer(character)) {
-                                System.out.println("Please enter a valid option: " +
-                                        "Human, Naive, Greedy");
+                            if (!client.isInQueue()) {
+                                System.out.println("Choose wisely: Human, Naive, Greedy");
+                                String character = input.readLine();
+                                if (!client.setPlayer(character)) {
+                                    System.out.println("Please enter a valid option: " +
+                                            "Human, Naive, Greedy");
+                                }
+                                client.queue();
+                            } else {
+                                System.out.println("You can't use this command in game!");
                             }
-                            client.queue();
-                        } else {
-                            System.out.println("You can't use this command in game!");
                         }
                         break;
                     case "list":
                         client.sendList();
                         break;
+                    case "hint":
+                        client.hint();
+                        break;
                     default:
                         if (client.getStatus() && client.getPlayer() instanceof HumanPlayer) {
-                            if (command.equals("PASS")) {
+                            if (command.equalsIgnoreCase("pass")) {
                                 client.sendMove(64);
                             } else {
                                 int col = command.toUpperCase().charAt(0) - 65;
