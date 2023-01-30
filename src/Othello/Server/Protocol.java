@@ -20,7 +20,7 @@ public final class Protocol {
      *
      * @return the protocol description for handshake
      */
-    public static String handshake(String username) {
+    public static String handshake(String description) {//TODO
         return HELLO + SEPARATOR + CLIENT;
     }
 

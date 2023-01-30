@@ -14,7 +14,6 @@ public class ClientHandler implements Runnable {
     private String username;
     private String newGame;
     private int currentIndex;
-    private boolean move = false;
     public final static Object GAMELOCK = new Object();
 
     public ClientHandler(Socket client, OthelloServer othelloServer) {
@@ -46,26 +45,20 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public boolean setMove(int index) {
+    public void setMove(int index) {
         synchronized (GAMELOCK) {
             currentIndex = index;
             GAMELOCK.notifyAll();
-            move = true;
-            return move;
+            server.playMove(index, this);
         }
     }
+
     public void sendMove(int index) {
-        synchronized (GAMELOCK) {
-            while (!move) {
-                try {
-                    GAMELOCK.wait();
-                } catch (InterruptedException e){
-                    e.getMessage();
-                }
-            }
-            move = false;
-            writer.println(Protocol.move(index));
-        }
+        writer.println(Protocol.move(index));
+    }
+
+    public void sendMessage(String message) {
+        writer.println(message);
     }
 
     public int getCurrentIndex() {
