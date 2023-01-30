@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.Executor;
 
 public class OthelloServer implements Server, Runnable {
     private final ArrayList<ClientHandler> clients;
@@ -82,16 +83,18 @@ public class OthelloServer implements Server, Runnable {
         clients.add(handler);
     }
 
-    public synchronized void addToQueue(ClientHandler handler) {
-        playersQueue.add(handler);
-        inQueue++;
+    public void addToQueue(ClientHandler handler) {
+        synchronized (playersQueue) {
+            playersQueue.add(handler);
+            inQueue++;
+        }
     }
 
     public void startGame() {
         synchronized (playersQueue) {
             if (playersQueue.size() >= 2) {
-                ClientHandler p1 = playersQueue.get(0);
-                ClientHandler p2 = playersQueue.get(1);
+                ClientHandler p1 = playersQueue.remove(0);
+                ClientHandler p2 = playersQueue.remove(0);
                 String name1 = p1.getUsername();
                 String name2 = p2.getUsername();
                 p1.recieveNewGame(Protocol.newGame(name1, name2));
@@ -104,15 +107,21 @@ public class OthelloServer implements Server, Runnable {
     }
 
     public int getInQueue() {
-        return inQueue;
+        synchronized (playersQueue) {
+            return inQueue;
+        }
     }
 
     public List<String> getUsernames() {
-        return new ArrayList<>(players.values());
+        synchronized (players) {
+            return new ArrayList<>(players.values());
+        }
     }
 
     public void addUsername(String s, ClientHandler handler) {
-        players.put(handler, s);
+        synchronized (players) {
+            players.put(handler, s);
+        }
     }
 
     @Override
@@ -122,7 +131,6 @@ public class OthelloServer implements Server, Runnable {
                 Socket client = serverSocket.accept();
                 ClientHandler handler = new ClientHandler(client, this);
                 new Thread(handler).start();
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

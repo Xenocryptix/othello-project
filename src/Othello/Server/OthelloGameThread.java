@@ -30,28 +30,39 @@ public class OthelloGameThread implements Runnable {
     }
 
     public ClientHandler getTrun() {
-        if (((HumanPlayer) game.getTurn()).getName().equals(player1Name)) {
-            return players.get(0);
-        } else {
-            return players.get(1);
+        synchronized (game) {
+            if (((HumanPlayer) game.getTurn()).getName().equals(player1Name)) {
+                return players.get(0);
+            } else {
+                return players.get(1);
+            }
         }
     }
 
     @Override
     public void run() {
-        while (!game.isGameover()) {
-            int row;
-            int col;
-            if (getTrun().equals(players.get(0))) {
-                row = players.get(0).getCurrentIndex() / Board.DIM;
-                col = players.get(0).getCurrentIndex() % Board.DIM;
-                game.doMove(new OthelloMove(Disk.BLACK, row, col));
-                players.get(1).setMove(players.get(0).getCurrentIndex());
-            } else {
-                row = players.get(1).getCurrentIndex() / Board.DIM;
-                col = players.get(1).getCurrentIndex() % Board.DIM;
-                game.doMove(new OthelloMove(Disk.WHITE, row, col));
-                players.get(0).setMove(players.get(1).getCurrentIndex());
+        synchronized (game) {
+            while (!game.isGameover()) {
+                int row;
+                int col;
+                if (getTrun().equals(players.get(0))) {
+                    row = players.get(0).getCurrentIndex() / Board.DIM;
+                    col = players.get(0).getCurrentIndex() % Board.DIM;
+                    game.doMove(new OthelloMove(Disk.BLACK, row, col));
+                    players.get(1).setMove(players.get(0).getCurrentIndex());
+
+                    players.get(0).sendMove(players.get(0).getCurrentIndex());
+                    players.get(1).sendMove(players.get(0).getCurrentIndex());
+
+                } else {
+                    row = players.get(1).getCurrentIndex() / Board.DIM;
+                    col = players.get(1).getCurrentIndex() % Board.DIM;
+                    game.doMove(new OthelloMove(Disk.WHITE, row, col));
+                    players.get(0).setMove(players.get(1).getCurrentIndex());
+
+                    players.get(1).sendMove(players.get(1).getCurrentIndex());
+                    players.get(0).sendMove(players.get(1).getCurrentIndex());
+                }
             }
         }
     }

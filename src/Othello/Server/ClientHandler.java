@@ -3,6 +3,8 @@ package Othello.Server;
 import java.io.*;
 import java.net.Socket;
 
+import static Othello.Server.Protocol.*;
+
 public class ClientHandler implements Runnable {
     private final Socket client;
     private final OthelloServer server;
@@ -12,7 +14,8 @@ public class ClientHandler implements Runnable {
     private String username;
     private String newGame;
     private int currentIndex;
-    public static final Object QUEUED = new Object();
+    private boolean move = false;
+    public final static Object GAMELOCK = new Object();
 
     public ClientHandler(Socket client, OthelloServer othelloServer) {
         this.client = client;
@@ -43,12 +46,32 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void setMove(int index) {
-        currentIndex = index;
+    public boolean setMove(int index) {
+        synchronized (GAMELOCK) {
+            currentIndex = index;
+            GAMELOCK.notifyAll();
+            move = true;
+            return move;
+        }
+    }
+    public void sendMove(int index) {
+        synchronized (GAMELOCK) {
+            while (!move) {
+                try {
+                    GAMELOCK.wait();
+                } catch (InterruptedException e){
+                    e.getMessage();
+                }
+            }
+            move = false;
+            writer.println(Protocol.move(index));
+        }
     }
 
     public int getCurrentIndex() {
-        return currentIndex;
+        synchronized (this) {
+            return currentIndex;
+        }
     }
 
     @Override
@@ -58,10 +81,10 @@ public class ClientHandler implements Runnable {
             while ((command = reader.readLine()) != null) {
                 String[] splitted = command.split(Protocol.SEPARATOR);
                 switch (splitted[0]) {
-                    case "HELLO":
+                    case HELLO:
                         writer.println(Protocol.handshake("Welcome"));
                         break;
-                    case "LOGIN":
+                    case LOGIN:
                         if (server.getUsernames().contains(splitted[1])) {
                             writer.println(Protocol.ALREADYLOGGEDIN);
                         } else {
@@ -70,10 +93,10 @@ public class ClientHandler implements Runnable {
                             writer.println(Protocol.LOGIN);
                         }
                         break;
-                    case "LIST":
+                    case LIST:
                         writer.println(Protocol.list(server.getUsernames()));
                         break;
-                    case "QUEUE":
+                    case QUEUE:
                         server.addToQueue(this);
                         synchronized (LOCK) {
                             try {
@@ -87,13 +110,12 @@ public class ClientHandler implements Runnable {
                             }
                         }
                         break;
-                    case "MOVE":
+                    case MOVE:
                         if (Integer.parseInt(splitted[1]) < 0 ||
                                 Integer.parseInt(splitted[1]) > 64) {
                             close();
                         }
                         setMove(Integer.parseInt(splitted[1]));
-                        writer.println(Protocol.move(getCurrentIndex()));
                 }
             }
         } catch (IOException e) {

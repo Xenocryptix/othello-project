@@ -40,6 +40,15 @@ public class GreedyStrategy implements Strategy {
         if (movesForDisk.isEmpty()) {
             return null;
         }
+        if (movesForDisk.contains(new OthelloMove(disk, 0, 0))) {
+            return new OthelloMove(disk, 0, 0);
+        } else if (movesForDisk.contains(new OthelloMove(disk, 0, 7))) {
+            return new OthelloMove(disk, 0, 7);
+        } else if (movesForDisk.contains(new OthelloMove(disk, 7, 7))) {
+            return new OthelloMove(disk, 7, 7);
+        } else if (movesForDisk.contains(new OthelloMove(disk, 7, 0))) {
+            return new OthelloMove(disk, 7, 0);
+        }
         Move highestMove = movesForDisk.get(0);
         int highestFlips = 0;
 
