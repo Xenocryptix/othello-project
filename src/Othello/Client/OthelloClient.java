@@ -417,15 +417,21 @@ public class OthelloClient implements Client, Runnable {
 
     public void hint() {
         if (player instanceof HumanPlayer) {
-            AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
-            Move move = aiHelper.determineMove(game);
-            if (move == null) {
-                clientListener.printMessage("No moves available");
+            if (checkTurn()) {
+                AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
+                Move move = aiHelper.determineMove(game);
+                if (move == null) {
+                    clientListener.printMessage("No moves available");
+                } else {
+                    int row = ((OthelloMove) move).getRow() + 1;
+                    char col = (char) (((OthelloMove) move).getCol() + 65);
+                    clientListener.printMessage("You could play a move at: " + col + row);
+                }
             } else {
-                int row = ((OthelloMove) move).getRow() + 1;
-                char col = (char) (((OthelloMove) move).getCol() + 65);
-                clientListener.printMessage("You could play a move at: " + col + row);
+                clientListener.printMessage("You can only use hint in your turn");
             }
+        } else {
+            clientListener.printMessage("Bots don't need hints");
         }
     }
 }

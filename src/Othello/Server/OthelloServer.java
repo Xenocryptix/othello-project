@@ -12,6 +12,7 @@ public class OthelloServer implements Server, Runnable {
     private final List<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
+    private final Thread matchThread;
     private ServerSocket serverSocket;
     private int inQueue;
 
@@ -20,6 +21,7 @@ public class OthelloServer implements Server, Runnable {
         this.port = port;
         playersQueue = new ArrayList<>();
         serverThread = new Thread(this);
+        matchThread = new Thread(new Matchmaking(this));
         players = new HashMap<>();
         sessions = new HashMap<>();
         inQueue = 0;
@@ -36,6 +38,7 @@ public class OthelloServer implements Server, Runnable {
         try {
             serverSocket = new ServerSocket(port);
             serverThread.start();
+            matchThread.start();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -51,6 +54,10 @@ public class OthelloServer implements Server, Runnable {
     @Override
     public int getPort() {
         return serverSocket.getLocalPort();
+    }
+
+    public List<ClientHandler> getQueue() {
+        return playersQueue;
     }
 
     /**
@@ -125,7 +132,6 @@ public class OthelloServer implements Server, Runnable {
                 String name2 = p2.getUsername();
                 p1.recieveNewGame(Protocol.newGame(name1, name2));
                 p2.recieveNewGame(Protocol.newGame(name1, name2));
-                ClientHandler.LOCK.notifyAll();
 
                 OthelloGameThread game = new OthelloGameThread(p1, p2, this);
                 sessions.put(players, game);
