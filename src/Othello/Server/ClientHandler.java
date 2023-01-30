@@ -37,6 +37,7 @@ public class ClientHandler implements Runnable {
 
     public void close() {
         try {
+            server.removeClient(this);
             client.close();
             writer.close();
             reader.close();

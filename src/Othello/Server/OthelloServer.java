@@ -25,7 +25,6 @@ public class OthelloServer implements Server, Runnable {
         clients = new ArrayList<>();
         playersQueue = new ArrayDeque<>();
         serverThread = new Thread(this);
-        usernames = new ArrayList<>();
         players = new HashMap<>();
         sessions = new HashMap<>();
     }
@@ -85,6 +84,7 @@ public class OthelloServer implements Server, Runnable {
 
     public synchronized void addClient(ClientHandler handler) {
         clients.add(handler);
+        players.put(handler, handler.getUsername());
     }
 
     public void addToQueue(ClientHandler handler) {
@@ -97,6 +97,23 @@ public class OthelloServer implements Server, Runnable {
                 inQueue--;
             }
         }
+    }
+
+    public void removeQueue(ClientHandler handler) {
+        synchronized (playersQueue) {
+            playersQueue.remove(handler);
+            inQueue--;
+        }
+    }
+
+    public void removeClient(ClientHandler handler) {
+        clients.remove(handler);
+        players.remove(handler);
+    }
+
+    public void endSession(List<ClientHandler> players) {
+
+        sessions.remove(players);
     }
 
     public void startGame() {
