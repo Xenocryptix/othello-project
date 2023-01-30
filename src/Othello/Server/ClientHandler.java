@@ -28,8 +28,8 @@ public class ClientHandler implements Runnable {
         return username;
     }
 
-    public void recieveNewGame(String newGame) {
-        writer.println(newGame);
+    public void sendNewGame(String message) {
+        writer.println(message);
     }
 
     public void close() {

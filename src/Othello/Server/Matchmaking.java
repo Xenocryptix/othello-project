@@ -1,21 +1,16 @@
 package Othello.Server;
 
-import Othello.Server.ClientHandler;
-import Othello.Server.OthelloServer;
-import Othello.Server.Server;
-
-import java.util.List;
+import java.util.Queue;
 
 public class Matchmaking implements Runnable {
-    private List<ClientHandler> queue;
-    private OthelloServer server;
+    private final OthelloServer server;
     public Matchmaking(OthelloServer server) {
         this.server = server;
     }
     @Override
     public void run() {
         while (server.isAccepting()) {
-            queue = server.getQueue();
+            Queue<ClientHandler> queue = server.getQueue();
             if (server.getInQueue() >= 2) {
                 server.startGame();
             }

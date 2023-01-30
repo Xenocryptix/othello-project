@@ -378,10 +378,11 @@ public class OthelloClient implements Client, Runnable {
                 clientListener.printMessage("You have both drawn!");
                 break;
             case "VICTORY":
+                clientListener.printMessage(splitted[2] + " won!\n");
                 if (splitted[2].equals(username)) {
-                    clientListener.printMessage("Congrats, you won!");
+                    clientListener.printMessage("Congrats!");
                 } else {
-                    clientListener.printMessage("Bummer, " + opponent.getName() + " won. Haha skill issue");
+                    clientListener.printMessage("Don't worry, sometimes your opponent has good gaming chair");
                 }
                 break;
             default:
