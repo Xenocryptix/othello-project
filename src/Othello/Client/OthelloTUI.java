@@ -1,8 +1,9 @@
 package Othello.Client;
 
-import Othello.exceptions.UnestablishedConnection;
+import Othello.exceptions.*;
 import Othello.model.Board;
 import Othello.players.HumanPlayer;
+import Othello.players.ai.ComputerPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +24,6 @@ public class OthelloTUI {
             tui.run();
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            ;
         }
     }
 
@@ -39,7 +39,7 @@ public class OthelloTUI {
         try {
             boolean connected = client.connect(InetAddress.getByName(serverAddress), port);
             if (!connected) {
-                throw new UnestablishedConnection("No connection was established");
+                throw new UnestablishedConnection();
             }
             client.sendHello("desc");
 
@@ -64,16 +64,20 @@ public class OthelloTUI {
                         help();
                         break;
                     default:
-                        sendMove(command, client);
+                        if (client.inGame()) {
+                            sendMove(command, client);
+                        } else {
+                            System.out.println("Unknown command.\nFor available commands, type HELP");
+                        }
                 }
-                if (client.inGame()) {
+                if (client.inGame() && client.checkTurn()) {
                     System.out.println("Enter a move/command: ");
                 }
             }
             client.close();
 
         } catch (UnknownHostException e) {
-            System.out.println("You've entered an unknown host. Enter a valid one");
+            System.out.println("Host unknown. There may be a typo in your address, or the server is closed");
         } catch (UnestablishedConnection | PortUnreachableException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
@@ -88,31 +92,39 @@ public class OthelloTUI {
         System.out.print("Enter port number: ");
         port = Integer.parseInt(input.readLine());
         if (port < 0 || port > 65536) {
-            throw new PortUnreachableException("Port number entered is invalid");
+            throw new PortUnreachableException("The specified port is invalid or unavailable");
         }
     }
 
     private static void login(BufferedReader input, OthelloClient client) throws IOException {
         System.out.print("Enter username: ");
         String username = input.readLine();
-        client.sendLogin(username); //TODO: ALREADYLOGGEDIN
+        client.sendLogin(username);
     }
 
     private static void sendMove(String command, OthelloClient client) {
-        if (client.inGame() && client.getPlayer() instanceof HumanPlayer) {
+        if (client.getPlayer() instanceof HumanPlayer) {
             if (command.equalsIgnoreCase("pass")) {
                 client.sendMove(64);
-            } else {
+            } else if (Character.isAlphabetic(command.charAt(0)) && Character.isDigit(command.charAt(1))) {
                 int col = command.toUpperCase().charAt(0) - 65;
                 int row = Integer.parseInt(String.valueOf(command.charAt(1))) - 1;
                 int index = row * Board.DIM + col;
-                if (!client.sendMove(index)) {
-                    System.out.println("Please enter a valid move. If you want help enter: hint ");
+                if (!client.checkTurn()) {
+                    System.out.println("It's not your turn yet. Please wait");
+                } else if (!client.sendMove(index)) {
+                    System.out.println("This is not a legal move. Please enter a valid move\n" +
+                            "You can type HINT if you're unsure of where to move");
+                } else {
                     client.sendMove(index);
                 }
+            } else {
+                System.out.println("Unknown command or invalid move format.\n" +
+                        "Your move should be in the format of a letter followed by a number\n" +
+                        "For available commands, type HELP");
             }
-        } else {
-            System.out.println("Invalid command");
+        } else if (client.getPlayer() instanceof ComputerPlayer) {
+            System.out.println("You can not move while playing as a bot!");
         }
     }
 
@@ -123,7 +135,7 @@ public class OthelloTUI {
                 String character = input.readLine();
                 while (!client.setPlayer(character)) {
                     System.out.println("Please enter a valid option: " +
-                            "Human (H), Naive (N), Greedy (N)");
+                            "Human (H), Naive (N), Greedy (G)");
                     character = input.readLine();
                 }
                 client.queue();

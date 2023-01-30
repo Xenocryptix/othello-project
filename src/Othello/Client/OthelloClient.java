@@ -281,7 +281,7 @@ public class OthelloClient implements Client, Runnable {
                         list(splitted);
                         break;
                     case ALREADYLOGGEDIN:
-                        clientListener.printMessage("User already logged in");
+                        clientListener.printMessage("This user is already connected to the server. Please choose a different username");
                         break;
                     case HELLO:
                         clientListener.printMessage("Successfully connected to the server");
@@ -303,16 +303,25 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Checks whose turn is it. If it is the players turn then it checks whether the player
+     * Checks whose turn is it.
+     *
+     * @return true if it's your turn, otherwise false
+     */
+    public boolean checkTurn() {
+        return game.getTurn().equals(player);
+    }
+
+    /**
+     * Print the message based on current turn. If it is the players turn then it checks whether the player
      * is playing as an AI, or human player and then does a move accordingly. IF it is not,
      * then it waits for the opponent's move.
      */
-    private void checkTurn() {
-        if (game.getTurn().equals(opponent)) {
+    private void printTurn() {
+        if (!checkTurn()) {
             clientListener.printMessage("Waiting for " + opponent.getName() + " to play a move...");
         } else {
             if (game.getTurn() instanceof HumanPlayer) {
-                clientListener.printMessage("It's your turn!");
+                clientListener.printMessage("It's your turn! Enter a move below");
             } else {
                 clientListener.printMessage("The AI is thinking...");
                 sendMoveComputerPlayer();
@@ -338,7 +347,7 @@ public class OthelloClient implements Client, Runnable {
             game.doMove(new OthelloMove(currentDisk, row, col));
             clientListener.printMessage(game.toString());
         }
-        checkTurn();
+        printTurn();
     }
 
     /**
@@ -363,7 +372,7 @@ public class OthelloClient implements Client, Runnable {
         inGame = false;
         switch (splitted[1]) {
             case "DISCONNECT":
-                clientListener.printMessage("Opponent " + splitted[2] + " lost connection");
+                clientListener.printMessage("Opponent " + opponent.getName() + " lost connection");
                 break;
             case "DRAW":
                 clientListener.printMessage("You have both drawn!");
@@ -372,7 +381,7 @@ public class OthelloClient implements Client, Runnable {
                 if (splitted[2].equals(username)) {
                     clientListener.printMessage("Congrats, you won!");
                 } else {
-                    clientListener.printMessage("Bummer, " + opponent.getName() + " won");
+                    clientListener.printMessage("Bummer, " + opponent.getName() + " won. Haha skill issue");
                 }
                 break;
             default:
@@ -403,7 +412,7 @@ public class OthelloClient implements Client, Runnable {
             game.setPlayer2(player);
         }
         listener.printMessage(game.toString());
-        checkTurn();
+        printTurn();
     }
 
     public void hint() {
