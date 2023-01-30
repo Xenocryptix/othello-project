@@ -10,23 +10,20 @@ public class OthelloServer implements Server, Runnable {
     private final ArrayList<ClientHandler> clients;
     private final Map<ClientHandler, String> players;
     private final Map<List<ClientHandler>, OthelloGameThread> sessions;
-    private final Queue<ClientHandler> playersQueue;
+    private final List<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
     private ServerSocket serverSocket;
-    private List<String> usernames;
-    private final List<OthelloGameThread> games;
     private int inQueue;
 
 
     public OthelloServer(int port) {
         this.port = port;
-        this.games = new ArrayList<>();
-        clients = new ArrayList<>();
-        playersQueue = new ArrayDeque<>();
+        playersQueue = new ArrayList<>();
         serverThread = new Thread(this);
         players = new HashMap<>();
         sessions = new HashMap<>();
+        inQueue = 0;
     }
 
     /**
@@ -82,9 +79,10 @@ public class OthelloServer implements Server, Runnable {
     }
 
 
-    public synchronized void addClient(ClientHandler handler) {
-        clients.add(handler);
-        players.put(handler, handler.getUsername());
+    public void addClient(ClientHandler handler) {
+        synchronized (players) {
+            players.put(handler, handler.getUsername());
+        }
     }
 
     public void addToQueue(ClientHandler handler) {
@@ -107,8 +105,9 @@ public class OthelloServer implements Server, Runnable {
     }
 
     public void removeClient(ClientHandler handler) {
-        clients.remove(handler);
-        players.remove(handler);
+        synchronized (players) {
+            players.remove(handler);
+        }
     }
 
     public void endSession(List<ClientHandler> players) {
@@ -118,9 +117,9 @@ public class OthelloServer implements Server, Runnable {
 
     public void startGame() {
         synchronized (playersQueue) {
-            if (playersQueue.size() >= 2) {
-                ClientHandler p1 = playersQueue.remove();
-                ClientHandler p2 = playersQueue.remove();
+            if (getInQueue() >= 2) {
+                ClientHandler p1 = playersQueue.remove(0);
+                ClientHandler p2 = playersQueue.remove(0);
                 List<ClientHandler> players = new ArrayList<>();
                 players.add(p1);
                 players.add(p2);
@@ -179,18 +178,13 @@ public class OthelloServer implements Server, Runnable {
     }
 
     public void playMove(int index, ClientHandler clientHandler) {
-        synchronized (games) {
-            for (List<ClientHandler> ch : sessions.keySet()) {
-                if (ch.contains(clientHandler)) {
-                    OthelloGameThread currentGame = sessions.get(ch);
-                    if (!currentGame.doMove(index)) {
-                        clientHandler.close();
-                    }
+        for (List<ClientHandler> ch : sessions.keySet()) {
+            if (ch.contains(clientHandler)) {
+                OthelloGameThread currentGame = sessions.get(ch);
+                if (!currentGame.doMove(index)) {
+                    clientHandler.close();
                 }
             }
         }
-    }
-    public void removeFromSession(List<ClientHandler> clientHandlers) {
-        sessions.remove(clientHandlers);
     }
 }

@@ -15,9 +15,11 @@ public class OthelloGameThread implements Runnable {
     private final String player1Name;
     private final String player2Name;
     private final OthelloGame game;
+    private final OthelloServer server;
 
 
-    public OthelloGameThread(ClientHandler player1, ClientHandler player2) {
+    public OthelloGameThread(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) {
+        server = othelloServer;
         game = new OthelloGame();
         players = new ArrayList<>(2);
         players.add(player1);
@@ -63,7 +65,7 @@ public class OthelloGameThread implements Runnable {
         }
     }
 
-    public boolean checkOver() {
+    public void checkOver() {
         if (game.isGameover()) {
             String message;
             if (game.getWinner() != null) {
@@ -73,8 +75,8 @@ public class OthelloGameThread implements Runnable {
             }
             players.get(0).sendMessage(message);
             players.get(1).sendMessage(message);
-            return true;
+            server.endGame(this);
         }
-        return false;
     }
+
 }
