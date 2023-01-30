@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void recieveNewGame(String newGame) {
-        this.newGame = newGame;
+        writer.println(newGame);
     }
 
     public void close() {

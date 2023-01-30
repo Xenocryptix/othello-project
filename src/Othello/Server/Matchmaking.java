@@ -16,7 +16,7 @@ public class Matchmaking implements Runnable {
     public void run() {
         while (server.isAccepting()) {
             queue = server.getQueue();
-            if (server.getInQueue() > 1) {
+            if (server.getInQueue() >= 2) {
                 server.startGame();
             }
         }

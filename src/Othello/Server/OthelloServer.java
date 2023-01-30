@@ -9,7 +9,7 @@ import java.util.*;
 public class OthelloServer implements Server, Runnable {
     private final Map<ClientHandler, String> players;
     private final Map<List<ClientHandler>, OthelloGameThread> sessions;
-    private final List<ClientHandler> playersQueue;
+    private static List<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
     private final Thread matchThread;
@@ -114,7 +114,6 @@ public class OthelloServer implements Server, Runnable {
         for (List<ClientHandler> ch : sessions.keySet()) {
             if (sessions.get(ch).equals(gameThread)) {
                 sessions.remove(ch);
-                inQueue = inQueue - 2;
             }
         }
     }
@@ -142,7 +141,7 @@ public class OthelloServer implements Server, Runnable {
 
     public int getInQueue() {
         synchronized (playersQueue) {
-            return inQueue;
+            return playersQueue.size();
         }
     }
 
@@ -164,14 +163,10 @@ public class OthelloServer implements Server, Runnable {
     }
 
     public void queue(ClientHandler handler) {
-        synchronized (playersQueue) {
-            if (!playersQueue.contains(handler)) {
-                playersQueue.add(handler);
-                inQueue++;
-            } else {
-                playersQueue.remove(handler);
-                inQueue--;
-            }
+        if (!playersQueue.contains(handler)) {
+            playersQueue.add(handler);
+        } else {
+            playersQueue.remove(handler);
         }
     }
 
