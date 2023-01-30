@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.*;
 
 public class OthelloServer implements Server, Runnable {
-    private final ArrayList<ClientHandler> clients;
     private final Map<ClientHandler, String> players;
     private final Map<List<ClientHandler>, OthelloGameThread> sessions;
     private final List<ClientHandler> playersQueue;
@@ -78,29 +77,23 @@ public class OthelloServer implements Server, Runnable {
         return serverThread.isAlive();
     }
 
+    @Override
+    public void run() {
+        try {
+            while (isAccepting()) {
+                Socket client = serverSocket.accept();
+                ClientHandler handler = new ClientHandler(client, this);
+                addClient(handler);
+                new Thread(handler).start();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void addClient(ClientHandler handler) {
         synchronized (players) {
             players.put(handler, handler.getUsername());
-        }
-    }
-
-    public void addToQueue(ClientHandler handler) {
-        synchronized (playersQueue) {
-            if (!playersQueue.contains(handler)) {
-                playersQueue.offer(handler);
-                inQueue++;
-            } else {
-                playersQueue.remove(handler);
-                inQueue--;
-            }
-        }
-    }
-
-    public void removeQueue(ClientHandler handler) {
-        synchronized (playersQueue) {
-            playersQueue.remove(handler);
-            inQueue--;
         }
     }
 
@@ -110,9 +103,13 @@ public class OthelloServer implements Server, Runnable {
         }
     }
 
-    public void endSession(List<ClientHandler> players) {
-
-        sessions.remove(players);
+    public void endGame(OthelloGameThread gameThread) {
+        for (List<ClientHandler> ch : sessions.keySet()) {
+            if (sessions.get(ch).equals(gameThread)) {
+                sessions.remove(ch);
+                inQueue = inQueue - 2;
+            }
+        }
     }
 
     public void startGame() {
@@ -130,11 +127,8 @@ public class OthelloServer implements Server, Runnable {
                 p2.recieveNewGame(Protocol.newGame(name1, name2));
                 ClientHandler.LOCK.notifyAll();
 
-                OthelloGameThread game = new OthelloGameThread(p1, p2);
-
+                OthelloGameThread game = new OthelloGameThread(p1, p2, this);
                 sessions.put(players, game);
-
-                games.add(game);
                 new Thread(game).start();
             }
         }
@@ -158,23 +152,21 @@ public class OthelloServer implements Server, Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        try {
-            while (isAccepting()) {
-                Socket client = serverSocket.accept();
-                ClientHandler handler = new ClientHandler(client, this);
-                addClient(handler);
-                new Thread(handler).start();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static void main(String[] args) {
         OthelloServer s = new OthelloServer(2222);
         s.start();
+    }
+
+    public void queue(ClientHandler handler) {
+        synchronized (playersQueue) {
+            if (!playersQueue.contains(handler)) {
+                playersQueue.add(handler);
+                inQueue++;
+            } else {
+                playersQueue.remove(handler);
+                inQueue--;
+            }
+        }
     }
 
     public void playMove(int index, ClientHandler clientHandler) {

@@ -80,7 +80,7 @@ public class ClientHandler implements Runnable {
                         writer.println(Protocol.list(server.getUsernames()));
                         break;
                     case QUEUE:
-                        server.addToQueue(this);
+                        server.queue(this);
                         synchronized (LOCK) {
                             try {
                                 while (server.getInQueue() < 2) {
@@ -94,11 +94,11 @@ public class ClientHandler implements Runnable {
                         }
                         break;
                     case MOVE:
-                        if (Integer.parseInt(splitted[1]) < 0 ||
-                                Integer.parseInt(splitted[1]) > 64) {
+                        if (Integer.parseInt(splitted[1]) < 0 || Integer.parseInt(splitted[1]) > 64) {
                             close();
+                        } else {
+                            setMove(Integer.parseInt(splitted[1]));
                         }
-                        setMove(Integer.parseInt(splitted[1]));
                 }
             }
         } catch (IOException e) {
