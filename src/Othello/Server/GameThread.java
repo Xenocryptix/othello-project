@@ -94,9 +94,9 @@ public class GameThread {
     public void disconnected(ClientHandler clientHandler) {
         String message;
         if (clientHandler.equals(players.get(0))) {
-            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(0).toString()});
+            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(0).getUsername()});
         } else {
-            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(1).toString()});
+            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(1).getUsername()});
         }
         players.get(0).sendMessage(message);
         players.get(1).sendMessage(message);

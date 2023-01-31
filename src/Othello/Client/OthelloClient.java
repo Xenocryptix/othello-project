@@ -11,6 +11,7 @@ import Othello.model.players.PlayerFactory;
 import Othello.model.players.ai.GreedyStrategy;
 import Othello.model.players.ai.NaiveStrategy;
 
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -36,15 +37,25 @@ public class OthelloClient implements Client, Runnable {
     private AbstractPlayer opponent;
     private boolean inGame;
     private boolean inQueue;
-    private final Listener listener;
+    private boolean loggedIn = false;
+    private Listener listener;
+    public static final Object LOGINLOCK = new Object();
+    public static final Object CONNECTLOCK = new Object();
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
+     *
+     * @param listener The listener to be used to send messages to the TUI
      */
     public OthelloClient(Listener listener) {
+        this.listener = listener;
         inQueue = false;
         inGame = false;
-        this.listener = listener;
+    }
+
+    public OthelloClient() {
+        inQueue = false;
+        inGame = false;
     }
 
     /**
@@ -72,6 +83,10 @@ public class OthelloClient implements Client, Runnable {
      */
     public boolean isInQueue() {
         return inQueue;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
 
     /**
@@ -115,7 +130,6 @@ public class OthelloClient implements Client, Runnable {
             new Thread(this).start();
             return true;
         } catch (IOException e) {
-            listener.printMessage("Failed to connect");
             return false;
         }
     }
@@ -206,20 +220,18 @@ public class OthelloClient implements Client, Runnable {
      * Send the login details to the server, which is the username of the user.
      *
      * @param username The username of the user
-     * @return True if success, otherwise false
      */
     @Override
-    public boolean sendLogin(String username) {
+    public void sendLogin(String username) {
         try {
+            System.out.println("Logging in...");
             this.username = username;
             writer.write(Protocol.login(username));
             writer.newLine();
             writer.flush();
-            return true;
         } catch (IOException e) {
             clientListener.printMessage("The server has disconnected");
             close();
-            return false;
         }
     }
 
@@ -265,6 +277,7 @@ public class OthelloClient implements Client, Runnable {
     public void run() {
         try {
             String command;
+
             while ((command = reader.readLine()) != null) {
                 String[] splitted = command.split(SEPARATOR);
                 switch (splitted[0]) {
@@ -278,13 +291,24 @@ public class OthelloClient implements Client, Runnable {
                         list(splitted);
                         break;
                     case ALREADYLOGGEDIN:
-                        clientListener.printMessage("This user is already connected to the server. Please choose a different username");
+                        synchronized (LOGINLOCK) {
+                            loggedIn = false;
+                            clientListener.printMessage("This user is already connected to the server. Please choose a different username");
+                            LOGINLOCK.notifyAll();
+                        }
                         break;
                     case HELLO:
-                        clientListener.printMessage("Successfully connected to the server");
+                        synchronized (CONNECTLOCK) {
+                            clientListener.printMessage("Successfully connected to the server");
+                            CONNECTLOCK.notifyAll();
+                        }
                         break;
                     case LOGIN:
-                        clientListener.printMessage("Logged in successfully. Have fun playing!");
+                        synchronized (LOGINLOCK) {
+                            loggedIn = true;
+                            clientListener.printMessage("Logged in successfully. Have fun playing!");
+                            LOGINLOCK.notifyAll();
+                        }
                         break;
                     case MOVE:
                         move(splitted);
@@ -375,9 +399,9 @@ public class OthelloClient implements Client, Runnable {
                 clientListener.printMessage("You have both drawn!");
                 break;
             case "VICTORY":
-                clientListener.printMessage(splitted[2] + " won!\n");
-                if (splitted[2].equals(username)) {
-                    clientListener.printMessage("Congrats!");
+                clientListener.printMessage(game.getWinner() + " won!\n");
+                if (game.getWinner().toString().substring(7).equals(username)) {
+                    clientListener.printMessage("Congrats! you won!");
                 } else {
                     clientListener.printMessage("Don't worry, sometimes your opponent has a good gaming chair");
                 }
@@ -436,6 +460,4 @@ public class OthelloClient implements Client, Runnable {
             clientListener.printMessage("Bots don't need hints");
         }
     }
-
-
 }

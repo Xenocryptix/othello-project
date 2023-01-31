@@ -1,6 +1,6 @@
 package Othello.Client;
 
-import Othello.exceptions.*;
+
 import Othello.model.Board;
 import Othello.model.players.HumanPlayer;
 import Othello.model.players.ai.ComputerPlayer;
@@ -12,11 +12,15 @@ import java.net.InetAddress;
 import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
+import static Othello.Client.OthelloClient.CONNECTLOCK;
+import static Othello.Client.OthelloClient.LOGINLOCK;
+
 public class OthelloTUI {
     private static String serverAddress;
-    private static int port;
+    private static int port = -1;
     private static final String GREEN = "\033[0;32m";
     public static final String RESET = "\033[0m";
+    private boolean loggedIn = false;
 
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
@@ -32,24 +36,40 @@ public class OthelloTUI {
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-        initiate(input);
 
         Listener clientListener = new ClientListener();
         OthelloClient client = new OthelloClient(clientListener);
         try {
-            boolean connected = client.connect(InetAddress.getByName(serverAddress), port);
-            if (!connected) {
-                throw new UnestablishedConnection();
+            boolean connected = false;
+            while (!connected) {
+                initiate(input);
+                if (port >= 0 && port <= 65536) {
+                    connected = client.connect(InetAddress.getByName(serverAddress), port);
+                    if (!connected) {
+                        System.out.println("Can not connect to the specified server");
+                    }
+                } else {
+                    System.out.println("Invalid port");
+                }
             }
             client.sendHello("desc");
-
-            login(input, client);
+            synchronized (CONNECTLOCK) {
+                CONNECTLOCK.wait();
+                login(input, client);
+            }
 
             help();
 
-            System.out.print("Enter a command: ");
+            System.out.println("Enter a command: ");
             String command;
-            while (!(command = input.readLine()).equals("quit")) {
+            while ((command = input.readLine()) != null) {
+                if (command.equals("quit")) {
+                    if (!client.inGame()) {
+                        break;
+                    } else {
+                        System.out.println("You can't leave while in game!");
+                    }
+                }
                 switch (command.toLowerCase()) {
                     case "queue":
                         queue(input, client);
@@ -71,19 +91,19 @@ public class OthelloTUI {
                         }
                 }
                 if (client.inGame() && client.checkTurn()) {
-                    System.out.print("Enter a move/command: ");
-                } else if (!client.inGame()) {
-                    System.out.print("Enter a command: ");
+                    System.out.println("Enter a move/command: ");
                 }
             }
             client.close();
 
         } catch (UnknownHostException e) {
             System.out.println("Host unknown. There may be a typo in your address, or the server is closed");
-        } catch (UnestablishedConnection | PortUnreachableException e) {
+        } catch (PortUnreachableException e) {
             System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println("You lost connection abruptly. Please fix your connection");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -92,16 +112,25 @@ public class OthelloTUI {
         serverAddress = input.readLine();
 
         System.out.print("Enter port number: ");
-        port = Integer.parseInt(input.readLine());
-        if (port < 0 || port > 65536) {
-            throw new PortUnreachableException("The specified port is invalid or unavailable");
+        String portStr = input.readLine();
+        if (portStr.length() > 0 && portStr.length() < 6) {
+            port = Integer.parseInt(portStr);
         }
     }
 
     private static void login(BufferedReader input, OthelloClient client) throws IOException {
-        System.out.print("Enter username: ");
-        String username = input.readLine();
-        client.sendLogin(username);
+        synchronized (LOGINLOCK) {
+            try {
+                while (!client.isLoggedIn()) {
+                    System.out.print("Enter username: ");
+                    String username = input.readLine();
+                    client.sendLogin(username);
+                    LOGINLOCK.wait();
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private static void sendMove(String command, OthelloClient client) {
@@ -155,6 +184,6 @@ public class OthelloTUI {
                         GREEN + "queue" + " ................. join/leave the queue \n" +
                         GREEN + "list" + "  ................. get a list of all players\n" +
                         GREEN + "hint" + "  ................. a move that can be played\n" +
-                        GREEN + "help" + " .................. help (this menu)\n" + RESET );
+                        GREEN + "help" + " .................. help (this menu)\n" + RESET);
     }
 }

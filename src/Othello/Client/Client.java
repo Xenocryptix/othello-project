@@ -37,9 +37,8 @@ public interface Client {
      * Send the login details to the server.
      *
      * @param username the username
-     * @return true if success, otherwise false
      */
-    boolean sendLogin(String username);
+    void sendLogin(String username);
 
     /**
      * Sends a request to the server to send back the list of clients connected.
