@@ -1,4 +1,4 @@
-package Othello.players;
+package Othello.model.players;
 
 import Othello.model.*;
 

@@ -1,6 +1,6 @@
 package Othello.model;
 
-import Othello.players.Player;
+import Othello.model.players.Player;
 
 import java.util.List;
 

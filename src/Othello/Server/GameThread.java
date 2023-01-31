@@ -5,7 +5,7 @@ import Othello.model.Board;
 import Othello.model.Disk;
 import Othello.model.OthelloGame;
 import Othello.model.OthelloMove;
-import Othello.players.PlayerFactory;
+import Othello.model.players.PlayerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,5 +89,5 @@ public class GameThread {
             server.endGame(this);
         }
     }
-
+    //TODO:DISCONNECTING
 }

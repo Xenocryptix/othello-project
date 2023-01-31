@@ -5,11 +5,11 @@ import Othello.model.Disk;
 import Othello.model.Move;
 import Othello.model.OthelloGame;
 import Othello.model.OthelloMove;
-import Othello.players.AbstractPlayer;
-import Othello.players.HumanPlayer;
-import Othello.players.PlayerFactory;
-import Othello.players.ai.GreedyStrategy;
-import Othello.players.ai.NaiveStrategy;
+import Othello.model.players.AbstractPlayer;
+import Othello.model.players.HumanPlayer;
+import Othello.model.players.PlayerFactory;
+import Othello.model.players.ai.GreedyStrategy;
+import Othello.model.players.ai.NaiveStrategy;
 
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class OthelloClient implements Client, Runnable {
     private AbstractPlayer opponent;
     private boolean inGame;
     private boolean inQueue;
-    private final Listener listener;
+    private Listener listener;
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
@@ -46,6 +46,10 @@ public class OthelloClient implements Client, Runnable {
      */
     public OthelloClient(Listener listener) {
         this.listener = listener;
+        inQueue = false;
+        inGame = false;
+    }
+    public OthelloClient() {
         inQueue = false;
         inGame = false;
     }
@@ -164,8 +168,7 @@ public class OthelloClient implements Client, Runnable {
             }
             return false;
         } catch (IOException e) {
-            clientListener.printMessage("Error occurred while sending messages");
-            close();
+            clientListener.printMessage("The server has disconnected");
             return false;
         }
     }
@@ -200,7 +203,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            clientListener.printMessage("Error occurred while sending messages");
+            clientListener.printMessage("The server has disconnected");
             close();
             return false;
         }
@@ -221,7 +224,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            clientListener.printMessage("Error occurred while sending messages");
+            clientListener.printMessage("The server has disconnected");
             close();
             return false;
         }
@@ -240,7 +243,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            clientListener.printMessage("Error occurred while sending messages");
+            clientListener.printMessage("The server has disconnected");
             close();
             return false;
         }
@@ -260,7 +263,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             inQueue = !inQueue;
         } catch (IOException e) {
-            clientListener.printMessage("Error occurred while sending messages");
+            clientListener.printMessage("The server has disconnected");
             close();
         }
     }
@@ -270,7 +273,7 @@ public class OthelloClient implements Client, Runnable {
         try {
             String command;
             while ((command = reader.readLine()) != null) {
-                String[] splitted = command.split(Protocol.SEPARATOR);
+                String[] splitted = command.split(SEPARATOR);
                 switch (splitted[0]) {
                     case NEWGAME:
                         newGame(splitted);

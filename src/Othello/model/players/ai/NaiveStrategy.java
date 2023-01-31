@@ -1,4 +1,4 @@
-package Othello.players.ai;
+package Othello.model.players.ai;
 
 import Othello.model.Disk;
 import Othello.model.Game;

@@ -2,8 +2,8 @@ package Othello.Client;
 
 import Othello.exceptions.*;
 import Othello.model.Board;
-import Othello.players.HumanPlayer;
-import Othello.players.ai.ComputerPlayer;
+import Othello.model.players.HumanPlayer;
+import Othello.model.players.ai.ComputerPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;

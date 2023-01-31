@@ -4,9 +4,9 @@ import Othello.model.Board;
 import Othello.model.Disk;
 import Othello.model.OthelloGame;
 import Othello.model.OthelloMove;
-import Othello.players.AbstractPlayer;
-import Othello.players.PlayerFactory;
-import Othello.players.ai.NaiveStrategy;
+import Othello.model.players.AbstractPlayer;
+import Othello.model.players.PlayerFactory;
+import Othello.model.players.ai.NaiveStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

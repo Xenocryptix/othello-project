@@ -1,8 +1,8 @@
-package Othello.players.ai;
+package Othello.model.players.ai;
 
 import Othello.model.Game;
 import Othello.model.Move;
-import Othello.players.AbstractPlayer;
+import Othello.model.players.AbstractPlayer;
 
 /**
  * Class that represents a computer player in the game.

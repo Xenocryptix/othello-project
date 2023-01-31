@@ -1,7 +1,7 @@
-package Othello.players;
+package Othello.model.players;
 
-import Othello.players.ai.ComputerPlayer;
-import Othello.players.ai.Strategy;
+import Othello.model.players.ai.Strategy;
+import Othello.model.players.ai.ComputerPlayer;
 
 /**
  * Interface factory for creating players.
