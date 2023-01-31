@@ -13,7 +13,6 @@ public final class Protocol {
     public static final String MOVE = "MOVE";
     public static final String GAMEOVER = "GAMEOVER";
     public static final String SEPARATOR = "~";
-    public static final String CLIENT = "Client";
 
     /**
      * Build a new protocol description which is responsible for the handshake.
@@ -21,7 +20,7 @@ public final class Protocol {
      * @return the protocol description for handshake
      */
     public static String handshake(String description) {//TODO
-        return HELLO + SEPARATOR + CLIENT;
+        return HELLO + SEPARATOR + description;
     }
 
     /**
@@ -35,15 +34,6 @@ public final class Protocol {
     }
 
     /**
-     * Sent by the server to a login request by a client when this username is already logged in.
-     *
-     * @return the keyword alreadyloggedin
-     */
-    public static String alreadyloggedin() {
-        return ALREADYLOGGEDIN;
-    }
-
-    /**
      * Sent by the server to the client in respond to a LIST request.
      * Formulates message including all usernames connectes to the server
      *
@@ -51,24 +41,15 @@ public final class Protocol {
      * @return Protocol message containing all usernames in the server
      */
     public static String list(List<String> usernames) {
-        String list = LIST + SEPARATOR;
+        String list = LIST;
         if (usernames.size() > 1) {
             for (String currentUsername : usernames) {
-                list = list + currentUsername + SEPARATOR;
+                list = list + SEPARATOR + currentUsername;
             }
         } else {
-            list = list + usernames.get(0);
+            list = list + SEPARATOR + usernames.get(0);
         }
         return list;
-    }
-
-    /**
-     * Sent by the client to the server to be added to the game queue.
-     *
-     * @return the keyword queue
-     */
-    public static String queue() {
-        return QUEUE;
     }
 
     /**
@@ -102,8 +83,8 @@ public final class Protocol {
      */
     public static String gameover(String[] state) {
         if (state.length == 2) {
-            return GAMEOVER + SEPARATOR + state[0] + SEPARATOR + state[1];
+            return GAMEOVER + SEPARATOR + state[0].toUpperCase() + SEPARATOR + state[1];
         }
-        return GAMEOVER + SEPARATOR + state[0];
+        return GAMEOVER + SEPARATOR + state[0].toUpperCase();
     }
 }
