@@ -109,6 +109,7 @@ public class OthelloClient implements Client, Runnable {
     @Override
     public boolean connect(InetAddress address, int port) {
         try {
+            //
             client = new Socket(address, port);
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));

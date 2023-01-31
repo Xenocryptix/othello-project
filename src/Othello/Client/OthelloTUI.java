@@ -148,6 +148,7 @@ public class OthelloTUI {
     }
 
     private static void help() {
+        //
         System.out.print(
                 GREEN + "Commands:\n" +
                 GREEN + "queue" + " ................. join/leave the queue \n" +
