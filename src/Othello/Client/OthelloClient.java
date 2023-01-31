@@ -11,6 +11,7 @@ import Othello.players.PlayerFactory;
 import Othello.players.ai.GreedyStrategy;
 import Othello.players.ai.NaiveStrategy;
 
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -382,7 +383,7 @@ public class OthelloClient implements Client, Runnable {
                 if (splitted[2].equals(username)) {
                     clientListener.printMessage("Congrats!");
                 } else {
-                    clientListener.printMessage("Don't worry, sometimes your opponent has good gaming chair");
+                    clientListener.printMessage("Don't worry, sometimes your opponent has a good gaming chair");
                 }
                 break;
             default:
@@ -426,7 +427,7 @@ public class OthelloClient implements Client, Runnable {
                 AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
                 Move move = aiHelper.determineMove(game);
                 if (move == null) {
-                    clientListener.printMessage("No moves available");
+                    clientListener.printMessage("No moves available to play");
                 } else {
                     int row = ((OthelloMove) move).getRow() + 1;
                     char col = (char) (((OthelloMove) move).getCol() + 65);

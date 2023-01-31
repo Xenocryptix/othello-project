@@ -95,6 +95,7 @@ public class ClientHandler implements Runnable {
                         writer.println("Unexpected value: " + splitted[0]);
                 }
             }
+            close(); //When a readline is null then the client has tried to quit, so the client handler must be closed
         } catch (IOException e) {
             close();
         }

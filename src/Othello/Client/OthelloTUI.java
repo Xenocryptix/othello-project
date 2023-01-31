@@ -120,7 +120,7 @@ public class OthelloTUI {
                 }
             } else {
                 System.out.println("Unknown command or invalid move format.\n" +
-                        "Your move should be in the format of a letter followed by a number\n" +
+                        "Your move should be in the format of a letter followed by a number, e.g. \"C5\" \n" +
                         "For available commands, type HELP");
             }
         } else if (client.getPlayer() instanceof ComputerPlayer) {
