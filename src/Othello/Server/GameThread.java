@@ -9,6 +9,7 @@ import Othello.model.players.PlayerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //TODO
 public class GameThread {
     private final List<ClientHandler> players;
@@ -18,8 +19,8 @@ public class GameThread {
     /**
      * Initiates a new game with the new client handlers.
      *
-     * @param player1 The client handler of player 1
-     * @param player2 The client handler of player 2
+     * @param player1       The client handler of player 1
+     * @param player2       The client handler of player 2
      * @param othelloServer
      */
     public GameThread(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) { //TODO: CAN WE REMOVE THE SERVER
@@ -89,5 +90,15 @@ public class GameThread {
             server.endGame(this);
         }
     }
-    //TODO:DISCONNECTING
+
+    public void disconnected(ClientHandler clientHandler) {
+        String message;
+        if (clientHandler.equals(players.get(0))) {
+            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(0).toString()});
+        } else {
+            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(1).toString()});
+        }
+        players.get(0).sendMessage(message);
+        players.get(1).sendMessage(message);
+    }
 }

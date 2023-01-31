@@ -11,7 +11,6 @@ import Othello.model.players.PlayerFactory;
 import Othello.model.players.ai.GreedyStrategy;
 import Othello.model.players.ai.NaiveStrategy;
 
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -41,17 +40,11 @@ public class OthelloClient implements Client, Runnable {
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
-     *
-     * @param listener The listener to be used to send messages to the TUI
      */
     public OthelloClient(Listener listener) {
+        inQueue = false;
+        inGame = false;
         this.listener = listener;
-        inQueue = false;
-        inGame = false;
-    }
-    public OthelloClient() {
-        inQueue = false;
-        inGame = false;
     }
 
     /**
@@ -443,4 +436,6 @@ public class OthelloClient implements Client, Runnable {
             clientListener.printMessage("Bots don't need hints");
         }
     }
+
+
 }

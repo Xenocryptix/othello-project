@@ -1,5 +1,7 @@
 package Othello.Server;
 
+import Othello.exceptions.PortNumberException;
+
 public interface Server {
     /**
      * Starts the server. The server should run in a separate thread,
@@ -9,7 +11,7 @@ public interface Server {
      */
     //@ requires !isAccepting();
     //@ ensures isAccepting();
-    void start();
+    void start() throws PortNumberException;
 
     /**
      * Returns the port of the server.

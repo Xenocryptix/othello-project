@@ -1,6 +1,8 @@
 package Othello.Server;
 
 
+import Othello.exceptions.PortNumberException;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -36,13 +38,13 @@ public class OthelloServer implements Server, Runnable {
      * the port can be given in the constructor. This method may only be run once.
      */
     @Override
-    public void start() {
+    public void start() throws PortNumberException {
         try {
             serverSocket = new ServerSocket(port);
             serverThread.start();
             matchThread.start();
         } catch (IOException e) {
-            System.out.println("Couldn't start the server");
+            throw new PortNumberException();
         }
 
     }
@@ -122,19 +124,6 @@ public class OthelloServer implements Server, Runnable {
         }
     }
 
-    /**
-     * When a client abruptly disconnects, this method is called
-     * to remove this player from the server as well as ensure that
-     * the player is removed from the queue.
-     *
-     * @param clientHandler The client handler that disconnected
-     */
-    public void removeClient(ClientHandler clientHandler) {
-        synchronized (players) {
-            players.remove(clientHandler);
-            playersQueue.remove(clientHandler);
-        }
-    }
 
     /**
      * Ends a session of a game when the game is over from the GameThread
@@ -147,6 +136,7 @@ public class OthelloServer implements Server, Runnable {
             for (List<ClientHandler> ch : sessions.keySet()) {
                 if (sessions.get(ch).equals(gameThread)) {
                     sessions.remove(ch);
+                    break;
                 }
             }
         }
@@ -217,7 +207,9 @@ public class OthelloServer implements Server, Runnable {
      * @return True, if the client handler is in queue, otherwise, false
      */
     public boolean inQueue(ClientHandler clientHandler) {
-        return playersQueue.contains(clientHandler);
+        synchronized (playersQueue) {
+            return playersQueue.contains(clientHandler);
+        }
     }
 
     /**
@@ -250,16 +242,57 @@ public class OthelloServer implements Server, Runnable {
      * @param clientHandler The client handler that sends the move
      */
     public void playMove(int index, ClientHandler clientHandler) {
+        GameThread game = getGame(clientHandler);
+        if (!game.doMove(index)) {
+            clientHandler.close();
+        }
+    }
+    /**
+     * When a client abruptly disconnects, this method is called
+     * to remove this player from the server as well as ensure that
+     * the player is removed from the queue.
+     *
+     * @param clientHandler The client handler that disconnected
+     */
+    public void removeClient(ClientHandler clientHandler) {
+        synchronized (players) {
+            players.remove(clientHandler);
+            playersQueue.remove(clientHandler);
+            if (inGame(clientHandler)) {
+                getGame(clientHandler).disconnected(clientHandler);
+            }
+        }
+    }
+
+    /**
+     * Checks if a certain client handler is in a game or not.
+     *
+     * @param clientHandler The client handler to be checked
+     * @return True, if the player is in a game and false otherwise
+     */
+    public boolean inGame(ClientHandler clientHandler) {
+        synchronized (sessions) {
+            GameThread game = getGame(clientHandler);
+            return game != null;
+        }
+    }
+
+    /**
+     * Gets the game of the client handler passed by going through
+     * the current running sessions.
+     *
+     * @param clientHandler The client to be checked
+     * @return the game if he is in one, or null if he is not
+     */
+    public GameThread getGame(ClientHandler clientHandler) {
         synchronized (sessions) {
             for (List<ClientHandler> ch : sessions.keySet()) {
                 if (ch.contains(clientHandler)) {
-                    GameThread currentGame = sessions.get(ch);
-                    if (!currentGame.doMove(index)) {
-                        clientHandler.close();
-                    }
+                    return sessions.get(ch);
                 }
             }
         }
+        return null;
     }
 }
 
