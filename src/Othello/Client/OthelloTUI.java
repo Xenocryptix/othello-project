@@ -47,7 +47,7 @@ public class OthelloTUI {
 
             help();
 
-            System.out.println("Enter a command: ");
+            System.out.print("Enter a command: ");
             String command;
             while (!(command = input.readLine()).equals("quit")) {
                 switch (command.toLowerCase()) {
@@ -71,7 +71,9 @@ public class OthelloTUI {
                         }
                 }
                 if (client.inGame() && client.checkTurn()) {
-                    System.out.println("Enter a move/command: ");
+                    System.out.print("Enter a move/command: ");
+                } else if (!client.inGame()) {
+                    System.out.print("Enter a command: ");
                 }
             }
             client.close();
@@ -148,14 +150,11 @@ public class OthelloTUI {
     }
 
     private static void help() {
-        //
         System.out.print(
                 GREEN + "Commands:\n" +
-                GREEN + "queue" + " ................. join/leave the queue \n" +
-                GREEN + "list" + "  ................. get a list of all players\n" +
-                GREEN + "hint" + "  ................. a move that can be played\n" +
-                GREEN + "help" + " .................. help (this menu)\n" + RESET );
+                        GREEN + "queue" + " ................. join/leave the queue \n" +
+                        GREEN + "list" + "  ................. get a list of all players\n" +
+                        GREEN + "hint" + "  ................. a move that can be played\n" +
+                        GREEN + "help" + " .................. help (this menu)\n" + RESET );
     }
 }
-
-

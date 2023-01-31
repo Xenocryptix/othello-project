@@ -36,7 +36,7 @@ public class OthelloClient implements Client, Runnable {
     private AbstractPlayer opponent;
     private boolean inGame;
     private boolean inQueue;
-    private Listener listener;
+    private final Listener listener;
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
@@ -109,7 +109,6 @@ public class OthelloClient implements Client, Runnable {
     @Override
     public boolean connect(InetAddress address, int port) {
         try {
-            //
             client = new Socket(address, port);
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
