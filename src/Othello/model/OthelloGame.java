@@ -15,7 +15,7 @@ import static Othello.model.Board.DIRECTION_X_AND_Y;
  * adds two players to the game. It also generates all valid
  * moves for a game and has a method which allows making a move for the
  * game which flips all the tiles in the middle of the two disks. IT shows the state of the game
- * using a method and the board can be reset through OthelloGame and even set to a new array
+ * using a method and the board can be reset through GameThread and even set to a new array
  */
 public class OthelloGame implements Game {
     /*@

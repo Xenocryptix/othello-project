@@ -9,15 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO
 public class OthelloServer implements Server, Runnable {
     private final Map<ClientHandler, String> players;
-    private final Map<List<ClientHandler>, OthelloGameThread> sessions;
-    private static List<ClientHandler> playersQueue;
+    private final Map<List<ClientHandler>, GameThread> sessions;
+    private final List<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
     private final Thread matchThread;
     private ServerSocket serverSocket;
-    private boolean inQueue;
 
 
     public OthelloServer(int port) {
@@ -27,7 +27,6 @@ public class OthelloServer implements Server, Runnable {
         matchThread = new Thread(new Matchmaking(this));
         players = new HashMap<>();
         sessions = new HashMap<>();
-        inQueue = false;
     }
 
     /**
@@ -43,7 +42,7 @@ public class OthelloServer implements Server, Runnable {
             serverThread.start();
             matchThread.start();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("Couldn't start the server");
         }
 
     }
@@ -59,6 +58,11 @@ public class OthelloServer implements Server, Runnable {
         return serverSocket.getLocalPort();
     }
 
+    /**
+     * Query on the players that are in the queue
+     *
+     * @return The list of client handlers that are in queue
+     */
     public List<ClientHandler> getQueue() {
         return playersQueue;
     }
@@ -73,9 +77,9 @@ public class OthelloServer implements Server, Runnable {
             serverSocket.close();
             serverThread.join();
         } catch (IOException e) {
-            e.printStackTrace();
+            //TODO:MESSAGE
         } catch (InterruptedException e) {
-            e.getCause();
+            //TODO:MESSAGE
         }
     }
 
@@ -87,6 +91,10 @@ public class OthelloServer implements Server, Runnable {
         return serverThread.isAlive();
     }
 
+    /**
+     * The run method that runs while the server is not closed and accepts new clients
+     * and adds them to the client handler list and start a new thread for that client
+     */
     @Override
     public void run() {
         try {
@@ -97,102 +105,161 @@ public class OthelloServer implements Server, Runnable {
                 new Thread(handler).start();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            //TODO: MESSAGE
         }
     }
 
-    public void addClient(ClientHandler handler) {
+    /**
+     * Adds a client handler with their username to a list stored
+     * in the server called players to store all the players
+     * in the game.
+     *
+     * @param clientHandler The client handler to be added to players
+     */
+    public void addClient(ClientHandler clientHandler) {
         synchronized (players) {
-            players.put(handler, handler.getUsername());
+            players.put(clientHandler, clientHandler.getUsername());
         }
     }
 
-    public void removeClient(ClientHandler handler) {
+    /**
+     * When a client abruptly disconnects, this method is called
+     * to remove this player from the server as well as ensure that
+     * the player is removed from the queue.
+     *
+     * @param clientHandler The client handler that disconnected
+     */
+    public void removeClient(ClientHandler clientHandler) {
         synchronized (players) {
-            players.remove(handler);
+            players.remove(clientHandler);
+            playersQueue.remove(clientHandler);
         }
     }
 
-    public void endGame(OthelloGameThread gameThread) {
-        for (List<ClientHandler> ch : sessions.keySet()) {
-            if (sessions.get(ch).equals(gameThread)) {
-                sessions.remove(ch);
+    /**
+     * Ends a session of a game when the game is over from the GameThread
+     * class.
+     *
+     * @param gameThread The game that is ended to be removed from the session running
+     */
+    public void endGame(GameThread gameThread) {
+        synchronized (sessions) {
+            for (List<ClientHandler> ch : sessions.keySet()) {
+                if (sessions.get(ch).equals(gameThread)) {
+                    sessions.remove(ch);
+                }
             }
         }
     }
 
+    /**
+     * Starts a new game between two client handlers and adds the
+     * game to the sessions.
+     */
     public void startGame() {
         synchronized (sessions) {
             if (getInQueue() >= 2) {
                 ClientHandler p1 = playersQueue.remove(0);
                 ClientHandler p2 = playersQueue.remove(0);
-                List<ClientHandler> players = new ArrayList<>();
-                players.add(p1);
-                players.add(p2);
+                List<ClientHandler> currentPlayers = new ArrayList<>();
+                currentPlayers.add(p1);
+                currentPlayers.add(p2);
 
                 String name1 = p1.getUsername();
                 String name2 = p2.getUsername();
                 p1.recieveNewGame(Protocol.newGame(name1, name2));
                 p2.recieveNewGame(Protocol.newGame(name1, name2));
 
-                OthelloGameThread game = new OthelloGameThread(p1, p2, this);
-                sessions.put(players, game);
+                GameThread game = new GameThread(p1, p2, this);
+                sessions.put(currentPlayers, game);
             }
         }
     }
 
+    /**
+     * Checks the number of players that are in the queue
+     *
+     * @return The size of the queue
+     */
     public int getInQueue() {
         synchronized (playersQueue) {
             return playersQueue.size();
         }
     }
 
+    /**
+     * Query's the usernames of the players that are on the server
+     *
+     * @return A list of player's usernames
+     */
     public List<String> getUsernames() {
         synchronized (players) {
             return new ArrayList<>(players.values());
         }
     }
 
-    public void addUsername(String s, ClientHandler handler) {
+    /**
+     * Adds a new username to the list of the players stored in the server
+     *
+     * @param username      The name of the player to be added
+     * @param clientHandler The client handler associated with the username
+     */
+    public void addUsername(String username, ClientHandler clientHandler) {
         synchronized (players) {
-            players.put(handler, s);
+            players.put(clientHandler, username);
         }
     }
 
-    public static void main(String[] args) {
-        OthelloServer s = new OthelloServer(2222);
-        s.start();
+    /**
+     * Checks if a client handler is in queue or not.
+     *
+     * @param clientHandler The client handler to be checked
+     * @return True, if the client handler is in queue, otherwise, false
+     */
+    public boolean inQueue(ClientHandler clientHandler) {
+        return playersQueue.contains(clientHandler);
     }
 
-    public void queue(ClientHandler handler) {
+    /**
+     * Adds a client handler to the queue.
+     *
+     * @param clientHandler The client handler to be added to the queue
+     */
+    public void queue(ClientHandler clientHandler) {
         synchronized (playersQueue) {
-            playersQueue.add(handler);
-            inQueue = true;
+            playersQueue.add(clientHandler);
         }
     }
 
+    /**
+     * Remove a client handler from the queue.
+     *
+     * @param clientHandler The client handler to be removed from the queue
+     */
     public void deQueue(ClientHandler clientHandler) {
         synchronized (playersQueue) {
             players.remove(clientHandler);
-            inQueue = false;
         }
     }
 
+    /**
+     * Plays a move received by the server from the client. If the move
+     * is invalid, this client handier is closed
+     *
+     * @param index         The index of the move
+     * @param clientHandler The client handler that sends the move
+     */
     public void playMove(int index, ClientHandler clientHandler) {
         synchronized (sessions) {
             for (List<ClientHandler> ch : sessions.keySet()) {
                 if (ch.contains(clientHandler)) {
-                    OthelloGameThread currentGame = sessions.get(ch);
+                    GameThread currentGame = sessions.get(ch);
                     if (!currentGame.doMove(index)) {
                         clientHandler.close();
                     }
                 }
             }
         }
-    }
-
-    public boolean inQueue(ClientHandler clientHandler) {
-        return playersQueue.contains(clientHandler);
     }
 }
 

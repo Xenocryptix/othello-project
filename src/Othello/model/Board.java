@@ -430,7 +430,7 @@ public class Board {
     public String toString() {
         String s = "   A   B   C   D   E   F   G   H\n";
         for (int i = 0; i < DIM; i++) {
-            String row = Integer.toString(i + 1) + " ";
+            String row = i + 1 + " ";
             for (int j = 0; j < DIM; j++) {
                 row += " " + getField(i, j).toString().substring(0, 1).replace("E", " ") + " ";
                 if (j < DIM - 1) {

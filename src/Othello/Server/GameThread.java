@@ -10,22 +10,20 @@ import Othello.players.PlayerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OthelloGameThread {
+public class GameThread {
     private final List<ClientHandler> players;
-    private final String player1Name;
-    private final String player2Name;
     private final OthelloGame game;
     private final OthelloServer server;
 
 
-    public OthelloGameThread(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) {
+    public GameThread(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) {
         server = othelloServer;
-        game = new OthelloGame();
+        game = new Othello.model.OthelloGame();
         players = new ArrayList<>(2);
         players.add(player1);
         players.add(player2);
-        player1Name = player1.getUsername();
-        player2Name = player2.getUsername();
+        String player1Name = player1.getUsername();
+        String player2Name = player2.getUsername();
         game.setPlayer1(new PlayerFactory().makeHumanPlayer(player1Name));
         game.setPlayer2(new PlayerFactory().makeHumanPlayer(player2Name));
     }

@@ -117,7 +117,7 @@ public class OthelloClient implements Client, Runnable {
             new Thread(this).start();
             return true;
         } catch (IOException e) {
-            System.out.println("Failed to connect");
+            listener.printMessage("Failed to connect");
             return false;
         }
     }
@@ -132,7 +132,7 @@ public class OthelloClient implements Client, Runnable {
             reader.close();
             client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            //TODO: MESSAGE
         }
     }
 
@@ -298,7 +298,7 @@ public class OthelloClient implements Client, Runnable {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            close();
         }
     }
 
@@ -416,6 +416,10 @@ public class OthelloClient implements Client, Runnable {
         printTurn();
     }
 
+    /**
+     * Uses the AI to produce a hint for the user if it is the user's turn,
+     * and he is a human player.
+     */
     public void hint() {
         if (player instanceof HumanPlayer) {
             if (checkTurn()) {

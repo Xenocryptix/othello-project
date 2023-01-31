@@ -11,7 +11,6 @@ public class ClientHandler implements Runnable {
     private final BufferedReader reader;
     private final PrintWriter writer;
     private String username;
-    private String newGame;
 
     public ClientHandler(Socket client, OthelloServer othelloServer) {
         this.client = client;
@@ -97,7 +96,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (IOException e) {
-            e.getCause();
+            close();
         }
     }
 }
