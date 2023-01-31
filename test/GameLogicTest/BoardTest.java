@@ -1,5 +1,6 @@
 package GameLogicTest;
 
+import Othello.exceptions.InvalidNumber;
 import Othello.model.Board;
 import Othello.model.Disk;
 import Othello.model.OthelloMove;
@@ -40,7 +41,7 @@ public class BoardTest {
      * Ensures that converting from (row,col) pair work's correctly
      */
     @Test
-    public void testIndex() {
+    public void testIndex() throws InvalidNumber {
         int index = 0;
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
@@ -54,24 +55,24 @@ public class BoardTest {
      * Ensures that all fields of the board are from 0 till Board.DIM * Board.DIM
      */
     @Test
-    public void testIsFieldIndex() {
-        assertFalse(board.isField(-1));
+    public void testIsFieldIndex() throws InvalidNumber {
+        assertThrows(InvalidNumber.class, () -> board.isField(-1));
         assertTrue(board.isField(0));
         assertTrue(board.isField(Board.DIM * Board.DIM - 1));
-        assertFalse(board.isField(Board.DIM * Board.DIM));
+        assertThrows(InvalidNumber.class, () -> board.isField(Board.DIM*Board.DIM));
     }
 
     /**
      * Ensures that the board has fields at row and column 0 till Board.DIM - 1
      */
     @Test
-    public void testIsFieldRowCol() {
-        assertFalse(board.isField(-1, 0));
-        assertFalse(board.isField(0, -1));
+    public void testIsFieldRowCol() throws InvalidNumber {
+        assertThrows(InvalidNumber.class, () -> board.isField(0,-1));
+        assertThrows(InvalidNumber.class, () -> board.isField(-1,0));
         assertTrue(board.isField(0, 0));
         assertTrue(board.isField(Board.DIM - 1, Board.DIM - 1));
-        assertFalse(board.isField(7, Board.DIM + 1));
-        assertFalse(board.isField(Board.DIM + 1, 7));
+        assertThrows(InvalidNumber.class, () -> board.isField(7, Board.DIM + 1));
+        assertThrows(InvalidNumber.class, () -> board.isField(Board.DIM + 1, 7));
     }
 
     /**
@@ -88,7 +89,7 @@ public class BoardTest {
      * Ensures that setting a field with row and col to a disk work
      */
     @Test
-    public void testSetAndGetFieldRowCol() {
+    public void testSetAndGetFieldRowCol() throws InvalidNumber {
         board.setField(0, 0, Disk.BLACK);
         assertEquals(Disk.BLACK, board.getField(0, 0));
         assertEquals(Disk.EMPTY, board.getField(0, 1));
@@ -226,7 +227,7 @@ public class BoardTest {
      * Test that when multiple flips occur at the same time it flips the correct disks
      */
     @Test
-    public void testMultipleFlips() {
+    public void testMultipleFlips() throws InvalidNumber {
         //Setting up the board for a move that flips more than one field
         board.flipMove(new OthelloMove(Disk.BLACK, 3, 2));
         board.flipMove(new OthelloMove(Disk.WHITE, 4, 2));

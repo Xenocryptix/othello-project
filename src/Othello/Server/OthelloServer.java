@@ -20,8 +20,9 @@ public class OthelloServer implements Server, Runnable {
     private final Thread serverThread;
     private final Thread matchThread;
     private ServerSocket serverSocket;
+    private boolean started = false;
 
-
+    //TODO
     public OthelloServer(int port) {
         this.port = port;
         playersQueue = new ArrayList<>();
@@ -43,7 +44,9 @@ public class OthelloServer implements Server, Runnable {
             serverSocket = new ServerSocket(port);
             serverThread.start();
             matchThread.start();
+            started = true;
         } catch (IOException e) {
+            started = false;
             throw new PortNumberException();
         }
 
@@ -58,6 +61,10 @@ public class OthelloServer implements Server, Runnable {
     @Override
     public int getPort() {
         return serverSocket.getLocalPort();
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 
     /**

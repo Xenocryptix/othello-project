@@ -263,7 +263,7 @@ public class OthelloClient implements Client, Runnable {
             if (player == null) {
                 return;
             }
-            writer.write(Protocol.queue());
+            writer.write(QUEUE);
             writer.newLine();
             writer.flush();
             inQueue = !inQueue;

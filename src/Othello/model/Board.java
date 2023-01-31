@@ -1,5 +1,7 @@
 package Othello.model;
 
+import Othello.exceptions.InvalidNumber;
+
 import java.util.Arrays;
 
 /**
@@ -91,7 +93,13 @@ public class Board {
         ensures \result >= 0 && \result < 64;
         pure
     */
-    public int index(int row, int col) {
+    public int index(int row, int col) throws InvalidNumber {
+        if (row < 0 || row >= DIM) {
+            throw new InvalidNumber("Row: " + row + " is invalid");
+        }
+        if (col < 0 || col >= DIM) {
+            throw new InvalidNumber("Column: " + col + " is invalid");
+        }
         return row * DIM + col;
     }
 
@@ -105,7 +113,10 @@ public class Board {
         ensures index >= 0 && index < DIM*DIM ==> \result == true;
         pure;
     */
-    public boolean isField(int index) {
+    public boolean isField(int index) throws InvalidNumber {
+        if (index < 0 || index >= DIM*DIM) {
+            throw new InvalidNumber("Index :" + index + " is invalid");
+        }
         return index >= 0 && index < DIM * DIM;
     }
 
@@ -120,7 +131,13 @@ public class Board {
         ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
         pure;
     */
-    public boolean isField(int row, int col) {
+    public boolean isField(int row, int col) throws InvalidNumber {
+        if (row < 0 || row >= DIM) {
+            throw new InvalidNumber("Row: " + row + " is invalid");
+        }
+        if (col < 0 || col >= DIM) {
+            throw new InvalidNumber("Column: " + col + " is invalid");
+        }
         return row >= 0 && row < DIM && col >= 0 && col < DIM;
     }
 
@@ -137,8 +154,12 @@ public class Board {
         pure
     */
     public Disk getField(int row, int col) {
-        if (!isField(row, col)) {
-            return null;
+        try {
+            if (!isField(row, col)) {
+                return null;
+            }
+        } catch (InvalidNumber e) {
+            e.getMessage();
         }
         return fields[row][col];
     }
@@ -201,7 +222,13 @@ public class Board {
         ensures getField(row, col) == Disk.EMPTY ==> \result == true;
         pure
     */
-    public boolean isEmptyField(int row, int col) {
+    public boolean isEmptyField(int row, int col) throws InvalidNumber {
+        if (row < 0 || row >= DIM) {
+            throw new InvalidNumber("Row: " + row + " is invalid");
+        }
+        if (col < 0 || col >= DIM) {
+            throw new InvalidNumber("Column: " + col + " is invalid");
+        }
         return getField(row, col) == Disk.EMPTY;
     }
 
@@ -290,7 +317,13 @@ public class Board {
         requires isField(row, col);
         ensures getField(row, col) == disk;
     */
-    public void setField(int row, int col, Disk disk) {
+    public void setField(int row, int col, Disk disk) throws InvalidNumber {
+        if (row < 0 || row >= DIM) {
+            throw new InvalidNumber("Row: " + row + " is invalid");
+        }
+        if (col < 0 || col >= DIM) {
+            throw new InvalidNumber("Column: " + col + " is invalid");
+        }
         fields[row][col] = disk;
     }
 
@@ -328,13 +361,24 @@ public class Board {
         int col = ((OthelloMove) move).getCol();
         Disk disk = ((OthelloMove) move).getDisk();
         //First place the disk in the coordinate
-        setField(row, col, disk);
+        try {
+            setField(row, col, disk);
+        } catch (InvalidNumber e) {
+            e.getMessage();
+        }
         for (int[] dir : DIRECTION_X_AND_Y) {
             //We iterate in 8 direction, looking for flippable lines
             int directionRow = row + dir[0];
             int directionColumn = col + dir[1];
             int count = 0;
-            while (isField(directionRow, directionColumn)) {
+            while (true) {
+                try {
+                    if (!isField(directionRow, directionColumn)) {
+                        break;
+                    }
+                } catch (InvalidNumber e) {
+                    e.getMessage();
+                }
                 //Continue to iterate in that direction while the tile is of opposite color
                 if (getField(directionRow, directionColumn).equals(disk.other())) {
                     //Continue to move in that direction while counting the tiles that traversed
@@ -347,15 +391,19 @@ public class Board {
                 }
             }
             //We backtrack to the first tile, flipping all the disks in the middle
-            if (isField(directionRow, directionColumn) &&
-                    getField(directionRow, directionColumn).equals(disk)) {
-                directionRow -= dir[0];
-                directionColumn -= dir[1];
-                for (int i = 0; i < count; i++) {
-                    flip(directionRow, directionColumn);
+            try {
+                if (isField(directionRow, directionColumn) &&
+                        getField(directionRow, directionColumn).equals(disk)) {
                     directionRow -= dir[0];
                     directionColumn -= dir[1];
+                    for (int i = 0; i < count; i++) {
+                        flip(directionRow, directionColumn);
+                        directionRow -= dir[0];
+                        directionColumn -= dir[1];
+                    }
                 }
+            } catch (InvalidNumber e) {
+                e.getMessage();
             }
         }
     }
@@ -397,9 +445,13 @@ public class Board {
     public void flip(int i) {
         int row = getRow(i);
         int col = getColumn(i);
-        if (!isEmptyField(row, col)) {
-            Disk disk = getField(row, col);
-            setField(row, col, disk.other());
+        try {
+            if (!isEmptyField(row, col)) {
+                Disk disk = getField(row, col);
+                setField(row, col, disk.other());
+            }
+        } catch (InvalidNumber e) {
+            e.getMessage();
         }
     }
 
@@ -415,9 +467,13 @@ public class Board {
         ensures countDisk(getField(row,col)) == \old(countDisk(getField(row,col)))+1;
     */
     public void flip(int row, int col) {
-        if (!isEmptyField(row, col)) {
-            Disk disk = getField(row, col);
-            setField(row, col, disk.other());
+        try {
+            if (!isEmptyField(row, col)) {
+                Disk disk = getField(row, col);
+                setField(row, col, disk.other());
+            }
+        } catch (InvalidNumber e) {
+            e.getMessage();
         }
     }
 

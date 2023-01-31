@@ -1,5 +1,6 @@
 package Othello.model;
 
+import Othello.exceptions.InvalidNumber;
 import Othello.model.players.Player;
 
 import java.util.ArrayList;
@@ -193,7 +194,12 @@ public class OthelloGame implements Game {
             int nCol = col + dir[1];
             int count = 0;
             //Iterate in the chosen direction
-            while (board.isField(nRow, nCol)) {
+            while (true) {
+                try {
+                    if (!board.isField(nRow, nCol)) break;
+                } catch (InvalidNumber e) {
+                    e.getMessage();
+                }
                 //If a tile with the same color as the starting point is
                 // encountered, break immediately
                 if (board.getField(nRow, nCol).equals(disk)) {
@@ -257,9 +263,13 @@ public class OthelloGame implements Game {
         //For every occupied tile, we do a directional check
         for (int i = 0; i < Board.DIM; i++) {
             for (int j = 0; j < Board.DIM; j++) {
-                if (!board.isEmptyField(i, j)) {
-                    Disk disk = board.getField(i, j);
-                    checkDirection(i, j, disk);
+                try {
+                    if (!board.isEmptyField(i, j)) {
+                        Disk disk = board.getField(i, j);
+                        checkDirection(i, j, disk);
+                    }
+                } catch (InvalidNumber e) {
+                    e.getMessage();
                 }
             }
         }
