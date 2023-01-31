@@ -10,7 +10,7 @@ import Othello.players.PlayerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OthelloGameThread implements Runnable {
+public class OthelloGameThread {
     private final List<ClientHandler> players;
     private final String player1Name;
     private final String player2Name;
@@ -32,11 +32,6 @@ public class OthelloGameThread implements Runnable {
 
     public List<ClientHandler> getPlayers() {
         return players;
-    }
-
-    @Override
-    public void run() {
-
     }
 
     public void sendMovePlayers(int index) {

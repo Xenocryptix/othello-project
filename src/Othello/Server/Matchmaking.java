@@ -1,5 +1,6 @@
 package Othello.Server;
 
+import java.util.List;
 import java.util.Queue;
 
 public class Matchmaking implements Runnable {
@@ -10,7 +11,7 @@ public class Matchmaking implements Runnable {
     @Override
     public void run() {
         while (server.isAccepting()) {
-            Queue<ClientHandler> queue = server.getQueue();
+            List<ClientHandler> queue = server.getQueue();
             if (server.getInQueue() >= 2) {
                 server.startGame();
             }

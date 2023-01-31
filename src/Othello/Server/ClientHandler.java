@@ -28,8 +28,8 @@ public class ClientHandler implements Runnable {
         return username;
     }
 
-    public void sendNewGame(String message) {
-        writer.println(message);
+    public void recieveNewGame(String newGame) {
+        writer.println(newGame);
     }
 
     public void close() {
@@ -79,7 +79,11 @@ public class ClientHandler implements Runnable {
                         writer.println(list(server.getUsernames()));
                         break;
                     case QUEUE:
-                        server.queue(this);
+                        if (server.inQueue(this)) {
+                            server.deQueue(this);
+                        } else {
+                            server.queue(this);
+                        }
                         break;
                     case MOVE:
                         if (Integer.parseInt(splitted[1]) < 0 || Integer.parseInt(splitted[1]) > 64) {
