@@ -42,7 +42,7 @@ public class ClientTest {
     }
 
     @Test
-    public void testMessage() throws InterruptedException, UnknownHostException {
+    void testMessage() throws InterruptedException, UnknownHostException {
         assertTrue(client.connect(InetAddress.getByName("localhost"), 2222));
 
         client.sendHello("Test class");
@@ -59,10 +59,10 @@ public class ClientTest {
 
         client.queue();
         TimeUnit.SECONDS.sleep(1);
-        assertEquals(server.getInQueue(), 1);
+        assertEquals(1, server.getInQueue());
         client.queue();
         TimeUnit.SECONDS.sleep(1);
-        assertEquals(server.getInQueue(), 0);
+        assertEquals(0, server.getInQueue());
     }
 
 }
