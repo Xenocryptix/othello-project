@@ -1,0 +1,52 @@
+package NetworkingTest;
+
+import Othello.Client.ClientListener;
+import Othello.Client.Listener;
+import Othello.Client.OthelloClient;
+import Othello.Server.OthelloServer;
+import Othello.Server.Server;
+import Othello.exceptions.PortNumberException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static Othello.Client.OthelloClient.CONNECTLOCK;
+import static Othello.Client.OthelloClient.LOGINLOCK;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class ClientTest {
+    private Server server;
+    Listener clientListener;
+    SampleClient client;
+
+    @BeforeEach
+    public void setUp() throws PortNumberException, UnknownHostException {
+        server = new OthelloServer(2222);
+        server.start();
+        clientListener = new ClientListener();
+        client = new SampleClient(clientListener);
+        client.connect(InetAddress.getByName("localhost"), 2222);
+    }
+
+    @Test
+    public void testClient() throws PortNumberException, InterruptedException {
+        client.sendHello("Test class");
+        synchronized (CONNECTLOCK) {
+            CONNECTLOCK.wait();
+        }
+        assertTrue(client.getCommand().contains("HELLO"));
+
+        client.sendLogin("test_client");
+        synchronized (LOGINLOCK) {
+            LOGINLOCK.wait();
+        }
+        assertTrue(client.getCommand().contains("LOGIN"));
+    }
+
+}

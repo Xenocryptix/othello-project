@@ -20,7 +20,6 @@ public class OthelloTUI {
     private static int port = -1;
     private static final String GREEN = "\033[0;32m";
     public static final String RESET = "\033[0m";
-    private boolean loggedIn = false;
 
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
@@ -60,7 +59,7 @@ public class OthelloTUI {
 
             help();
 
-            System.out.println("Enter a command: ");
+            System.out.print("Enter a command: ");
             String command;
             while ((command = input.readLine()) != null) {
                 if (command.equals("quit")) {
@@ -91,7 +90,7 @@ public class OthelloTUI {
                         }
                 }
                 if (client.inGame() && client.checkTurn()) {
-                    System.out.println("Enter a move/command: ");
+                    System.out.print("Enter a move/command: ");
                 }
             }
             client.close();
