@@ -131,13 +131,13 @@ public class Board {
         ensures row >= 0 && row < DIM && col >= 0 && col < DIM ==> \result == true;
         pure;
     */
-    public boolean isField(int row, int col) throws InvalidNumber {
-        if (row < 0 || row >= DIM) {
-            throw new InvalidNumber("Row: " + row + " is invalid");
-        }
-        if (col < 0 || col >= DIM) {
-            throw new InvalidNumber("Column: " + col + " is invalid");
-        }
+    public boolean isField(int row, int col) {
+//        if (row < 0 || row >= DIM) {
+//            throw new InvalidNumber("Row: " + row + " is invalid");
+//        }
+//        if (col < 0 || col >= DIM) {
+//            throw new InvalidNumber("Column: " + col + " is invalid");
+//        }
         return row >= 0 && row < DIM && col >= 0 && col < DIM;
     }
 
@@ -154,12 +154,8 @@ public class Board {
         pure
     */
     public Disk getField(int row, int col) {
-        try {
-            if (!isField(row, col)) {
-                return null;
-            }
-        } catch (InvalidNumber e) {
-            e.getMessage();
+        if (!isField(row, col)) {
+            return null;
         }
         return fields[row][col];
     }
@@ -364,21 +360,14 @@ public class Board {
         try {
             setField(row, col, disk);
         } catch (InvalidNumber e) {
-            e.getMessage();
+            throw new RuntimeException(e);
         }
         for (int[] dir : DIRECTION_X_AND_Y) {
             //We iterate in 8 direction, looking for flippable lines
             int directionRow = row + dir[0];
             int directionColumn = col + dir[1];
             int count = 0;
-            while (true) {
-                try {
-                    if (!isField(directionRow, directionColumn)) {
-                        break;
-                    }
-                } catch (InvalidNumber e) {
-                    e.getMessage();
-                }
+            while (isField(directionRow, directionColumn)) {
                 //Continue to iterate in that direction while the tile is of opposite color
                 if (getField(directionRow, directionColumn).equals(disk.other())) {
                     //Continue to move in that direction while counting the tiles that traversed
@@ -391,19 +380,15 @@ public class Board {
                 }
             }
             //We backtrack to the first tile, flipping all the disks in the middle
-            try {
-                if (isField(directionRow, directionColumn) &&
-                        getField(directionRow, directionColumn).equals(disk)) {
+            if (isField(directionRow, directionColumn) &&
+                    getField(directionRow, directionColumn).equals(disk)) {
+                directionRow -= dir[0];
+                directionColumn -= dir[1];
+                for (int i = 0; i < count; i++) {
+                    flip(directionRow, directionColumn);
                     directionRow -= dir[0];
                     directionColumn -= dir[1];
-                    for (int i = 0; i < count; i++) {
-                        flip(directionRow, directionColumn);
-                        directionRow -= dir[0];
-                        directionColumn -= dir[1];
-                    }
                 }
-            } catch (InvalidNumber e) {
-                e.getMessage();
             }
         }
     }

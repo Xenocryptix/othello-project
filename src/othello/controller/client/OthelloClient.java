@@ -284,9 +284,6 @@ public class OthelloClient implements Client, Runnable {
     @Override
     public void queue() {
         try {
-            if (player == null) {
-                return;
-            }
             writer.write(Protocol.QUEUE);
             writer.newLine();
             writer.flush();
@@ -308,7 +305,7 @@ public class OthelloClient implements Client, Runnable {
 
             while ((command = reader.readLine()) != null) {
                 String[] splitted = command.split(Protocol.SEPARATOR);
-                msg = splitted[0];
+                msg = command;
                 switch (splitted[0]) {
                     case Protocol.NEWGAME:
                         newGame(splitted);
