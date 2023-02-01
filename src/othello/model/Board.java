@@ -29,7 +29,6 @@ public class Board {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
-    private static final String LINE = "  +—+—+—+—+—+—+—+—+";
     private /*@ spec_public */ Disk[][] fields;
 
     /**

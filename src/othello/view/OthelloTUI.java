@@ -16,11 +16,12 @@ import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
 public class OthelloTUI {
-    private static String serverAddress;
-    private static int port = -1;
     private static final String GREEN = "\033[0;32m";
     private static final String RESET = "\033[0m";
     private static final SoundEffect ERROR = new SoundEffect("src/othello/view/error.wav");
+    private static String serverAddress;
+    private static int port = -1;
+
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
         try {
@@ -34,7 +35,7 @@ public class OthelloTUI {
      * Method called when logging in. It sends the username and checks
      * it is logged in or not
      *
-     * @param input To read the output from the server
+     * @param input  To read the output from the server
      * @param client The client associated with the TUI
      * @throws IOException Thrown if there was an error in reading
      */
@@ -60,7 +61,7 @@ public class OthelloTUI {
      * using the passed client and prints a message accordingly
      *
      * @param command The entered move by the user
-     * @param client The client associated with the TUI
+     * @param client  The client associated with the TUI
      */
     private static void sendMove(String command, OthelloClient client) {
         if (client.getPlayer() instanceof HumanPlayer) {
@@ -96,7 +97,7 @@ public class OthelloTUI {
      * to ensure that the user is not in the queue and also not
      * in a game.
      *
-     * @param input To read the output from the server
+     * @param input  To read the output from the server
      * @param client The client associated with the TUI
      * @throws IOException Thrown if there was an error in reading
      */
@@ -147,7 +148,8 @@ public class OthelloTUI {
                         GREEN + "queue" + " ................. join/leave the queue \n" +
                         GREEN + "list" + "  ................. get a list of all players\n" +
                         GREEN + "hint" + "  ................. a move that can be played\n" +
-                        GREEN + "help" + " .................. help (this menu)\n" + RESET);
+                        GREEN + "help" + " .................. help (this menu)\n" +
+                        GREEN + "quit" + " .................. close your game (can't be performed mid game)\n" + RESET);
     }
 
     /**
@@ -159,7 +161,7 @@ public class OthelloTUI {
         System.out.println(
                 GREEN + "Welcome to the Othello Central!\n" +
                         "Here you can have fun, but don't forget to finish you school work!"
-                + RESET
+                        + RESET
         );
     }
 
