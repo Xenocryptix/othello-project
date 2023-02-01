@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static Othello.Client.OthelloClient.CONNECTLOCK;
 import static Othello.Client.OthelloClient.LOGINLOCK;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientTest {
-    private Server server;
+    private OthelloServer server;
     Listener clientListener;
     OthelloClient client;
 
@@ -35,28 +36,32 @@ public class ClientTest {
         server = new OthelloServer(2222);
         server.start();
         clientListener = new ClientListener();
-        client = new OthelloClient();
-        client.addListener(clientListener);
-        client.connect(InetAddress.getByName("localhost"), 2222);
+        client = new OthelloClient(clientListener);
+
     }
 
     @Test
-    public void testMessage() throws InterruptedException {
+    public void testMessage() throws InterruptedException, UnknownHostException {
+        assertTrue(client.connect(InetAddress.getByName("localhost"), 2222));
+
         client.sendHello("Test class");
-        synchronized (CONNECTLOCK) {
-            System.out.println("Waiting...");
-            CONNECTLOCK.wait();
-            assertTrue(client.getMessage().contains("HELLO"));
-        }
+        TimeUnit.SECONDS.sleep(1);
+        assertTrue(client.getMessage().contains("HELLO"));
 
         client.sendLogin("test_client");
-        synchronized (LOGINLOCK) {
-            LOGINLOCK.wait();
-            assertTrue(client.getMessage().contains("LOGIN"));
-        }
+        TimeUnit.SECONDS.sleep(1);
+        assertTrue(client.getMessage().contains("LOGIN"));
 
         client.sendList();
+        TimeUnit.SECONDS.sleep(1);
+        assertTrue(client.getMessage().contains("LIST"));
 
+        client.queue();
+        TimeUnit.SECONDS.sleep(1);
+        assertEquals(server.getInQueue(), 1);
+        client.queue();
+        TimeUnit.SECONDS.sleep(1);
+        assertEquals(server.getInQueue(), 0);
     }
 
 }
