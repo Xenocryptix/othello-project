@@ -1,9 +1,9 @@
 package GameLogicTest;
 
-import Othello.exceptions.InvalidNumber;
-import Othello.model.Board;
-import Othello.model.Disk;
-import Othello.model.OthelloMove;
+import othello.exceptions.InvalidNumber;
+import othello.model.Board;
+import othello.model.Disk;
+import othello.model.OthelloMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

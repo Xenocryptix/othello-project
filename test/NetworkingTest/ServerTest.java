@@ -1,8 +1,8 @@
 package NetworkingTest;
 
-import Othello.Server.OthelloServer;
-import Othello.Server.Server;
-import Othello.exceptions.PortNumberException;
+import othello.controller.server.OthelloServer;
+import othello.controller.server.Server;
+import othello.exceptions.PortNumberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

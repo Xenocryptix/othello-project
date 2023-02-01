@@ -1,22 +1,17 @@
 package NetworkingTest;
 
-import Othello.Client.ClientListener;
-import Othello.Client.Listener;
-import Othello.Client.OthelloClient;
-import Othello.Server.OthelloServer;
-import Othello.Server.Server;
-import Othello.exceptions.PortNumberException;
+import othello.controller.client.ClientListener;
+import othello.controller.client.Listener;
+import othello.controller.client.OthelloClient;
+import othello.controller.server.OthelloServer;
+import othello.exceptions.PortNumberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static Othello.Client.OthelloClient.CONNECTLOCK;
-import static Othello.Client.OthelloClient.LOGINLOCK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

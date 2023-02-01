@@ -1,12 +1,12 @@
 package GameLogicTest;
 
-import Othello.model.Board;
-import Othello.model.Disk;
-import Othello.model.OthelloGame;
-import Othello.model.OthelloMove;
-import Othello.model.players.AbstractPlayer;
-import Othello.model.players.PlayerFactory;
-import Othello.model.players.ai.NaiveStrategy;
+import othello.model.Board;
+import othello.model.Disk;
+import othello.model.OthelloGame;
+import othello.model.OthelloMove;
+import othello.model.players.AbstractPlayer;
+import othello.model.players.PlayerFactory;
+import othello.model.players.ai.NaiveStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

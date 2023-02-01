@@ -1,12 +1,11 @@
 package NetworkingTest;
 
-import Othello.Server.OthelloServer;
-import Othello.Server.Protocol;
-import Othello.Server.Server;
+import othello.controller.server.OthelloServer;
+import othello.controller.Protocol;
+import othello.controller.server.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
