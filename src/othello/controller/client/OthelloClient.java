@@ -1,10 +1,7 @@
 package othello.controller.client;
 
 import othello.controller.Protocol;
-import othello.model.Disk;
-import othello.model.Move;
-import othello.model.OthelloGame;
-import othello.model.OthelloMove;
+import othello.model.*;
 import othello.model.players.AbstractPlayer;
 import othello.model.players.HumanPlayer;
 import othello.model.players.PlayerFactory;
@@ -422,13 +419,13 @@ public class OthelloClient implements Client, Runnable {
     private void gameOver(String[] splitted) {
         inGame = false;
         switch (splitted[1]) {
-            case "DISCONNECT":
+            case Result.DISCONNECT:
                 broadcast("Opponent " + opponent.getName() + " lost connection");
                 break;
-            case "DRAW":
+            case Result.DRAW:
                 broadcast("You have both drawn!");
                 break;
-            case "VICTORY":
+            case Result.VICTORY:
                 broadcast(game.getWinner() + " won!\n");
                 if (game.getWinner().toString().substring(7).equals(username)) {
                     broadcast("Congrats! you won!");

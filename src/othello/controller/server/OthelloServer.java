@@ -2,6 +2,7 @@ package othello.controller.server;
 
 
 import othello.controller.Protocol;
+import othello.exceptions.ConnectionDropped;
 import othello.exceptions.PortNumberException;
 
 import java.io.IOException;
@@ -258,13 +259,14 @@ public class OthelloServer implements Server, Runnable {
      * the player is removed from the queue.
      *
      * @param clientHandler The client handler that disconnected
+     * @throws ConnectionDropped
      */
-    public void removeClient(ClientHandler clientHandler) {
+    public void removeClient(ClientHandler clientHandler) throws ConnectionDropped {
         synchronized (players) {
             players.remove(clientHandler);
             playersQueue.remove(clientHandler);
             if (inGame(clientHandler)) {
-                getGame(clientHandler).disconnected(clientHandler);
+                throw new ConnectionDropped("Player was in game");
             }
         }
     }

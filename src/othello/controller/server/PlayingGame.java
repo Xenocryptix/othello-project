@@ -2,10 +2,7 @@ package othello.controller.server;
 
 
 import othello.controller.Protocol;
-import othello.model.Board;
-import othello.model.Disk;
-import othello.model.OthelloGame;
-import othello.model.OthelloMove;
+import othello.model.*;
 import othello.model.players.PlayerFactory;
 
 import java.util.ArrayList;
@@ -82,9 +79,9 @@ public class PlayingGame {
         if (game.isGameover()) {
             String message;
             if (game.getWinner() != null) {
-                message = Protocol.gameover(new String[]{"VICTORY", game.getWinner().toString()});
+                message = Protocol.gameover(new String[]{Result.VICTORY, game.getWinner().toString()});
             } else {
-                message = Protocol.gameover(new String[]{"DRAW"});
+                message = Protocol.gameover(new String[]{Result.DRAW});
             }
             players.get(0).sendMessage(message);
             players.get(1).sendMessage(message);
@@ -98,12 +95,12 @@ public class PlayingGame {
      *
      * @param clientHandler The client handler that disconnected
      */
-    public void disconnected(ClientHandler clientHandler) {
+    public void disconnect(ClientHandler clientHandler) {
         String message;
         if (clientHandler.equals(players.get(0))) {
-            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(0).getUsername()});
+            message = Protocol.gameover(new String[]{Result.DISCONNECT, players.get(0).getUsername()});
         } else {
-            message = Protocol.gameover(new String[]{"DISCONNECT", players.get(1).getUsername()});
+            message = Protocol.gameover(new String[]{Result.DISCONNECT, players.get(1).getUsername()});
         }
         players.get(0).sendMessage(message);
         players.get(1).sendMessage(message);

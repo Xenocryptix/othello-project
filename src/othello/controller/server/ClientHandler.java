@@ -1,6 +1,7 @@
 package othello.controller.server;
 
 import othello.controller.Protocol;
+import othello.exceptions.ConnectionDropped;
 
 import java.io.*;
 import java.net.Socket;
@@ -39,6 +40,9 @@ public class ClientHandler implements Runnable {
             reader.close();
         } catch (IOException e) {
             System.out.println("Close error");
+        } catch (ConnectionDropped e) {
+            server.getGame(this).disconnect(this);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -93,9 +97,12 @@ public class ClientHandler implements Runnable {
                         writer.println(Protocol.ERROR);
                 }
             }
-            close(); //When a readline is null then the client has tried to quit, so the client handler must be closed
+            throw new ConnectionDropped(username + " left"); //When a readline is null then the client has tried to quit, so the client handler must be closed
         } catch (IOException e) {
             close();
+        } catch (ConnectionDropped e) {
+            close();
+            System.out.println(e.getMessage());
         }
     }
 }
