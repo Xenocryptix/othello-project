@@ -1,11 +1,11 @@
 package GameLogicTest;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import othello.exceptions.InvalidNumber;
 import othello.model.Board;
 import othello.model.Disk;
 import othello.model.OthelloMove;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,6 +39,8 @@ public class BoardTest {
 
     /**
      * Ensures that converting from (row,col) pair work's correctly
+     *
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     @Test
     public void testIndex() throws InvalidNumber {
@@ -53,22 +55,24 @@ public class BoardTest {
 
     /**
      * Ensures that all fields of the board are from 0 till Board.DIM * Board.DIM
+     *
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     @Test
     public void testIsFieldIndex() throws InvalidNumber {
         assertThrows(InvalidNumber.class, () -> board.isField(-1));
         assertTrue(board.isField(0));
         assertTrue(board.isField(Board.DIM * Board.DIM - 1));
-        assertThrows(InvalidNumber.class, () -> board.isField(Board.DIM*Board.DIM));
+        assertThrows(InvalidNumber.class, () -> board.isField(Board.DIM * Board.DIM));
     }
 
     /**
      * Ensures that the board has fields at row and column 0 till Board.DIM - 1
      */
     @Test
-    public void testIsFieldRowCol() throws InvalidNumber {
-        assertFalse(board.isField(0,-1));
-        assertFalse(board.isField(-1,0));
+    public void testIsFieldRowCol() {
+        assertFalse(board.isField(0, -1));
+        assertFalse(board.isField(-1, 0));
         assertTrue(board.isField(0, 0));
         assertTrue(board.isField(Board.DIM - 1, Board.DIM - 1));
         assertFalse(board.isField(7, Board.DIM + 1));
@@ -87,6 +91,8 @@ public class BoardTest {
 
     /**
      * Ensures that setting a field with row and col to a disk work
+     *
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     @Test
     public void testSetAndGetFieldRowCol() throws InvalidNumber {
@@ -225,6 +231,8 @@ public class BoardTest {
 
     /**
      * Test that when multiple flips occur at the same time it flips the correct disks
+     *
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     @Test
     public void testMultipleFlips() throws InvalidNumber {

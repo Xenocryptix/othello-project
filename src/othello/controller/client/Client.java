@@ -37,6 +37,7 @@ public interface Client {
      * Send the login details to the server.
      *
      * @param username the username
+     * @return true if successful, otherwise false
      */
     boolean sendLogin(String username);
 

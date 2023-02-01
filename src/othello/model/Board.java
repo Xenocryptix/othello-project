@@ -85,6 +85,7 @@ public class Board {
      * @param row the row of the field
      * @param col the column of the field
      * @return the index belonging to the (row,col) field
+     * @throws InvalidNumber if the number row or col do not fall in the correct range
      */
     /*@
         requires row >= 0 && row < DIM;
@@ -107,6 +108,7 @@ public class Board {
      *
      * @param index The index to be checked
      * @return True if the index falls in the range of [0,Dim), otherwise false
+     * @throws InvalidNumber if the index doesn't fall in the correct range
      */
     /*@
         ensures index >= 0 && index < DIM*DIM ==> \result == true;
@@ -131,12 +133,6 @@ public class Board {
         pure;
     */
     public boolean isField(int row, int col) {
-//        if (row < 0 || row >= DIM) {
-//            throw new InvalidNumber("Row: " + row + " is invalid");
-//        }
-//        if (col < 0 || col >= DIM) {
-//            throw new InvalidNumber("Column: " + col + " is invalid");
-//        }
         return row >= 0 && row < DIM && col >= 0 && col < DIM;
     }
 
@@ -211,6 +207,7 @@ public class Board {
      * @param row the row of the field
      * @param col the column of the field
      * @return true if the field is empty
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     /*@
         requires isField(row, col);
@@ -307,6 +304,7 @@ public class Board {
      * @param row  the field's row
      * @param col  the field's column
      * @param disk the mark to be placed
+     * @throws InvalidNumber if the number doesn't lien in the correct range
      */
     /*@
         requires isField(row, col);

@@ -149,7 +149,8 @@ public class OthelloTUI {
                         GREEN + "list" + "  ................. get a list of all players\n" +
                         GREEN + "hint" + "  ................. a move that can be played\n" +
                         GREEN + "help" + " .................. help (this menu)\n" +
-                        GREEN + "quit" + " .................. close your game (can't be performed mid game)\n" + RESET);
+                        GREEN + "quit" + " .................. close " +
+                        "your game (can't be performed mid game)\n" + RESET);
     }
 
     /**

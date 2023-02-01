@@ -96,20 +96,6 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
-     * Stops the server. This method returns after the server thread has actually stopped.
-     * This method may only be run once and only after start() has been called before.
-     */
-    @Override
-    public void stop() {
-        try {
-            serverSocket.close();
-            serverThread.join();
-        } catch (IOException | InterruptedException e) {
-            System.out.println("Error in waiting for the thread to end");
-        }
-    }
-
-    /**
      * Query on whether the server is alive or not.
      *
      * @return true if the server is currently accepting connections, and false otherwise.

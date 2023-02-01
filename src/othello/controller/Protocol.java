@@ -22,6 +22,7 @@ public final class Protocol {
      * Build a new protocol description which is responsible for the handshake.
      *
      * @return the protocol description for handshake
+     * @param description the description of the hello
      */
     public static String handshake(String description) {
         return HELLO + SEPARATOR + description;

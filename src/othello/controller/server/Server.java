@@ -2,12 +2,17 @@ package othello.controller.server;
 
 import othello.exceptions.PortNumberException;
 
+/**
+ * Used to represent a new server instance.
+ */
 public interface Server {
     /**
      * Starts the server. The server should run in a separate thread,
      * so this method should return after starting this thread.
      * The server port depends on the implementation, for example,
      * the port can be given in the constructor, This method may only be run once.
+     *
+     * @throws PortNumberException if the port trying to use is not valid
      */
     //@ requires !isAccepting();
     //@ ensures isAccepting();
@@ -24,15 +29,9 @@ public interface Server {
     int getPort();
 
     /**
-     * Stops the server. This method returns after the server thread has actually stopped.
-     * This method may only be run once and only after start() has been called before.
-     */
-    //@ requires isAccepting();
-    //@ ensures !isAccepting();
-    void stop();
-
-    /**
-     * Returns true if the server is currently accepting connections, and false otherwise.
+     * Query on if the server is currently accepting connections, and false otherwise.
+     *
+     * @return True if the server is accepting new connections, otherwise no
      */
     //@ pure;
     boolean isAccepting();

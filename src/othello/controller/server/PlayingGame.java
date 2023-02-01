@@ -84,9 +84,9 @@ public class PlayingGame {
             if (game.getWinner() != null) {
                 message = Protocol.gameover(
                         new String[]
-                        {Result.VICTORY, game.getWinner().toString()});
+                        {"VICTORY", game.getWinner().toString()});
             } else {
-                message = Protocol.gameover(new String[]{Result.DRAW});
+                message = Protocol.gameover(new String[]{"DRAW"});
             }
             players.get(0).sendMessage(message);
             players.get(1).sendMessage(message);
@@ -105,11 +105,11 @@ public class PlayingGame {
         if (clientHandler.equals(players.get(0))) {
             message = Protocol.gameover(
                     new String[]
-                    {Result.DISCONNECT, players.get(0).getUsername()});
+                    {"DISCONNECT", players.get(0).getUsername()});
         } else {
             message = Protocol.gameover(
                     new String[]
-                    {Result.DISCONNECT, players.get(1).getUsername()});
+                    {"DISCONNECT", players.get(1).getUsername()});
         }
         players.get(0).sendMessage(message);
         players.get(1).sendMessage(message);
