@@ -25,7 +25,5 @@ public class ServerTest {
         assertTrue(server.isAccepting());
         assertTrue(server.getPort() > 0);
         assertTrue(server.getPort() <= 65535);
-
-
     }
 }

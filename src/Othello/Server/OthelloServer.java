@@ -6,28 +6,23 @@ import Othello.exceptions.PortNumberException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //TODO
 public class OthelloServer implements Server, Runnable {
     private final Map<ClientHandler, String> players;
     private final Map<List<ClientHandler>, GameThread> sessions;
-    private final List<ClientHandler> playersQueue;
+    private final Queue<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
-    private final Thread matchThread;
     private ServerSocket serverSocket;
     private boolean started = false;
 
     //TODO
     public OthelloServer(int port) {
         this.port = port;
-        playersQueue = new ArrayList<>();
+        playersQueue = new ArrayDeque<>();
         serverThread = new Thread(this);
-        matchThread = new Thread(new Matchmaking(this));
         players = new HashMap<>();
         sessions = new HashMap<>();
     }
@@ -43,7 +38,6 @@ public class OthelloServer implements Server, Runnable {
         try {
             serverSocket = new ServerSocket(port);
             serverThread.start();
-            matchThread.start();
             started = true;
         } catch (IOException e) {
             started = false;
@@ -72,7 +66,7 @@ public class OthelloServer implements Server, Runnable {
      *
      * @return The list of client handlers that are in queue
      */
-    public List<ClientHandler> getQueue() {
+    public Queue<ClientHandler> getQueue() {
         return playersQueue;
     }
 
@@ -156,8 +150,8 @@ public class OthelloServer implements Server, Runnable {
     public void startGame() {
         synchronized (sessions) {
             if (getInQueue() >= 2) {
-                ClientHandler p1 = playersQueue.remove(0);
-                ClientHandler p2 = playersQueue.remove(0);
+                ClientHandler p1 = playersQueue.remove();
+                ClientHandler p2 = playersQueue.remove();
                 List<ClientHandler> currentPlayers = new ArrayList<>();
                 currentPlayers.add(p1);
                 currentPlayers.add(p2);
@@ -227,6 +221,9 @@ public class OthelloServer implements Server, Runnable {
     public void queue(ClientHandler clientHandler) {
         synchronized (playersQueue) {
             playersQueue.add(clientHandler);
+            if (getInQueue() >= 2) {
+                startGame();
+            }
         }
     }
 

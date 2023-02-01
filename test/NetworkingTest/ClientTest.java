@@ -23,30 +23,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ClientTest {
     private Server server;
     Listener clientListener;
-    SampleClient client;
+    OthelloClient client;
 
+    /**
+     * Set up the server and initialize the client components
+     * @throws PortNumberException
+     * @throws UnknownHostException
+     */
     @BeforeEach
     public void setUp() throws PortNumberException, UnknownHostException {
         server = new OthelloServer(2222);
         server.start();
         clientListener = new ClientListener();
-        client = new SampleClient(clientListener);
+        client = new OthelloClient(clientListener);
         client.connect(InetAddress.getByName("localhost"), 2222);
     }
 
     @Test
-    public void testClient() throws PortNumberException, InterruptedException {
+    public void testMessage() throws InterruptedException {
         client.sendHello("Test class");
         synchronized (CONNECTLOCK) {
+            System.out.println("Waiting...");
             CONNECTLOCK.wait();
+            assertTrue(client.getMessage().contains("HELLO"));
         }
-        assertTrue(client.getCommand().contains("HELLO"));
 
         client.sendLogin("test_client");
         synchronized (LOGINLOCK) {
             LOGINLOCK.wait();
+            assertTrue(client.getMessage().contains("LOGIN"));
         }
-        assertTrue(client.getCommand().contains("LOGIN"));
+
+        client.sendList();
+
     }
 
 }

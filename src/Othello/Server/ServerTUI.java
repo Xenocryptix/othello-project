@@ -14,6 +14,7 @@ public class ServerTUI {
             System.out.print("Input a valid port number: ");
             int port = input.nextInt();
             server = new OthelloServer(port);
+            server.start();
             started = server.isStarted();
         }
         System.out.println("Server successfully started!");

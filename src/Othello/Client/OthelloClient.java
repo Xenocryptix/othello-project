@@ -41,6 +41,7 @@ public class OthelloClient implements Client, Runnable {
     private Listener listener;
     public static final Object LOGINLOCK = new Object();
     public static final Object CONNECTLOCK = new Object();
+    private String msg;
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
@@ -65,6 +66,15 @@ public class OthelloClient implements Client, Runnable {
      */
     public boolean inGame() {
         return inGame;
+    }
+
+    /**
+     * Returns the reply from the server, for debugging purposes
+     *
+     * @return msg the reply
+     */
+    public String getMessage() {
+        return msg;
     }
 
     /**
@@ -280,6 +290,7 @@ public class OthelloClient implements Client, Runnable {
 
             while ((command = reader.readLine()) != null) {
                 String[] splitted = command.split(SEPARATOR);
+                msg = splitted[0];
                 switch (splitted[0]) {
                     case NEWGAME:
                         newGame(splitted);
