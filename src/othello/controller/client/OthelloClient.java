@@ -420,13 +420,13 @@ public class OthelloClient implements Client, Runnable {
     private void gameOver(String[] splitted) {
         inGame = false;
         switch (splitted[1]) {
-            case Result.DISCONNECT:
+            case "DISCONNECT":
                 broadcast("Opponent " + opponent.getName() + " lost connection");
                 break;
-            case Result.DRAW:
+            case "DRAW":
                 broadcast("You have both drawn!");
                 break;
-            case Result.VICTORY:
+            case "VICTORY":
                 broadcast(game.getWinner() + " won!\n");
                 if (game.getWinner().toString().substring(7).equals(username)) {
                     broadcast("Congrats! you won!");
