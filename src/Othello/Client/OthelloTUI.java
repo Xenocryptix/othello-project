@@ -61,7 +61,6 @@ public class OthelloTUI {
 
             help();
 
-            System.out.print("Enter a command: ");
             String command;
             while ((command = input.readLine()) != null) {
                 if (command.equals("quit")) {
@@ -92,7 +91,7 @@ public class OthelloTUI {
                         }
                 }
                 if (client.inGame() && client.checkTurn()) {
-                    System.out.print("Enter a move/command: ");
+                    System.out.print("Enter a move or command: ");
                 }
             }
             client.close();
