@@ -230,18 +230,25 @@ public class OthelloClient implements Client, Runnable {
      * Send the login details to the server, which is the username of the user.
      *
      * @param username The username of the user
+     * @return
      */
     @Override
-    public void sendLogin(String username) {
+    public boolean sendLogin(String username) {
         try {
             System.out.println("Logging in...");
             this.username = username;
+            if (username.contains("~")) {
+                clientListener.printMessage("Character \"~\" is not allowed in the username");
+                return false;
+            }
             writer.write(Protocol.login(username));
             writer.newLine();
             writer.flush();
+            return true;
         } catch (IOException e) {
             clientListener.printMessage("The server has disconnected");
             close();
+            return false;
         }
     }
 

@@ -123,7 +123,9 @@ public class OthelloTUI {
                 while (!client.isLoggedIn()) {
                     System.out.print("Enter username: ");
                     String username = input.readLine();
-                    client.sendLogin(username);
+                    if (!client.sendLogin(username)) {
+                        continue;
+                    }
                     LOGINLOCK.wait();
                 }
             } catch (InterruptedException e) {
