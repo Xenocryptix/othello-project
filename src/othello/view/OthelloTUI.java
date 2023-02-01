@@ -55,7 +55,7 @@ public class OthelloTUI {
                     error.play();
                 }
             }
-            client.sendHello("desc");//TODO
+            client.sendHello();
             synchronized (OthelloClient.CONNECTLOCK) {
                 OthelloClient.CONNECTLOCK.wait();
                 login(input, client);

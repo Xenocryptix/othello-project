@@ -28,10 +28,9 @@ public interface Client {
     /**
      * Send hello command to the server.
      *
-     * @param desc description
      * @return true if success, otherwise false
      */
-    boolean sendHello(String desc);
+    boolean sendHello();
 
     /**
      * Send the login details to the server.

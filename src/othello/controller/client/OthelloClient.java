@@ -221,13 +221,12 @@ public class OthelloClient implements Client, Runnable {
     /**
      * Send hello command to the server.
      *
-     * @param description the description of the hello message
      * @return true if success, otherwise false
      */
     @Override
-    public boolean sendHello(String description) {
+    public boolean sendHello() {
         try {
-            writer.write(Protocol.handshake(description));
+            writer.write(Protocol.handshake("New Client"));
             writer.newLine();
             writer.flush();
             return true;

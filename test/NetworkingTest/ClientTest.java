@@ -40,7 +40,7 @@ public class ClientTest {
     void testMessage() throws InterruptedException, UnknownHostException {
         assertTrue(client.connect(InetAddress.getByName("localhost"), 2222));
 
-        client.sendHello("Test class");
+        client.sendHello();
         TimeUnit.SECONDS.sleep(1);
         assertTrue(client.getMessage().contains("HELLO"));
 

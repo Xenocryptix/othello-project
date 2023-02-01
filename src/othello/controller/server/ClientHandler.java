@@ -61,7 +61,7 @@ public class ClientHandler implements Runnable {
                 String[] splitted = command.split(Protocol.SEPARATOR);
                 switch (splitted[0]) {
                     case Protocol.HELLO:
-                        writer.println(Protocol.handshake("Welcome"));
+                        writer.println(Protocol.handshake("Welcome to the server!"));
                         break;
                     case Protocol.LOGIN:
                         if (server.getUsernames().contains(splitted[1])) {
