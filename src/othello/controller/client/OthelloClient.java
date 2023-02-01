@@ -150,6 +150,7 @@ public class OthelloClient implements Client, Runnable {
             reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
             new Thread(this).start();
+            sendHello();
             return true;
         } catch (IOException e) {
             return false;
