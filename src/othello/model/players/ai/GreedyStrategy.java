@@ -5,7 +5,8 @@ import othello.model.*;
 import java.util.List;
 
 /**
- * Represents a greedy strategy that picks the move that flips the most disks.
+ * Represents a greedy strategy that picks the move that flips the most disks
+ * and pick the corners if it is one of the valid moves.
  */
 public class GreedyStrategy implements Strategy {
     /**
@@ -25,7 +26,8 @@ public class GreedyStrategy implements Strategy {
     }
 
     /**
-     * Return the move that flips the most disks.
+     * Return the move that flips the most disks and pick
+     * the corners if it is one of the valid moves.
      *
      * @param game The game for which the move should be returned
      * @return move The move with the highest number of flips
@@ -40,6 +42,8 @@ public class GreedyStrategy implements Strategy {
         if (movesForDisk.isEmpty()) {
             return null;
         }
+
+        //Picks the corners of they are one of the valid moves
         if (movesForDisk.contains(new OthelloMove(disk, 0, 0))) {
             return new OthelloMove(disk, 0, 0);
         } else if (movesForDisk.contains(new OthelloMove(disk, 0, 7))) {
@@ -49,6 +53,7 @@ public class GreedyStrategy implements Strategy {
         } else if (movesForDisk.contains(new OthelloMove(disk, 7, 0))) {
             return new OthelloMove(disk, 7, 0);
         }
+
         Move highestMove = movesForDisk.get(0);
         int highestFlips = 0;
 
