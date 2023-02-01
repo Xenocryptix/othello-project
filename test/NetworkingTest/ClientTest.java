@@ -17,7 +17,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//TODO
+/**
+ * Responsible for testing the client side
+ */
 public class ClientTest {
     private OthelloServer server;
     private List<OthelloClient> clients;

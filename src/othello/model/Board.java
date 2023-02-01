@@ -29,7 +29,7 @@ public class Board {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
-    private static final String LINE = "  +-----+-----+-----+-----+-----+-----+-----+-----+";
+    private static final String LINE = "  +—+—+—+—+—+—+—+—+";
     private /*@ spec_public */ Disk[][] fields;
 
     /**
@@ -469,20 +469,24 @@ public class Board {
      */
     @Override
     public String toString() {
-        String s = "     A     B     C     D     E     F     G     H\n";
-        s += LINE + "\n";
+        String s = "   Ａ  Ｂ Ｃ  Ｄ  Ｅ  Ｆ Ｇ  Ｈ\n";
+        String bar = "\u001B[32m" + "|";
         for (int i = 0; i < DIM; i++) {
-            String row = i + 1 + " |";
+            String row = i + 1 + " " + "\u001B[42m" + bar;
             for (int j = 0; j < DIM; j++) {
-                row += "  " + getField(i, j).toString().substring(0, 1).replace("E", " ") + "  ";
-                row = row + "|";
+                String disk;
+                if (getField(i, j).equals(Disk.BLACK)) {
+                    disk = "⚫";
+                } else if (getField(i, j).equals(Disk.WHITE)) {
+                    disk = "⚪";
+                } else {
+                    disk = "\uD83D\uDFE9";
+                }
+                row += disk;
+                row = row + bar;
             }
-            s = s + row;
-            if (i < DIM - 1) {
-                s = s + "\n" + LINE + "\n";
-            }
+            s = s + row + "\u001B[0m" + "\n";
         }
-        s += "\n" + LINE + "\n";
         s += "\nBLACK has " + countDisk(Disk.BLACK) + "\n"
                 + "WHITE has " + countDisk(Disk.WHITE);
         return s;
