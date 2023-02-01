@@ -26,6 +26,7 @@ import static othello.model.Board.DIM;
 public class OthelloClient implements Client, Runnable {
     public static final Object LOGINLOCK = new Object();
     public static final Object CONNECTLOCK = new Object();
+    public static final String SERVER_HAS_DISCONNECTED = "The server has disconnected";
     private final List<Listener> listeners;
     private Socket client;
     private BufferedReader reader;
@@ -40,7 +41,7 @@ public class OthelloClient implements Client, Runnable {
     private String msg;
 
     /**
-     * Initialises the listener of the othello client to communicate with the TUI.
+     * Initialises the listeners of the othello client to communicate with the TUI.
      */
     public OthelloClient() {
         inQueue = false;
@@ -49,7 +50,7 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Adds a listener to the list of listeners to be sent to
+     * Adds a listener to the list of listeners to be sent to.
      *
      * @param listener The listener to be added
      */
@@ -58,7 +59,7 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Broadcasts the message to all the listeners that are in the client
+     * Broadcasts the message to all the listeners that are in the client.
      *
      * @param message The message to be broadcast
      */
@@ -69,7 +70,7 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Returns whether the user is in a game or not
+     * Returns whether the user is in a game or not.
      *
      * @return true, if user is in a game, otherwise false
      */
@@ -78,7 +79,7 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Returns the reply from the server, for debugging purposes
+     * Returns the reply from the server, for debugging purposes.
      *
      * @return msg the reply
      */
@@ -104,6 +105,11 @@ public class OthelloClient implements Client, Runnable {
         return inQueue;
     }
 
+    /**
+     * Query if the use is logged in or not.
+     *
+     * @return True if yes, else false
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }
@@ -112,12 +118,12 @@ public class OthelloClient implements Client, Runnable {
      * Used by the TUI to allow the user to choose which kind of player the user
      * wants to be, i.e. allow a certain AI to play ot play by himself
      *
-     * @param player the input by the user to select what kind of player he wants to be
+     * @param type the input by the user to select what kind of player he wants to be
      * @return true, if option chosen by the user is available, otherwise false
      */
 
-    public boolean setPlayer(String player) {
-        switch (player.toLowerCase()) {
+    public boolean setPlayer(String type) {
+        switch (type.toLowerCase()) {
             case "h":
                 this.player = new PlayerFactory().makeHumanPlayer(username);
                 break;
@@ -164,7 +170,7 @@ public class OthelloClient implements Client, Runnable {
             reader.close();
             client.close();
         } catch (IOException e) {
-            //TODO: MESSAGE
+            broadcast("Unable to close socket");
         }
     }
 
@@ -195,7 +201,7 @@ public class OthelloClient implements Client, Runnable {
             }
             return false;
         } catch (IOException e) {
-            broadcast("The server has disconnected");
+            broadcast(SERVER_HAS_DISCONNECTED);
             return false;
         }
     }
@@ -218,44 +224,40 @@ public class OthelloClient implements Client, Runnable {
 
     /**
      * Send hello command to the server.
-     *
-     * @return true if success, otherwise false
      */
     @Override
-    public boolean sendHello() {
+    public void sendHello() {
         try {
             writer.write(Protocol.handshake("New Client"));
             writer.newLine();
             writer.flush();
-            return true;
         } catch (IOException e) {
-            broadcast("The server has disconnected");
+            broadcast(SERVER_HAS_DISCONNECTED);
             close();
-            return false;
         }
     }
 
     /**
      * Send the login details to the server, which is the username of the user.
      *
-     * @param username The username of the user
-     * @return
+     * @param name The username of the user
+     * @return true, if login was successfully, otherwise false
      */
     @Override
-    public boolean sendLogin(String username) {
+    public boolean sendLogin(String name) {
         try {
             System.out.println("Logging in...");
-            this.username = username;
-            if (username.contains("~")) {
+            this.username = name;
+            if (name.contains("~")) {
                 broadcast("Character \"~\" is not allowed in the username");
                 return false;
             }
-            writer.write(Protocol.login(username));
+            writer.write(Protocol.login(name));
             writer.newLine();
             writer.flush();
             return true;
         } catch (IOException e) {
-            broadcast("The server has disconnected");
+            broadcast(SERVER_HAS_DISCONNECTED);
             close();
             return false;
         }
@@ -263,20 +265,16 @@ public class OthelloClient implements Client, Runnable {
 
     /**
      * Sends a request to the server to send back the list of clients connected.
-     *
-     * @return true if success, otherwise false
      */
     @Override
-    public boolean sendList() {
+    public void sendList() {
         try {
             writer.write(Protocol.LIST);
             writer.newLine();
             writer.flush();
-            return true;
         } catch (IOException e) {
-            broadcast("The server has disconnected");
+            broadcast(SERVER_HAS_DISCONNECTED);
             close();
-            return false;
         }
     }
 
@@ -294,11 +292,15 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             inQueue = !inQueue;
         } catch (IOException e) {
-            broadcast("The server has disconnected");
+            broadcast(SERVER_HAS_DISCONNECTED);
             close();
         }
     }
 
+    /**
+     * Method which is called when a thread of OthelloClient is started which.
+     * reads messages from the server and performs actions accordingly
+     */
     @Override
     public void run() {
         try {
@@ -320,7 +322,8 @@ public class OthelloClient implements Client, Runnable {
                     case Protocol.ALREADYLOGGEDIN:
                         synchronized (LOGINLOCK) {
                             loggedIn = false;
-                            broadcast("This user is already connected to the server. Please choose a different username");
+                            broadcast("This user is already connected to the server. " +
+                                    "Please choose a different username");
                             LOGINLOCK.notifyAll();
                         }
                         break;
@@ -360,8 +363,9 @@ public class OthelloClient implements Client, Runnable {
     }
 
     /**
-     * Print the message based on current turn. If it is the players turn then it checks whether the player
-     * is playing as an AI, or human player and then does a move accordingly. IF it is not,
+     * Print the message based on current turn. If it is the players turn then
+     * it checks whether the played is playing as an AI, or human player and
+     * then does a move accordingly. If it is not,
      * then it waits for the opponent's move.
      */
     private void printTurn() {
@@ -471,7 +475,8 @@ public class OthelloClient implements Client, Runnable {
     public void hint() {
         if (player instanceof HumanPlayer) {
             if (checkTurn()) {
-                AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
+                AbstractPlayer aiHelper = new PlayerFactory().
+                        makeComputerPlayer(new GreedyStrategy());
                 Move move = aiHelper.determineMove(game);
                 if (move == null) {
                     broadcast("No moves available to play");

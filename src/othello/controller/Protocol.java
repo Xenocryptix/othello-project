@@ -2,6 +2,10 @@ package othello.controller;
 
 import java.util.List;
 
+/**
+ * Protocol builder which is user by both the server and the client to be able
+ * to communicate with each other.
+ */
 public final class Protocol {
     public static final String ERROR = "ERROR";
     public static final String HELLO = "HELLO";
@@ -19,7 +23,7 @@ public final class Protocol {
      *
      * @return the protocol description for handshake
      */
-    public static String handshake(String description) {//TODO
+    public static String handshake(String description) {
         return HELLO + SEPARATOR + description;
     }
 

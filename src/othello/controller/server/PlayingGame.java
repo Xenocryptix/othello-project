@@ -8,7 +8,10 @@ import othello.model.players.PlayerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO
+/**
+ * Class that is responsible for playing a game on the server side and sends
+ * the result as well as the move to both client handlers playing the game.
+ */
 public class PlayingGame {
     private final List<ClientHandler> players;
     private final OthelloGame game;
@@ -19,9 +22,9 @@ public class PlayingGame {
      *
      * @param player1       The client handler of player 1
      * @param player2       The client handler of player 2
-     * @param othelloServer
+     * @param othelloServer The server that plays this game
      */
-    public PlayingGame(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) { //TODO: CAN WE REMOVE THE SERVER
+    public PlayingGame(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) {
         server = othelloServer;
         game = new OthelloGame();
         players = new ArrayList<>(2);
@@ -79,7 +82,9 @@ public class PlayingGame {
         if (game.isGameover()) {
             String message;
             if (game.getWinner() != null) {
-                message = Protocol.gameover(new String[]{Result.VICTORY, game.getWinner().toString()});
+                message = Protocol.gameover(
+                        new String[]
+                        {Result.VICTORY, game.getWinner().toString()});
             } else {
                 message = Protocol.gameover(new String[]{Result.DRAW});
             }
@@ -98,9 +103,13 @@ public class PlayingGame {
     public void disconnect(ClientHandler clientHandler) {
         String message;
         if (clientHandler.equals(players.get(0))) {
-            message = Protocol.gameover(new String[]{Result.DISCONNECT, players.get(0).getUsername()});
+            message = Protocol.gameover(
+                    new String[]
+                    {Result.DISCONNECT, players.get(0).getUsername()});
         } else {
-            message = Protocol.gameover(new String[]{Result.DISCONNECT, players.get(1).getUsername()});
+            message = Protocol.gameover(
+                    new String[]
+                    {Result.DISCONNECT, players.get(1).getUsername()});
         }
         players.get(0).sendMessage(message);
         players.get(1).sendMessage(message);

@@ -1,6 +1,6 @@
 package othello.exceptions;
 
-public class ConnectionDropped extends Exception{
+public class ConnectionDropped extends Exception {
     public ConnectionDropped(String message) {
         super(message);
     }

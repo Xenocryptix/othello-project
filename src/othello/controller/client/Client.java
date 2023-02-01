@@ -2,6 +2,9 @@ package othello.controller.client;
 
 import java.net.InetAddress;
 
+/**
+ * Interface which represents a general client for a game.
+ */
 public interface Client {
     /**
      * Connect to server using the address and port number.
@@ -27,30 +30,23 @@ public interface Client {
 
     /**
      * Send hello command to the server.
-     *
-     * @return true if success, otherwise false
      */
-    boolean sendHello();
+    void sendHello();
 
     /**
      * Send the login details to the server.
      *
      * @param username the username
-     * @return
      */
     boolean sendLogin(String username);
 
     /**
      * Sends a request to the server to send back the list of clients connected.
-     *
-     * @return true if success, otherwise false
      */
-    boolean sendList();
+    void sendList();
 
     /**
      * Sends a request to the server to join the queue.
-     *
-     * @return true if success, otherwise false
      */
     void queue();
 

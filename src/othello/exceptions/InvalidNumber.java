@@ -1,6 +1,6 @@
 package othello.exceptions;
 
-public class InvalidNumber extends Exception{
+public class InvalidNumber extends Exception {
     public InvalidNumber(String message) {
         super(message);
     }

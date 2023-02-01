@@ -1,5 +1,5 @@
 package othello.exceptions;
 
-public class ParsingError extends Exception{
+public class ParsingError extends Exception {
 
 }

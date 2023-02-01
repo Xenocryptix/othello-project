@@ -196,7 +196,9 @@ public class OthelloGame implements Game {
             //Iterate in the chosen direction
             while (true) {
                 try {
-                    if (!board.isField(nRow, nCol)) break;
+                    if (!board.isField(nRow, nCol)) {
+                        break;
+                    }
                 } catch (InvalidNumber e) {
                     e.getMessage();
                 }

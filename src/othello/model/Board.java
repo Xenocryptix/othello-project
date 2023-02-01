@@ -22,8 +22,6 @@ public class Board {
      * Dimension of the board, i.e., if set to 8, the board has 8 rows and 8 columns.
      */
     public static final int DIM = 8;
-    private static final String LINE = "  +-----+-----+-----+-----+-----+-----+-----+-----+";
-    private /*@ spec_public */ Disk[][] fields;
     /**
      * Predefined directional array.
      */
@@ -31,6 +29,8 @@ public class Board {
             {0, 1}, {1, 0}, {0, -1}, {-1, 0},
             {1, 1}, {1, -1}, {-1, -1}, {-1, 1}
     };
+    private static final String LINE = "  +-----+-----+-----+-----+-----+-----+-----+-----+";
+    private /*@ spec_public */ Disk[][] fields;
 
     /**
      * Creates an empty board with the middle tiles being initialised.
@@ -114,7 +114,7 @@ public class Board {
         pure;
     */
     public boolean isField(int index) throws InvalidNumber {
-        if (index < 0 || index >= DIM*DIM) {
+        if (index < 0 || index >= DIM * DIM) {
             throw new InvalidNumber("Index :" + index + " is invalid");
         }
         return index >= 0 && index < DIM * DIM;
@@ -499,7 +499,7 @@ public class Board {
         }
         s += "\n" + LINE + "\n";
         s += "\nBLACK has " + countDisk(Disk.BLACK) + "\n"
-           + "WHITE has " + countDisk(Disk.WHITE);
+                + "WHITE has " + countDisk(Disk.WHITE);
         return s;
     }
 

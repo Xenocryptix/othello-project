@@ -10,7 +10,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-//TODO
+/**
+ * A class that is responsible for starting a server on a thread
+ * which is used to store all the players that are connected to the
+ * server as well as the sessions that are currently open.
+ */
 public class OthelloServer implements Server, Runnable {
     private final Map<ClientHandler, String> players;
     private final Map<List<ClientHandler>, PlayingGame> sessions;
@@ -20,7 +24,12 @@ public class OthelloServer implements Server, Runnable {
     private ServerSocket serverSocket;
     private boolean started = false;
 
-    //TODO
+    /**
+     * Constructor which initiates all the variables that are being
+     * used in the class as well as initialising a port to a gaven port.
+     *
+     * @param port The port to be stored in the class
+     */
     public OthelloServer(int port) {
         this.port = port;
         playersQueue = new ArrayDeque<>();
@@ -59,12 +68,17 @@ public class OthelloServer implements Server, Runnable {
         return serverSocket.getLocalPort();
     }
 
+    /**
+     * Checks if the server has started or not.
+     *
+     * @return True, if the server started, else false
+     */
     public boolean isStarted() {
         return started;
     }
 
     /**
-     * Query on the players that are in the queue
+     * Query on the players that are in the queue.
      *
      * @return The list of client handlers that are in queue
      */
@@ -81,15 +95,15 @@ public class OthelloServer implements Server, Runnable {
         try {
             serverSocket.close();
             serverThread.join();
-        } catch (IOException e) {
-            //TODO:MESSAGE
-        } catch (InterruptedException e) {
-            //TODO:MESSAGE
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error in waiting for the thread to end");
         }
     }
 
     /**
-     * Returns true if the server is currently accepting connections, and false otherwise.
+     * Query on whether the server is alive or not.
+     *
+     * @return true if the server is currently accepting connections, and false otherwise.
      */
     @Override
     public boolean isAccepting() {
@@ -98,7 +112,7 @@ public class OthelloServer implements Server, Runnable {
 
     /**
      * The run method that runs while the server is not closed and accepts new clients
-     * and adds them to the client handler list and start a new thread for that client
+     * and adds them to the client handler list and start a new thread for that client.
      */
     @Override
     public void run() {
@@ -110,7 +124,7 @@ public class OthelloServer implements Server, Runnable {
                 new Thread(handler).start();
             }
         } catch (IOException e) {
-            //TODO: MESSAGE
+            System.out.println("Error in accepting a new client");
         }
     }
 
@@ -170,7 +184,7 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
-     * Checks the number of players that are in the queue
+     * Checks the number of players that are in the queue.
      *
      * @return The size of the queue
      */
@@ -181,7 +195,7 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
-     * Query's the usernames of the players that are on the server
+     * Query's the usernames of the players that are on the server.
      *
      * @return A list of player's usernames
      */
@@ -192,7 +206,7 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
-     * Adds a new username to the list of the players stored in the server
+     * Adds a new username to the list of the players stored in the server.
      *
      * @param username      The name of the player to be added
      * @param clientHandler The client handler associated with the username
@@ -242,7 +256,7 @@ public class OthelloServer implements Server, Runnable {
 
     /**
      * Plays a move received by the server from the client. If the move
-     * is invalid, this client handier is closed
+     * is invalid, this client handier is closed.
      *
      * @param index         The index of the move
      * @param clientHandler The client handler that sends the move
@@ -253,13 +267,14 @@ public class OthelloServer implements Server, Runnable {
             clientHandler.close();
         }
     }
+
     /**
      * When a client abruptly disconnects, this method is called
      * to remove this player from the server as well as ensure that
      * the player is removed from the queue.
      *
      * @param clientHandler The client handler that disconnected
-     * @throws ConnectionDropped
+     * @throws ConnectionDropped Thrown when a player is being removes while he is in the game
      */
     public void removeClient(ClientHandler clientHandler) throws ConnectionDropped {
         synchronized (players) {
@@ -302,12 +317,3 @@ public class OthelloServer implements Server, Runnable {
         return null;
     }
 }
-
-
-
-
-
-
-
-
-

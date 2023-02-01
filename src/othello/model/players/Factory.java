@@ -1,7 +1,7 @@
 package othello.model.players;
 
-import othello.model.players.ai.Strategy;
 import othello.model.players.ai.ComputerPlayer;
+import othello.model.players.ai.Strategy;
 
 /**
  * Interface factory for creating players.
@@ -11,7 +11,7 @@ public interface Factory {
     /**
      * Make a new human player.
      *
-     * @param name   name
+     * @param name name
      * @return human player object
      */
     //@ requires name != null;

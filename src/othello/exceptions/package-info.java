@@ -1,4 +1,4 @@
 /**
- * Contains all the unchecked exceptions created
+ * Contains all the unchecked exceptions created.
  */
 package othello.exceptions;

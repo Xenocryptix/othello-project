@@ -5,6 +5,9 @@ import othello.exceptions.PortNumberException;
 
 import java.util.Scanner;
 
+/**
+ * TUI which is responsible for creating the server at a certain port.
+ */
 public class ServerTUI {
     public static void main(String[] args) throws PortNumberException {
         Scanner input = new Scanner(System.in);
