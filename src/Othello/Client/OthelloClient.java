@@ -45,8 +45,6 @@ public class OthelloClient implements Client, Runnable {
 
     /**
      * Initialises the listener of the othello client to communicate with the TUI.
-     *
-     * @param listener The listener to be used to send messages to the TUI
      */
     public OthelloClient() {
         inQueue = false;
@@ -54,17 +52,26 @@ public class OthelloClient implements Client, Runnable {
         listeners = new ArrayList<>();
     }
 
-    public List<Listener> getListener() {
-        return listeners;
-    }
+    /**
+     * Adds a listener to the list of listeners to be sent to
+     *
+     * @param listener The listener to be added
+     */
     public void addListener(Listener listener) {
         listeners.add(listener);
     }
+
+    /**
+     * Broadcasts the message to all the listeners that are in the client
+     *
+     * @param message The message to be broadcast
+     */
     public void broadcast(String message) {
         for (Listener listener : listeners) {
             listener.printMessage(message);
         }
     }
+
     /**
      * Returns whether the user is in a game or not
      *
@@ -244,7 +251,7 @@ public class OthelloClient implements Client, Runnable {
             System.out.println("Logging in...");
             this.username = username;
             if (username.contains("~")) {
-                clientListener.printMessage("Character \"~\" is not allowed in the username");
+                broadcast("Character \"~\" is not allowed in the username");
                 return false;
             }
             writer.write(Protocol.login(username));
