@@ -1,5 +1,6 @@
 package GameLogicTest;
 
+import org.junit.jupiter.api.Test;
 import othello.model.Disk;
 import othello.model.OthelloGame;
 import othello.model.players.AbstractPlayer;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Responsible for testing the two different AI's developed
+ */
 public class AITests {
     private OthelloGame game;
 
@@ -18,6 +22,7 @@ public class AITests {
         game = new OthelloGame();
     }
 
+    @Test
     public void fullRandomGame() {
         int naiveWinner = 0;
         int greedyWinner = 0;

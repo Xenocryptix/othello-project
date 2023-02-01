@@ -10,6 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests that the protocol class correctly creates the protocol messages
+ */
 public class ProtocolTest {
     @BeforeEach
     public void setUp() {

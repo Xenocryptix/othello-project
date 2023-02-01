@@ -14,7 +14,7 @@ public class HumanPlayer extends AbstractPlayer {
     private List<Move> allowedMoves;
 
     /**
-     * Initialised a new human player with a given name
+     * Initialised a new human player with a given name.
      *
      * @param name The name for the human player
      */

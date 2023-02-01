@@ -1,12 +1,11 @@
 package NetworkingTest;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import othello.controller.client.ClientListener;
-import othello.controller.client.Listener;
 import othello.controller.client.OthelloClient;
 import othello.controller.server.OthelloServer;
 import othello.exceptions.PortNumberException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,19 +17,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//TODO
 public class ClientTest {
     private OthelloServer server;
-    List<OthelloClient> clients;
+    private List<OthelloClient> clients;
 
     /**
      * Set up the server and initialize the list of clients
-     * @throws PortNumberException
-     * @throws UnknownHostException
      */
     @BeforeEach
-    public void setUp() throws PortNumberException, UnknownHostException {
+    public void setUp() {
         //Initializing the server object
-        server = new OthelloServer(2222);
+        server = new OthelloServer(0);
         //Initializing clients
         clients = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -45,9 +43,10 @@ public class ClientTest {
      * Test the communication between client and server
      * We check for each message sent, a correct reply is received
      * (Since no player object is assigned to clients, getting a NullPointerException is normal)
-     * @throws InterruptedException
-     * @throws UnknownHostException
-     * @throws PortNumberException
+     *
+     * @throws PortNumberException Thrown if port is not defined
+     * @throws UnknownHostException Thrown if the server address is not found
+     * @throws InterruptedException Thrown if there was a problem with sleeping
      */
     @Test
     void testMessage() throws InterruptedException, UnknownHostException, PortNumberException {

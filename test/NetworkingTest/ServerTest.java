@@ -1,13 +1,11 @@
 package NetworkingTest;
 
-import othello.controller.client.ClientListener;
-import othello.controller.client.Listener;
-import othello.controller.client.OthelloClient;
-import othello.controller.server.OthelloServer;
-import othello.controller.server.Server;
-import othello.exceptions.PortNumberException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import othello.controller.client.ClientListener;
+import othello.controller.client.OthelloClient;
+import othello.controller.server.OthelloServer;
+import othello.exceptions.PortNumberException;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -18,21 +16,21 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.params.shadow.com.univocity.parsers.common.ArgumentUtils.indexOf;
 
+/**
+ * Responsible for testing the server side
+ */
 public class ServerTest {
-    private OthelloServer server;
     List<OthelloClient> clients;
+    private OthelloServer server;
 
     /**
      * Set up the server and initialize the list of clients
-     * @throws PortNumberException
-     * @throws UnknownHostException
      */
     @BeforeEach
-    public void setUp() throws PortNumberException {
+    public void setUp() {
         //Initializing the server object
-        server = new OthelloServer(2222);
+        server = new OthelloServer(0);
         //Initializing clients
         clients = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
@@ -47,9 +45,10 @@ public class ServerTest {
      * Test the basic functionalities of server, being able to retrieve the player list
      * and matching the players in the queue
      * (Since no player object is assigned to clients, getting a NullPointerException is normal)
-     * @throws PortNumberException
-     * @throws UnknownHostException
-     * @throws InterruptedException
+     *
+     * @throws PortNumberException Thrown if port is not defined
+     * @throws UnknownHostException Thrown if the server address is not found
+     * @throws InterruptedException Thrown if there was a problem with sleeping
      */
     @Test
     public void testGames() throws PortNumberException, UnknownHostException, InterruptedException {

@@ -87,7 +87,7 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
-     * Query on the players that are connected
+     * Query on the players that are connected.
      *
      * @return The list of client handlers that are connected
      */
