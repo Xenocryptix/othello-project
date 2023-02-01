@@ -11,7 +11,7 @@ import java.util.*;
 //TODO
 public class OthelloServer implements Server, Runnable {
     private final Map<ClientHandler, String> players;
-    private final Map<List<ClientHandler>, GameThread> sessions;
+    private final Map<List<ClientHandler>, PlayingGame> sessions;
     private final Queue<ClientHandler> playersQueue;
     private final int port;
     private final Thread serverThread;
@@ -127,15 +127,15 @@ public class OthelloServer implements Server, Runnable {
 
 
     /**
-     * Ends a session of a game when the game is over from the GameThread
+     * Ends a session of a game when the game is over from the PlayingGame
      * class.
      *
-     * @param gameThread The game that is ended to be removed from the session running
+     * @param playingGame The game that is ended to be removed from the session running
      */
-    public void endGame(GameThread gameThread) {
+    public void endGame(PlayingGame playingGame) {
         synchronized (sessions) {
             for (List<ClientHandler> ch : sessions.keySet()) {
-                if (sessions.get(ch).equals(gameThread)) {
+                if (sessions.get(ch).equals(playingGame)) {
                     sessions.remove(ch);
                     break;
                 }
@@ -158,10 +158,10 @@ public class OthelloServer implements Server, Runnable {
 
                 String name1 = p1.getUsername();
                 String name2 = p2.getUsername();
-                p1.recieveNewGame(Protocol.newGame(name1, name2));
-                p2.recieveNewGame(Protocol.newGame(name1, name2));
+                p1.sendNewGame(Protocol.newGame(name1, name2));
+                p2.sendNewGame(Protocol.newGame(name1, name2));
 
-                GameThread game = new GameThread(p1, p2, this);
+                PlayingGame game = new PlayingGame(p1, p2, this);
                 sessions.put(currentPlayers, game);
             }
         }
@@ -246,7 +246,7 @@ public class OthelloServer implements Server, Runnable {
      * @param clientHandler The client handler that sends the move
      */
     public void playMove(int index, ClientHandler clientHandler) {
-        GameThread game = getGame(clientHandler);
+        PlayingGame game = getGame(clientHandler);
         if (!game.doMove(index)) {
             clientHandler.close();
         }
@@ -276,7 +276,7 @@ public class OthelloServer implements Server, Runnable {
      */
     public boolean inGame(ClientHandler clientHandler) {
         synchronized (sessions) {
-            GameThread game = getGame(clientHandler);
+            PlayingGame game = getGame(clientHandler);
             return game != null;
         }
     }
@@ -288,7 +288,7 @@ public class OthelloServer implements Server, Runnable {
      * @param clientHandler The client to be checked
      * @return the game if he is in one, or null if he is not
      */
-    public GameThread getGame(ClientHandler clientHandler) {
+    public PlayingGame getGame(ClientHandler clientHandler) {
         synchronized (sessions) {
             for (List<ClientHandler> ch : sessions.keySet()) {
                 if (ch.contains(clientHandler)) {

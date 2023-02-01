@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO
-public class GameThread {
+public class PlayingGame {
     private final List<ClientHandler> players;
     private final OthelloGame game;
     private final OthelloServer server;
@@ -23,7 +23,7 @@ public class GameThread {
      * @param player2       The client handler of player 2
      * @param othelloServer
      */
-    public GameThread(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) { //TODO: CAN WE REMOVE THE SERVER
+    public PlayingGame(ClientHandler player1, ClientHandler player2, OthelloServer othelloServer) { //TODO: CAN WE REMOVE THE SERVER
         server = othelloServer;
         game = new OthelloGame();
         players = new ArrayList<>(2);
@@ -91,6 +91,12 @@ public class GameThread {
         }
     }
 
+    /**
+     * Responsible for sending the client handlers of the game the disconnected message with the
+     * correct reason.
+     *
+     * @param clientHandler The client handler that disconnected
+     */
     public void disconnected(ClientHandler clientHandler) {
         String message;
         if (clientHandler.equals(players.get(0))) {

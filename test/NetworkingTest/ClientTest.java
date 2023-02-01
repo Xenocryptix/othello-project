@@ -35,7 +35,8 @@ public class ClientTest {
         server = new OthelloServer(2222);
         server.start();
         clientListener = new ClientListener();
-        client = new OthelloClient(clientListener);
+        client = new OthelloClient();
+        client.addListener(clientListener);
         client.connect(InetAddress.getByName("localhost"), 2222);
     }
 

@@ -11,10 +11,11 @@ import Othello.model.players.PlayerFactory;
 import Othello.model.players.ai.GreedyStrategy;
 import Othello.model.players.ai.NaiveStrategy;
 
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import static Othello.Server.Protocol.*;
 import static Othello.model.Board.DIM;
@@ -27,7 +28,9 @@ import static Othello.model.Board.DIM;
  * the protocol to the server
  */
 public class OthelloClient implements Client, Runnable {
-    private final ClientListener clientListener = new ClientListener();
+    public static final Object LOGINLOCK = new Object();
+    public static final Object CONNECTLOCK = new Object();
+    private final List<Listener> listeners;
     private Socket client;
     private BufferedReader reader;
     private BufferedWriter writer;
@@ -38,9 +41,6 @@ public class OthelloClient implements Client, Runnable {
     private boolean inGame;
     private boolean inQueue;
     private boolean loggedIn = false;
-    private Listener listener;
-    public static final Object LOGINLOCK = new Object();
-    public static final Object CONNECTLOCK = new Object();
     private String msg;
 
     /**
@@ -48,17 +48,23 @@ public class OthelloClient implements Client, Runnable {
      *
      * @param listener The listener to be used to send messages to the TUI
      */
-    public OthelloClient(Listener listener) {
-        this.listener = listener;
-        inQueue = false;
-        inGame = false;
-    }
-
     public OthelloClient() {
         inQueue = false;
         inGame = false;
+        listeners = new ArrayList<>();
     }
 
+    public List<Listener> getListener() {
+        return listeners;
+    }
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+    public void broadcast(String message) {
+        for (Listener listener : listeners) {
+            listener.printMessage(message);
+        }
+    }
     /**
      * Returns whether the user is in a game or not
      *
@@ -180,12 +186,12 @@ public class OthelloClient implements Client, Runnable {
                     writer.flush();
                     return true;
                 } else if (index == 64 && !game.getValidMoves(game.getCurrentDisk()).isEmpty()) {
-                    listener.printMessage("You still have moves left");
+                    broadcast("You still have moves left");
                 }
             }
             return false;
         } catch (IOException e) {
-            clientListener.printMessage("The server has disconnected");
+            broadcast("The server has disconnected");
             return false;
         }
     }
@@ -220,7 +226,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            clientListener.printMessage("The server has disconnected");
+            broadcast("The server has disconnected");
             close();
             return false;
         }
@@ -240,7 +246,7 @@ public class OthelloClient implements Client, Runnable {
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            clientListener.printMessage("The server has disconnected");
+            broadcast("The server has disconnected");
             close();
         }
     }
@@ -258,7 +264,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             return true;
         } catch (IOException e) {
-            clientListener.printMessage("The server has disconnected");
+            broadcast("The server has disconnected");
             close();
             return false;
         }
@@ -278,7 +284,7 @@ public class OthelloClient implements Client, Runnable {
             writer.flush();
             inQueue = !inQueue;
         } catch (IOException e) {
-            clientListener.printMessage("The server has disconnected");
+            broadcast("The server has disconnected");
             close();
         }
     }
@@ -304,20 +310,20 @@ public class OthelloClient implements Client, Runnable {
                     case ALREADYLOGGEDIN:
                         synchronized (LOGINLOCK) {
                             loggedIn = false;
-                            clientListener.printMessage("This user is already connected to the server. Please choose a different username");
+                            broadcast("This user is already connected to the server. Please choose a different username");
                             LOGINLOCK.notifyAll();
                         }
                         break;
                     case HELLO:
                         synchronized (CONNECTLOCK) {
-                            clientListener.printMessage("Successfully connected to the server");
+                            broadcast("Successfully connected to the server");
                             CONNECTLOCK.notifyAll();
                         }
                         break;
                     case LOGIN:
                         synchronized (LOGINLOCK) {
                             loggedIn = true;
-                            clientListener.printMessage("Logged in successfully. Have fun playing!");
+                            broadcast("Logged in successfully. Have fun playing!");
                             LOGINLOCK.notifyAll();
                         }
                         break;
@@ -325,7 +331,7 @@ public class OthelloClient implements Client, Runnable {
                         move(splitted);
                         break;
                     default:
-                        clientListener.printMessage("Please input a valid command");
+                        broadcast("Please input a valid command");
                         break;
                 }
             }
@@ -350,12 +356,12 @@ public class OthelloClient implements Client, Runnable {
      */
     private void printTurn() {
         if (!checkTurn()) {
-            clientListener.printMessage("Waiting for " + opponent.getName() + " to play a move...");
+            broadcast("Waiting for " + opponent.getName() + " to play a move...");
         } else {
             if (game.getTurn() instanceof HumanPlayer) {
-                clientListener.printMessage("It's your turn! Enter a move below");
+                broadcast("It's your turn! Enter a move below");
             } else {
-                clientListener.printMessage("The AI is thinking...");
+                broadcast("The AI is thinking...");
                 sendMoveComputerPlayer();
             }
         }
@@ -370,14 +376,14 @@ public class OthelloClient implements Client, Runnable {
     private void move(String[] splitted) {
         int index = Integer.parseInt(splitted[1]);
         if (index == 64) {
-            clientListener.printMessage(game.getTurn() + " has skipped");
+            broadcast(game.getTurn() + " has skipped");
             game.nextTurn();
         } else {
             Disk currentDisk = game.getCurrentDisk();
             int row = index / DIM;
             int col = index % DIM;
             game.doMove(new OthelloMove(currentDisk, row, col));
-            clientListener.printMessage(game.toString());
+            broadcast(game.toString());
         }
         printTurn();
     }
@@ -389,9 +395,9 @@ public class OthelloClient implements Client, Runnable {
      * @param splitted The list of the players in the server
      */
     private void list(String[] splitted) {
-        clientListener.printMessage("Current players:");
+        broadcast("Current players:");
         for (int i = 1; i < splitted.length; i++) {
-            clientListener.printMessage(splitted[i]);
+            broadcast(splitted[i]);
         }
     }
 
@@ -404,17 +410,17 @@ public class OthelloClient implements Client, Runnable {
         inGame = false;
         switch (splitted[1]) {
             case "DISCONNECT":
-                clientListener.printMessage("Opponent " + opponent.getName() + " lost connection");
+                broadcast("Opponent " + opponent.getName() + " lost connection");
                 break;
             case "DRAW":
-                clientListener.printMessage("You have both drawn!");
+                broadcast("You have both drawn!");
                 break;
             case "VICTORY":
-                clientListener.printMessage(game.getWinner() + " won!\n");
+                broadcast(game.getWinner() + " won!\n");
                 if (game.getWinner().toString().substring(7).equals(username)) {
-                    clientListener.printMessage("Congrats! you won!");
+                    broadcast("Congrats! you won!");
                 } else {
-                    clientListener.printMessage("Don't worry, sometimes your opponent has a good gaming chair");
+                    broadcast("Don't worry, sometimes your opponent has a good gaming chair");
                 }
                 break;
             default:
@@ -444,7 +450,7 @@ public class OthelloClient implements Client, Runnable {
             game.setPlayer1(opponent);
             game.setPlayer2(player);
         }
-        listener.printMessage(game.toString());
+        broadcast(game.toString());
         printTurn();
     }
 
@@ -458,17 +464,17 @@ public class OthelloClient implements Client, Runnable {
                 AbstractPlayer aiHelper = new PlayerFactory().makeComputerPlayer(new GreedyStrategy());
                 Move move = aiHelper.determineMove(game);
                 if (move == null) {
-                    clientListener.printMessage("No moves available to play");
+                    broadcast("No moves available to play");
                 } else {
                     int row = ((OthelloMove) move).getRow() + 1;
                     char col = (char) (((OthelloMove) move).getCol() + 65);
-                    clientListener.printMessage("You could play a move at: " + col + row);
+                    broadcast("You could play a move at: " + col + row);
                 }
             } else {
-                clientListener.printMessage("You can only use hint in your turn");
+                broadcast("You can only use hint in your turn");
             }
         } else {
-            clientListener.printMessage("Bots don't need hints");
+            broadcast("Bots don't need hints");
         }
     }
 }

@@ -27,7 +27,7 @@ public class ClientHandler implements Runnable {
         return username;
     }
 
-    public void recieveNewGame(String newGame) {
+    public void sendNewGame(String newGame) {
         writer.println(newGame);
     }
 
@@ -42,9 +42,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void setMove(int index) {
-        server.playMove(index, this);
-    }
+
 
     public void sendMove(int index) {
         writer.println(Protocol.move(index));
@@ -88,11 +86,11 @@ public class ClientHandler implements Runnable {
                         if (Integer.parseInt(splitted[1]) < 0 || Integer.parseInt(splitted[1]) > 64) {
                             close();
                         } else {
-                            setMove(Integer.parseInt(splitted[1]));
+                            server.playMove(Integer.parseInt(splitted[1]), this);
                         }
                         break;
                     default:
-                        writer.println("Unexpected value: " + splitted[0]);
+                        writer.println(ERROR);
                 }
             }
             close(); //When a readline is null then the client has tried to quit, so the client handler must be closed

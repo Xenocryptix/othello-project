@@ -37,7 +37,9 @@ public class OthelloTUI {
 
 
         Listener clientListener = new ClientListener();
-        OthelloClient client = new OthelloClient(clientListener);
+        OthelloClient client = new OthelloClient();
+        client.addListener(clientListener);
+
         try {
             boolean connected = false;
             while (!connected) {
