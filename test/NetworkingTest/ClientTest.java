@@ -54,7 +54,7 @@ public class ClientTest {
         for (int i = 0; i < clients.size(); i++) {
             OthelloClient client = clients.get(i);
             //Test if each client is connected to the server
-            assertTrue(client.connect(InetAddress.getByName("localhost"), 2222));
+            assertTrue(client.connect(InetAddress.getByName("localhost"), server.getPort()));
             client.sendHello();
             //Everytime we send a message, wait for 1 second for the client to receive
             TimeUnit.SECONDS.sleep(1);

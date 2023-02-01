@@ -61,7 +61,7 @@ public class ServerTest {
 
         for (int i = 0; i < clients.size(); i++) {
             OthelloClient client = clients.get(i);
-            client.connect(InetAddress.getByName("localhost"), 2222);
+            client.connect(InetAddress.getByName("localhost"), server.getPort());
             client.sendHello();
             client.sendLogin("test_client" + i);
             client.sendList();
