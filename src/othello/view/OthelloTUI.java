@@ -19,8 +19,8 @@ public class OthelloTUI {
     private static String serverAddress;
     private static int port = -1;
     private static final String GREEN = "\033[0;32m";
-    public static final String RESET = "\033[0m";
-
+    private static final String RESET = "\033[0m";
+    private static final SoundEffect error = new SoundEffect("src/othello/view/error.wav");
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
         try {
@@ -48,12 +48,14 @@ public class OthelloTUI {
                     connected = client.connect(InetAddress.getByName(serverAddress), port);
                     if (!connected) {
                         System.out.println("Can not connect to the specified server");
+                        error.play();
                     }
                 } else {
                     System.out.println("Invalid port");
+                    error.play();
                 }
             }
-            client.sendHello("desc");
+            client.sendHello("desc");//TODO
             synchronized (OthelloClient.CONNECTLOCK) {
                 OthelloClient.CONNECTLOCK.wait();
                 login(input, client);

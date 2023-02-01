@@ -5,12 +5,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class SoundEffect {
-    private Clip clip;
-
-    public void setFile(String fileName) {
-        File file = new File(fileName);
+    private final Clip clip;
+    public SoundEffect(String path) {
         AudioInputStream sound = null;
         try {
+            File file = new File(path);
             sound = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();
             clip.open(sound);
@@ -22,6 +21,7 @@ public class SoundEffect {
             throw new RuntimeException(e);
         }
     }
+
     public void play() {
         clip.setFramePosition(0);
         clip.start();
