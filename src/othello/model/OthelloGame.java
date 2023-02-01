@@ -194,12 +194,7 @@ public class OthelloGame implements Game {
             int nCol = col + dir[1];
             int count = 0;
             //Iterate in the chosen direction
-            while (true) {
-                try {
-                    if (!board.isField(nRow, nCol)) break;
-                } catch (InvalidNumber e) {
-                    e.getMessage();
-                }
+            while (board.isField(nRow, nCol)) {
                 //If a tile with the same color as the starting point is
                 // encountered, break immediately
                 if (board.getField(nRow, nCol).equals(disk)) {

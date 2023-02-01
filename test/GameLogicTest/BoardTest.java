@@ -67,12 +67,12 @@ public class BoardTest {
      */
     @Test
     public void testIsFieldRowCol() throws InvalidNumber {
-        assertThrows(InvalidNumber.class, () -> board.isField(0,-1));
-        assertThrows(InvalidNumber.class, () -> board.isField(-1,0));
+        assertFalse(board.isField(0,-1));
+        assertFalse(board.isField(-1,0));
         assertTrue(board.isField(0, 0));
         assertTrue(board.isField(Board.DIM - 1, Board.DIM - 1));
-        assertThrows(InvalidNumber.class, () -> board.isField(7, Board.DIM + 1));
-        assertThrows(InvalidNumber.class, () -> board.isField(Board.DIM + 1, 7));
+        assertFalse(board.isField(7, Board.DIM + 1));
+        assertFalse(board.isField(Board.DIM + 1, 7));
     }
 
     /**

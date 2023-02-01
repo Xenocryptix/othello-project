@@ -73,6 +73,15 @@ public class OthelloServer implements Server, Runnable {
     }
 
     /**
+     * Query on the players that are connected
+     *
+     * @return The list of client handlers that are connected
+     */
+    public Map<ClientHandler, String> getPlayers() {
+        return players;
+    }
+
+    /**
      * Stops the server. This method returns after the server thread has actually stopped.
      * This method may only be run once and only after start() has been called before.
      */
