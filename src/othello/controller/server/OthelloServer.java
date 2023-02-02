@@ -245,7 +245,7 @@ public class OthelloServer implements Server, Runnable {
      */
     public void deQueue(ClientHandler clientHandler) {
         synchronized (playersQueue) {
-            players.remove(clientHandler);
+            playersQueue.remove(clientHandler);
         }
     }
 
@@ -276,7 +276,8 @@ public class OthelloServer implements Server, Runnable {
             players.remove(clientHandler);
             playersQueue.remove(clientHandler);
             if (inGame(clientHandler)) {
-                throw new ConnectionDropped("Player was in game");
+                throw new ConnectionDropped(clientHandler.getUsername() +
+                        " lost connection during the game");
             }
         }
     }

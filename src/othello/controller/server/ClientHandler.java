@@ -128,18 +128,9 @@ public class ClientHandler implements Runnable {
                         writer.println(Protocol.ERROR);
                 }
             }
-            //When a readline is null then the client has tried to quit,
-            // so the client handler must be closed
-            throw new ConnectionDropped(username + " left");
+            close();
         } catch (IOException e) {
             close();
-        } catch (ConnectionDropped e) {
-            /*
-            When this exception is caught, this means that the client abruptly disconnected
-            so socket must be closed on the server's end
-             */
-            close();
-            System.out.println(e.getMessage());
         }
     }
 

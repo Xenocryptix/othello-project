@@ -427,8 +427,8 @@ public class OthelloClient implements Client, Runnable {
                 broadcast("You have both drawn!");
                 break;
             case "VICTORY":
-                broadcast(game.getWinner() + " won!\n");
-                if (game.getWinner().toString().substring(7).equals(username)) {
+                broadcast(splitted[2] + " won!\n");
+                if (splitted[2].equals(username)) {
                     broadcast("Congrats! you won!");
                 } else {
                     broadcast("Don't worry, sometimes your opponent has a good gaming chair");

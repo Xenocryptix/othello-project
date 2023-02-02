@@ -98,7 +98,5 @@ public class ClientTest {
         assertTrue(msg2.contains("NEWGAME"));
         System.out.println(msg3);
         assertFalse(msg3.contains("NEWGAME"));
-
     }
-
 }

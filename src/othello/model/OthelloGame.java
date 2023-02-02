@@ -264,7 +264,7 @@ public class OthelloGame implements Game {
                         checkDirection(i, j, disk);
                     }
                 } catch (InvalidNumber e) {
-                    e.getMessage();
+                    System.out.println(e.getMessage());
                 }
             }
         }

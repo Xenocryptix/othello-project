@@ -49,6 +49,6 @@ public abstract class AbstractPlayer implements Player {
     //@ ensures \result.contains(name);
     @Override
     public String toString() {
-        return "Player " + name;
+        return name;
     }
 }
