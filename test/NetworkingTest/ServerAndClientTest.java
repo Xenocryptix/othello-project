@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Responsible for testing the server side
+ * Responsible for testing the server and client together
  */
-public class ServerTest {
+public class ServerAndClientTest {
     List<OthelloClient> clients;
     private OthelloServer server;
 

@@ -17,13 +17,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AITests {
     private OthelloGame game;
 
+    /**
+     * Initialises a new game.
+     */
     @BeforeEach
     public void setUp() {
         game = new OthelloGame();
     }
 
+    /**
+     * Ensures that the greedy AI is smarter that the naive
+     * AI.
+     */
     @Test
-    public void fullRandomGame() {
+    public void playGames() {
         int naiveWinner = 0;
         int greedyWinner = 0;
         assertFalse(game.isGameover());
