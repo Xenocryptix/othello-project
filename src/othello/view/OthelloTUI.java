@@ -16,7 +16,7 @@ import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
 /**
- * TUI to allow playing the game and connect to a server
+ * TUI to allow playing the game and connect to a server.
  */
 public class OthelloTUI {
     private static final String GREEN = "\033[0;32m";

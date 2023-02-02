@@ -37,8 +37,10 @@ public abstract class AbstractPlayer implements Player {
      * @param game the current game
      * @return the player's choice
      */
-    //@ requires !game.isGameover();
-    //@ ensures game.isValidMove(\result);
+    /*@
+     requires !game.isGameover();
+     ensures game.isValidMove(\result);
+    */
     public abstract Move determineMove(Game game);
 
     /**
