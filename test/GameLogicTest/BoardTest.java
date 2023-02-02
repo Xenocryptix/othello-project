@@ -9,10 +9,15 @@ import othello.model.OthelloMove;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests the board class
+ */
 public class BoardTest {
     private Board board;
 
-
+    /**
+     * Initialises a new board instance
+     */
     @BeforeEach
     public void setUp() {
         board = new Board();

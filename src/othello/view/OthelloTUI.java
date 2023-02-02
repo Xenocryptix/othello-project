@@ -15,17 +15,41 @@ import java.net.InetAddress;
 import java.net.PortUnreachableException;
 import java.net.UnknownHostException;
 
+/**
+ * TUI to allow playing the game and connect to a server
+ */
 public class OthelloTUI {
     private static final String GREEN = "\033[0;32m";
     private static final String RESET = "\033[0m";
+    /**
+     * Predefined queue string to be reused.
+     */
     public static final String QUEUE = "queue";
+    /**
+     * Predefined list string to be reused.
+     */
     public static final String LIST = "list";
+    /**
+     * Predefined hint string to be reused.
+     */
     public static final String HINT = "hint";
+    /**
+     * Predefined help string to be reused.
+     */
     public static final String HELP = "help";
+    /**
+     * Predefined quit string to be reused.
+     */
     public static final String QUIT = "quit";
     private static String serverAddress;
     private static int port = -1;
 
+    /**
+     * Used to create a new OthelloTUI instance and calls
+     * run in it.
+     *
+     * @param args Arguments passed from command line
+     */
     public static void main(String[] args) {
         OthelloTUI tui = new OthelloTUI();
         try {

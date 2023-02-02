@@ -6,7 +6,9 @@ import othello.exceptions.PortNumberException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
+/**
+ * Tests the made exceptions
+ */
 public class ExceptionTest {
     /**
      * Tests that not two servers can connect to the same

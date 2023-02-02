@@ -1,5 +1,7 @@
 package GameLogicTest;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import othello.model.Board;
 import othello.model.Disk;
 import othello.model.OthelloGame;
@@ -7,8 +9,6 @@ import othello.model.OthelloMove;
 import othello.model.players.AbstractPlayer;
 import othello.model.players.PlayerFactory;
 import othello.model.players.ai.NaiveStrategy;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -17,10 +17,15 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests theOthello game class
+ */
 public class OthelloGameTest {
     private OthelloGame game;
-    private Board board;
 
+    /**
+     * Initialises a new game instances
+     */
     @BeforeEach
     public void setUp() {
         game = new OthelloGame();
@@ -123,6 +128,7 @@ public class OthelloGameTest {
         }
 
     }
+
     /**
      * Ensures that when two players play and the board ends in a draw state
      * that the get winner returns that there's a draw, i.e. null
@@ -176,6 +182,7 @@ public class OthelloGameTest {
         assertEquals(player2, game.getTurn());
 
     }
+
     /**
      * A test case to check deepCopy()
      * The deep copy board should be independent to the game state, meaning that doing any move
