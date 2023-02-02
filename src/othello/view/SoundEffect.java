@@ -3,6 +3,7 @@ package othello.view;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Responsible for creating a sound effect from a WAV file.
@@ -14,13 +15,12 @@ public class SoundEffect {
      * Initialises the class with the file path of the sound.
      * file
      *
-     * @param path The file path of the file
+     * @param url The url of the sound
      */
-    public SoundEffect(String path) {
+    public SoundEffect(URL url) {
         AudioInputStream sound = null;
         try {
-            File file = new File(path);
-            sound = AudioSystem.getAudioInputStream(file);
+            sound = AudioSystem.getAudioInputStream(url);
             clip = AudioSystem.getClip();
             clip.open(sound);
         } catch (UnsupportedAudioFileException e) {

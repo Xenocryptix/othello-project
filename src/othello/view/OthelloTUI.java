@@ -18,7 +18,11 @@ import java.net.UnknownHostException;
 public class OthelloTUI {
     private static final String GREEN = "\033[0;32m";
     private static final String RESET = "\033[0m";
-    private static final SoundEffect ERROR = new SoundEffect("src/othello/view/error.wav");
+    public static final String QUEUE = "queue";
+    public static final String LIST = "list";
+    public static final String HINT = "hint";
+    public static final String HELP = "help";
+    public static final String QUIT = "quit";
     private static String serverAddress;
     private static int port = -1;
 
@@ -39,7 +43,7 @@ public class OthelloTUI {
      * @param client The client associated with the TUI
      * @throws IOException Thrown if there was an error in reading
      */
-    private static void login(BufferedReader input, OthelloClient client) throws IOException {
+    private void login(BufferedReader input, OthelloClient client) throws IOException {
         synchronized (OthelloClient.LOGINLOCK) {
             try {
                 while (!client.isLoggedIn()) {
@@ -63,7 +67,7 @@ public class OthelloTUI {
      * @param command The entered move by the user
      * @param client  The client associated with the TUI
      */
-    private static void sendMove(String command, OthelloClient client) {
+    private void sendMove(String command, OthelloClient client) {
         if (client.getPlayer() instanceof HumanPlayer) {
             if (command.
                     equalsIgnoreCase("pass")) {
@@ -82,10 +86,12 @@ public class OthelloTUI {
                     client.sendMove(index);
                 }
             } else {
-                System.out.println("Unknown command or invalid move format.\n" +
-                        "Your move should be in the format of a letter followed by a number" +
-                        ", e.g. \"C5\" \n" +
-                        "For available commands, type HELP");
+                if (!command.equals(QUIT)) {
+                    System.out.println("Unknown command or invalid move format.\n" +
+                            "Your move should be in the format of a letter followed by a number" +
+                            ", e.g. \"C5\" \n" +
+                            "For available commands, type HELP");
+                }
             }
         } else if (client.getPlayer() instanceof ComputerPlayer) {
             System.out.println("You can not move while playing as a bot!");
@@ -101,7 +107,7 @@ public class OthelloTUI {
      * @param client The client associated with the TUI
      * @throws IOException Thrown if there was an error in reading
      */
-    private static void queue(BufferedReader input, OthelloClient client) throws IOException {
+    private void queue(BufferedReader input, OthelloClient client) throws IOException {
         if (!client.inGame()) {
             if (!client.isInQueue()) {
                 System.out.println("Choose wisely: Human (H), Naive (N), Greedy (G)");
@@ -127,7 +133,7 @@ public class OthelloTUI {
      * @param input To read the output from the server
      * @throws IOException Thrown if there was an error in reading
      */
-    private static void initiate(BufferedReader input) throws IOException {
+    private void initiate(BufferedReader input) throws IOException {
         System.out.print("Enter a server address: ");
         serverAddress = input.readLine();
 
@@ -142,22 +148,22 @@ public class OthelloTUI {
      * Help menu to be printed if wanted by the user.
      */
 
-    private static void help() {
+    private void help() {
         System.out.print(
                 GREEN + "Commands:\n" +
-                        GREEN + "queue" + " ................. join/leave the queue \n" +
-                        GREEN + "list" + "  ................. get a list of all players\n" +
-                        GREEN + "hint" + "  ................. a move that can be played\n" +
-                        GREEN + "help" + " .................. help (this menu)\n" +
-                        GREEN + "quit" + " .................. close " +
+                        GREEN + QUEUE + " ................. join/leave the queue \n" +
+                        GREEN + LIST + "  ................. get a list of all players\n" +
+                        GREEN + HINT + "  ................. a move that can be played\n" +
+                        GREEN + HELP + " .................. help (this menu)\n" +
+                        GREEN + QUIT + " .................. close " +
                         "your game (can't be performed mid game)\n" + RESET);
     }
 
     /**
      * Welcome message printing at the start of the connection.
      */
-    private static void welcome() {
-        SoundEffect welcome = new SoundEffect("src/othello/view/welcome.wav");
+    private void welcome() {
+        SoundEffect welcome = new SoundEffect(getClass().getResource("/sound/welcome.wav"));
         welcome.play();
         System.out.println(
                 GREEN + "Welcome to the Othello Central!\n" +
@@ -172,6 +178,7 @@ public class OthelloTUI {
      * @throws IOException Thrown, when reading causes an error
      */
     public void run() throws IOException {
+        SoundEffect error = new SoundEffect(getClass().getResource("/sound/error.wav"));
 
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
@@ -188,11 +195,11 @@ public class OthelloTUI {
                     connected = client.connect(InetAddress.getByName(serverAddress), port);
                     if (!connected) {
                         System.out.println("Can not connect to the specified server");
-                        ERROR.play();
+                        error.play();
                     }
                 } else {
                     System.out.println("Invalid port");
-                    ERROR.play();
+                    error.play();
                 }
             }
 
@@ -206,7 +213,7 @@ public class OthelloTUI {
 
             String command;
             while ((command = input.readLine()) != null) {
-                if (command.equals("quit")) {
+                if (command.equals(QUIT)) {
                     if (!client.inGame()) {
                         break;
                     } else {
@@ -214,16 +221,16 @@ public class OthelloTUI {
                     }
                 }
                 switch (command.toLowerCase()) {
-                    case "queue":
+                    case QUEUE:
                         queue(input, client);
                         break;
-                    case "list":
+                    case LIST:
                         client.sendList();
                         break;
-                    case "hint":
+                    case HINT:
                         client.hint();
                         break;
-                    case "help":
+                    case HELP:
                         help();
                         break;
                     default:
