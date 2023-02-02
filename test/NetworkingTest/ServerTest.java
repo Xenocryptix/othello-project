@@ -1,7 +1,6 @@
 package NetworkingTest;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import othello.controller.client.ClientListener;
 import othello.controller.client.OthelloClient;
@@ -41,11 +40,12 @@ public class ServerTest {
             clients.add(client);
         }
     }
+
     /**
      * Test the basic functionalities of server, being able to retrieve the player list
      * and matching the players in the queue, and allowing players to play a game
      *
-     * @throws PortNumberException Thrown if port is not defined
+     * @throws PortNumberException  Thrown if port is not defined
      * @throws UnknownHostException Thrown if the server address is not found
      * @throws InterruptedException Thrown if there was a problem with sleeping
      */
@@ -86,6 +86,15 @@ public class ServerTest {
         assertEquals(0, server.getInQueue());
 
     }
+
+    /**
+     * Tests the servers when 4 clients queue
+     * and how the server reacts to them queuing
+     *
+     * @throws PortNumberException  Thrown if port number is taken
+     * @throws UnknownHostException Thrown if host is unknown
+     * @throws InterruptedException Thrown if an error happens during sleeping
+     */
     @Test
     public void testPlayingTwo() throws PortNumberException, UnknownHostException, InterruptedException {
         assertFalse(server.isAccepting());
@@ -111,11 +120,11 @@ public class ServerTest {
         clients.get(3).queue();
         TimeUnit.SECONDS.sleep(1);
     }
+
     /**
-     * Test the basic functionalities of server, being able to retrieve the player list
-     * and matching the players in the queue
+     * Tests when 10 clients join the server and queue
      *
-     * @throws PortNumberException Thrown if port is not defined
+     * @throws PortNumberException  Thrown if port is not defined
      * @throws UnknownHostException Thrown if the server address is not found
      * @throws InterruptedException Thrown if there was a problem with sleeping
      */
@@ -145,4 +154,5 @@ public class ServerTest {
             System.out.println(server.getQueue());
             assertEquals((i + 1) % 2, server.getInQueue());
         }
-    }}
+    }
+}

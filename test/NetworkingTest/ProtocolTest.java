@@ -1,23 +1,20 @@
 package NetworkingTest;
 
-import othello.controller.server.OthelloServer;
-import othello.controller.Protocol;
-import othello.controller.server.Server;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import othello.controller.Protocol;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Tests that the protocol class correctly creates the protocol messages
+ * Tests that the protocol class correctly creates the protocol messages.
  */
 public class ProtocolTest {
-    @BeforeEach
-    public void setUp() {
-        Server server = new OthelloServer(2222);
-    }
+    /**
+     * Tests that the generation of the protocol messages
+     * from the test class are correct.
+     */
     @Test
     public void generationOfProtocol() {
         //Ensures that the hello protocol message is generated correctly
@@ -37,7 +34,7 @@ public class ProtocolTest {
         assertEquals("MOVE~22", Protocol.move(22));
 
         //Ensures that the game over protocol message is generated correctly
-        assertEquals("GAMEOVER~DISCONNECT~Bob", Protocol.gameover(new String[]{"disconnect","Bob"}));
+        assertEquals("GAMEOVER~DISCONNECT~Bob", Protocol.gameover(new String[]{"disconnect", "Bob"}));
         assertEquals("GAMEOVER~DRAW", Protocol.gameover(new String[]{"draw"}));
         assertEquals("GAMEOVER~VICTORY~Bob", Protocol.gameover(new String[]{"victory", "Bob"}));
     }
