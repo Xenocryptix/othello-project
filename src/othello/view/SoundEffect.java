@@ -11,8 +11,8 @@ public class SoundEffect {
     private Clip clip;
 
     /**
-     * Initialises the class with the file path of the sound.
-     * file
+     * Initialises the class with the url of the sound.
+     *
      *
      * @param url The url of the sound
      */
